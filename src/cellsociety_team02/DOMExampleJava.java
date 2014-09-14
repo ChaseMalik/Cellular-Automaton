@@ -3,6 +3,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -12,24 +15,25 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class DOMExampleJava {
-	public static void main(String args[]) {
+	
+	public DOMExampleJava(File f) {
 		try {
-
-			File f = new File("xml files/FireExample.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(f);
 			doc.getDocumentElement().normalize();
 			NodeList infoNodes = doc.getElementsByTagName("info");
-
+			String myModel = null;
+			
 			Map<String, String> pMap = new HashMap<>();
 			int[][] Array = null;
 			Node infoNode = infoNodes.item(0);
 			if(infoNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element infoElement = (Element) infoNode;
-				String myModel = getValue("model", infoElement);
+				myModel = getValue("model", infoElement);
 				int r = Integer.parseInt(getValue("rows", infoElement));
 				int c = Integer.parseInt(getValue("cols", infoElement));
+				if(myModel.equals("Fire")){ r+=2; c+=2;} // Fire needs padding
 				Array = new int[r][c];
 			}
 
@@ -44,7 +48,7 @@ public class DOMExampleJava {
 					pMap.put(cNode.getNodeName(),content);
 				}
 			}
-			
+
 
 			NodeList cellNodes = doc.getElementsByTagName("cell");
 			for(int i = 0; i<cellNodes.getLength(); i++){
@@ -53,11 +57,12 @@ public class DOMExampleJava {
 					Element cElement = (Element) cNode;
 					int r = Integer.parseInt(getValue("r",cElement));
 					int c = Integer.parseInt(getValue("c",cElement));
+					if(myModel.equals("Fire")){ r+=1; c+=1;}
 					int state = Integer.parseInt(getValue("state",cElement));
 					Array[r][c] = state;
 				}
 			}
-			
+
 			for(int i=0; i<Array.length; i++){
 				for(int j=0; j<Array[0].length;j++){
 					System.out.print(Array[i][j] + " ");
@@ -67,7 +72,7 @@ public class DOMExampleJava {
 			for(String s:pMap.keySet()){
 				System.out.print(s + " " + pMap.get(s) + "\n");
 			}
-			
+
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
