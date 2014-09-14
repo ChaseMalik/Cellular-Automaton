@@ -1,5 +1,8 @@
 package cellsociety_team02;
 
+import java.util.Collection;
+import java.util.HashMap;
+
 import javafx.animation.KeyFrame;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,21 +11,28 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public abstract class Grid {
 	
 	protected Scene scene;
 	protected Group group;
+	protected HashMap<String,String> map;
 	protected int[][] current;
 	protected int[][] future;
+	protected boolean isRunning;
+	protected Collection<Cell> cells;
+	
+	public Grid(HashMap<String,String> parametersMap, int[][] initialStates) {
+		map = parametersMap;
+		future = initialStates;
+		isRunning = true;
+		updateDisplay();
+	}
 	
 	public Scene init(int width, int height) {
 		group = new Group();
 		scene = new Scene(group, width, height, Color.WHITE);
-
-		
 		return scene;
 	}
 	
@@ -36,8 +46,10 @@ public abstract class Grid {
 		KeyFrame kf = new KeyFrame(Duration.seconds(1.0), new EventHandler<ActionEvent>() {
 	    @Override
 	    public void handle(ActionEvent event) {
-	    	updateStates();
-	    	updateDisplay();
+	    	if (!isRunning){
+	    		updateStates();
+	    		updateDisplay();
+	    	}
 	       }
 	    });
 		return kf;
@@ -52,27 +64,21 @@ public abstract class Grid {
 	}
 	
 	protected void updateDisplay(){
+		group.getChildren().removeAll(cells);
 		for (int i=0; i<future.length; i++) {
 			for (int j=0; j<future[0].length; j++) {
 				Cell c = new Cell(i, j, future[i][j]);
+				cells.add(c);
 				group.getChildren().add(c);
 			}
 		}
 	}
 	
-	
 	protected abstract void updateCell(int i, int j);
-	
-	protected void pause() {
-		
-	}
 	
 	protected void keyPressed(KeyEvent ke) {
 		if (ke.getCode() == KeyCode.SPACE){
-			pause();
-		}
-		if (ke.getCode() == KeyCode.ENTER){
-			
+			isRunning = !isRunning;  //pauses if currently running, resumes if currently paused
 		}
 	}
 }
