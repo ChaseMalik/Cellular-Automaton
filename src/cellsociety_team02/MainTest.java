@@ -1,11 +1,9 @@
 package cellsociety_team02;
 
 import java.io.File;
+import java.util.Map;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -14,9 +12,13 @@ public class MainTest extends Application{
 	public void start (Stage s)
 	{
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open Resource File");
+		fileChooser.setTitle("Choose XML Source File");
 		File file = fileChooser.showOpenDialog(s);
-		new DOMExampleJava(file);
+		DOMExampleJava xml = new DOMExampleJava(file);
+		String model = xml.getModel();
+		Map<String,String> parameters = xml.makeParameterMap();
+		int[][] array = xml.makeArray();
+		xml.printArray();
 	}
 
 	/**
