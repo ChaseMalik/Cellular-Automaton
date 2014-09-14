@@ -23,9 +23,14 @@ public abstract class Grid {
 	protected boolean isRunning;
 	protected Collection<Cell> cells;
 	
+	protected double cellWidth;
+	protected double cellHeight;
+	
 	public Grid(HashMap<String,String> parametersMap, int[][] initialStates) {
 		map = parametersMap;
 		future = initialStates;
+		cellWidth = 600.0/(initialStates.length);
+		cellHeight = 600.0/(initialStates[0].length);
 		isRunning = true;
 		updateDisplay();
 	}
@@ -67,7 +72,7 @@ public abstract class Grid {
 		group.getChildren().removeAll(cells);
 		for (int i=0; i<future.length; i++) {
 			for (int j=0; j<future[0].length; j++) {
-				Cell c = new Cell(i, j, future[i][j]);
+				Cell c = new Cell(i*cellWidth, j*cellHeight, cellWidth, cellHeight, future[i][j]);
 				cells.add(c);
 				group.getChildren().add(c);
 			}
