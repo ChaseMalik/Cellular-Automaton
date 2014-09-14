@@ -1,7 +1,9 @@
 package cellsociety_team02;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import javafx.animation.KeyFrame;
 import javafx.event.ActionEvent;
@@ -17,7 +19,7 @@ public abstract class Grid {
 	
 	protected Scene scene;
 	protected Group group;
-	protected HashMap<String,String> map;
+	protected Map<String,String> map;
 	protected int[][] current;
 	protected int[][] future;
 	protected boolean isRunning;
@@ -26,18 +28,20 @@ public abstract class Grid {
 	protected double cellWidth;
 	protected double cellHeight;
 	
-	public Grid(HashMap<String,String> parametersMap, int[][] initialStates) {
+	public Grid(Map<String,String> parametersMap, int[][] initialStates) {
 		map = parametersMap;
 		future = initialStates;
-		cellWidth = 600.0/(initialStates.length);
-		cellHeight = 600.0/(initialStates[0].length);
+		cellHeight = 600.0/(initialStates.length);
+		cellWidth = 600.0/(initialStates[0].length);
 		isRunning = true;
-		updateDisplay();
 	}
 	
 	public Scene init(int width, int height) {
 		group = new Group();
 		scene = new Scene(group, width, height, Color.WHITE);
+		cells = new ArrayList<Cell>();
+		group.getChildren().addAll(cells);
+		updateDisplay();
 		return scene;
 	}
 	
@@ -69,10 +73,12 @@ public abstract class Grid {
 	}
 	
 	protected void updateDisplay(){
+		System.out.println(cellWidth);
+		System.out.println(cellHeight);
 		group.getChildren().removeAll(cells);
 		for (int i=0; i<future.length; i++) {
 			for (int j=0; j<future[0].length; j++) {
-				Cell c = new Cell(i*cellWidth, j*cellHeight, cellWidth, cellHeight, future[i][j]);
+				Cell c = new Cell(j*cellWidth, i*cellHeight, cellWidth, cellHeight, future[i][j]);
 				cells.add(c);
 				group.getChildren().add(c);
 			}
