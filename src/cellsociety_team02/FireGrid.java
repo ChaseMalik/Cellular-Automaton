@@ -11,7 +11,9 @@ public class FireGrid extends Grid {
 
 	@Override
 	protected void updateCell(int i, int j) {
-
+		if (i+1<current.length && current[i+1][j] == 1) {
+			future [i][j] = 1;
+		}
 	}
 
 }
