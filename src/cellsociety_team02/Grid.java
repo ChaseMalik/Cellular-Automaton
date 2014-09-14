@@ -30,6 +30,7 @@ public abstract class Grid {
 	
 	public Grid(Map<String,String> parametersMap, int[][] initialStates) {
 		map = parametersMap;
+		current = initialStates;
 		future = initialStates;
 		cellHeight = 600.0/(initialStates.length);
 		cellWidth = 600.0/(initialStates[0].length);
@@ -55,7 +56,7 @@ public abstract class Grid {
 		KeyFrame kf = new KeyFrame(Duration.seconds(1.0), new EventHandler<ActionEvent>() {
 	    @Override
 	    public void handle(ActionEvent event) {
-	    	if (!isRunning){
+	    	if (isRunning){
 	    		updateStates();
 	    		updateDisplay();
 	    	}
