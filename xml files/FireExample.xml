@@ -1,0 +1,27 @@
+<CAFire>
+	<info>
+		<model>Fire</model>
+		<rows>5</rows>
+		<cols>8</cols>
+	</info>	
+	<parameters>
+		<percent>50</percent>
+		<shape>circle</shape>
+	</parameters>
+	<cell>
+		<r>3</r>
+		<c>6</c>
+		<state>1</state>
+	</cell>
+	<cell>
+		<r>1</r>
+		<c>1</c>
+		<state>2</state>
+	</cell>
+	<cell>
+		<r>0</r>
+		<c>4</c>
+		<state>1</state>
+	</cell>	
+	
+</CAFire>
