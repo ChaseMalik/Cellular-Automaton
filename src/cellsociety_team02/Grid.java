@@ -2,7 +2,6 @@ package cellsociety_team02;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import javafx.animation.KeyFrame;
@@ -47,13 +46,13 @@ public abstract class Grid {
 	}
 	
 	public KeyFrame startHandlers() {
-		group.setOnKeyPressed(new EventHandler<KeyEvent>(){
+		group.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
 			@Override public void handle(KeyEvent ke) {
 				keyPressed(ke);
 			}			
 		});
 		
-		KeyFrame kf = new KeyFrame(Duration.seconds(1.0), new EventHandler<ActionEvent>() {
+		KeyFrame kf = new KeyFrame(Duration.seconds(0.1), new EventHandler<ActionEvent>() {
 	    @Override
 	    public void handle(ActionEvent event) {
 	    	if (isRunning){
@@ -66,31 +65,34 @@ public abstract class Grid {
 	}
 	
 	protected void updateStates(){
-		for (int i=0; i<current.length; i++) {
-			for (int j=0; j<current[0].length; j++) {
-				updateCell(i, j);
+		for (int r=0; r<current.length; r++) {
+			for (int c=0; c<current[0].length; c++) {
+				updateCell(r, c);
 			}
 		}
 	}
 	
 	protected void updateDisplay(){
-		System.out.println(cellWidth);
-		System.out.println(cellHeight);
 		group.getChildren().removeAll(cells);
-		for (int i=0; i<future.length; i++) {
-			for (int j=0; j<future[0].length; j++) {
-				Cell c = new Cell(j*cellWidth, i*cellHeight, cellWidth, cellHeight, future[i][j]);
-				cells.add(c);
-				group.getChildren().add(c);
+		for (int r=0; r<future.length; r++) {
+			for (int c=0; c<future[0].length; c++) {
+				Cell newCell = new Cell(c*cellWidth, r*cellHeight, cellWidth, cellHeight, future[r][c]);
+				cells.add(newCell);
+				group.getChildren().add(newCell);
 			}
 		}
 	}
 	
-	protected abstract void updateCell(int i, int j);
+	protected abstract void updateCell(int r, int c);
 	
 	protected void keyPressed(KeyEvent ke) {
 		if (ke.getCode() == KeyCode.SPACE){
 			isRunning = !isRunning;  //pauses if currently running, resumes if currently paused
+		}
+		if (ke.getCode() == KeyCode.A) {
+			System.out.println("Enter");
+			updateStates();
+			updateDisplay();
 		}
 	}
 }

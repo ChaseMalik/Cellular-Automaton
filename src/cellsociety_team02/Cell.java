@@ -14,7 +14,7 @@ public class Cell extends Rectangle {
 			case 4: setFill(Color.YELLOW); break;
 			case 5: setFill(Color.GREEN); break;
 			case 6: setFill(Color.BLUE); break;
-			case 7: setFill(Color.VIOLET);	break;
+			case 7: setFill(Color.VIOLET); break;
 		}
 	}
 }

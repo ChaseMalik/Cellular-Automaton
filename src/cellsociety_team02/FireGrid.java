@@ -1,6 +1,5 @@
 package cellsociety_team02;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class FireGrid extends Grid {
