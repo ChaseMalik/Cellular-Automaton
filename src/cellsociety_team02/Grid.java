@@ -2,7 +2,6 @@ package cellsociety_team02;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import javafx.animation.KeyFrame;
@@ -10,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -37,7 +35,7 @@ public abstract class Grid {
 		
 		cellHeight = 600.0/(initialStates.length);
 		cellWidth = 600.0/(initialStates[0].length);
-		isRunning = true;
+		isRunning = false;
 	}
 	
 	public Scene init(int width, int height) {
@@ -93,8 +91,11 @@ public abstract class Grid {
 	protected abstract void updateCell(int i, int j);
 	
 	protected void keyPressed(KeyEvent ke) {
-		if (ke.getCode() == KeyCode.SPACE){
-			isRunning = !isRunning;  //pauses if currently running, resumes if currently paused
+		switch (ke.getCode()){
+		case RIGHT: if(!isRunning){ updateStates(); updateDisplay();}; break;
+		case SPACE: isRunning = !isRunning; break; //pauses if currently running, resumes if currently paused
+		default:
+			break;
 		}
 	}
 }

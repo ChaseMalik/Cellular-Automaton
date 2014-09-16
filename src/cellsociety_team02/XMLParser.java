@@ -14,12 +14,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class DOMExampleJava {
+public class XMLParser {
 	private Document myDoc;
 	private String myModel;
 	private int[][] myArray;
 
-	public DOMExampleJava(File f) {
+	public XMLParser(File f) {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
