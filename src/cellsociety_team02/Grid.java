@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -31,9 +30,13 @@ public abstract class Grid {
 		map = parametersMap;
 		current = initialStates;
 		future = initialStates;
+		current = new int[future.length][];
+		for(int i = 0; i < future.length; i++)
+		    current[i] = future[i].clone();
+		
 		cellHeight = 600.0/(initialStates.length);
 		cellWidth = 600.0/(initialStates[0].length);
-		isRunning = true;
+		isRunning = false;
 	}
 	
 	public Scene init(int width, int height) {
@@ -46,7 +49,8 @@ public abstract class Grid {
 	}
 	
 	public KeyFrame startHandlers() {
-		group.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
 			@Override public void handle(KeyEvent ke) {
 				keyPressed(ke);
 			}			
@@ -82,18 +86,19 @@ public abstract class Grid {
 				group.getChildren().add(newCell);
 			}
 		}
+		current = new int[future.length][];
+		for(int i = 0; i < future.length; i++)
+		    current[i] = future[i].clone();
 	}
 	
 	protected abstract void updateCell(int r, int c);
 	
 	protected void keyPressed(KeyEvent ke) {
-		if (ke.getCode() == KeyCode.SPACE){
-			isRunning = !isRunning;  //pauses if currently running, resumes if currently paused
-		}
-		if (ke.getCode() == KeyCode.A) {
-			System.out.println("Enter");
-			updateStates();
-			updateDisplay();
+		switch (ke.getCode()){
+		case RIGHT: if(!isRunning){ updateStates(); updateDisplay();}; break;
+		case SPACE: isRunning = !isRunning; break; //pauses if currently running, resumes if currently paused
+		default:
+			break;
 		}
 	}
 }

@@ -14,5 +14,4 @@ public class FireGrid extends Grid {
 			future [i][j] = 1;
 		}
 	}
-
 }
