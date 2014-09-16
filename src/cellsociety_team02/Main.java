@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class MainTest extends Application{
+public class Main extends Application{
 	
 	Grid myGrid;
 	
@@ -20,7 +20,7 @@ public class MainTest extends Application{
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choose XML Source File");
 		File file = fileChooser.showOpenDialog(s);
-		DOMExampleJava xml = new DOMExampleJava(file);
+		XMLParser xml = new XMLParser(file);
 		String model = xml.getModel();
 		Map<String,String> parameters = xml.makeParameterMap();
 		int[][] array = xml.makeArray();
@@ -30,6 +30,7 @@ public class MainTest extends Application{
 		s.setTitle("CA Simulation");
 		switch(model)  {
 		case "Fire": myGrid = new FireGrid(parameters, array); break;
+		case "Segregation": myGrid = new SegregationGrid(parameters,array); break;
 		}
 		Scene scene = myGrid.init(600, 700);
 		s.setScene(scene);
