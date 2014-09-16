@@ -74,6 +74,7 @@ public abstract class Grid {
 	
 	protected void updateDisplay(){
 		group.getChildren().removeAll(cells);
+		cells.clear();
 		for (int r=0; r<future.length; r++) {
 			for (int c=0; c<future[0].length; c++) {
 				Cell newCell = new Cell(c*cellWidth, r*cellHeight, cellWidth, cellHeight, future[r][c]);
