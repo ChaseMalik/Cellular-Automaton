@@ -30,7 +30,9 @@ public class Main extends Application{
 		s.setTitle("CA Simulation");
 		switch(model)  {
 		case "Fire": myGrid = new FireGrid(parameters, array); break;
+		case "PredPrey" : myGrid = new PredPreyGrid(parameters, array); break;
 		case "Segregation": myGrid = new SegregationGrid(parameters,array); break;
+
 		}
 		Scene scene = myGrid.init(600, 700);
 		s.setScene(scene);

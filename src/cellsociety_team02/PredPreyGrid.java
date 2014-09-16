@@ -1,16 +1,167 @@
 package cellsociety_team02;
 
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class PredPreyGrid extends Grid {
+	
+	/*
+	 * STATES:
+	 * 0 = empty
+	 * 1 = fish
+	 * 2 = shark
+	 * 
+	 * 
+	 * 
+	 */
+	
+	private int[][] fishState;
+	private int[][] sharkState;
+	private int[][] sharkStarve;
+	private int fbreed;
+	private int sbreed;
+	private int starve;
+	private int state;
 
-	public PredPreyGrid(HashMap<String, String> parametersMap, int[][] initialStates) {
+	public PredPreyGrid(Map<String, String> parametersMap, int[][] initialStates) {
 		super(parametersMap, initialStates);
+		fbreed = Integer.parseInt(map.get("fishBreed"));
+		System.out.println("Fbreed: " + fbreed);
+		sbreed = Integer.parseInt(map.get("sharkBreed"));
+		System.out.println("Sbreed: " + sbreed);
+		starve = Integer.parseInt(map.get("sharkStarve"));
+		System.out.println("SharkStarve: " + starve);
+		fishState = new int[initialStates.length][initialStates[0].length];
+		sharkState = new int[initialStates.length][initialStates[0].length];
+		sharkStarve = new int[initialStates.length][initialStates[0].length];
+		for (int i = 0; i<fishState.length;i++) {
+			for (int j = 0; j<fishState[0].length;j++) {
+				fishState[i][j] = 0;
+				sharkState[i][j] = 0;
+				sharkStarve[i][j] = 0;
+			}
+		}
+			
 	}
 
 	@Override
-	protected void updateCell(int i, int j) {
+	protected void updateCell(int r, int c) {
+		state = current[r][c];
+		if (state == 0) return;
+		if (sharkStarve[r][c] >= starve){
+			sharkStarve[r][c] = 0;
+			future[r][c] = 0;
+			System.out.println("Removed shark");
+			return;
+		}
+		ArrayList<newMove> possibleMoves = getMoves(r,c);
+		int random = (int)(Math.random()*possibleMoves.size());
+		if (possibleMoves.size() == 0) {
+			if (state == 1) {
+				fishState[r][c]++;
+			}
+			if (state == 2) {
+				sharkState[r][c]++;
+				sharkStarve[r][c]++;
+			}
+			return;
+		}
+		newMove nextMove = possibleMoves.get(random);
+		nextMove.doNextMove(r,c);
+	}
+	
+	public class newMove {
+		private int newR;
+		private int newC;
+		public newMove(int r, int c, int s) {
+			newR = r;
+			newC = c;
+		}
+		public void doNextMove(int currentR, int currentC) {
+			future[newR][newC] = current[currentR][currentC];
+			if (state == 1) {
+				if (fishState[currentR][currentC] == fbreed){
+					future[currentR][currentC] = 1;
+					fishState[currentR][currentC] = 0;
+					fishState[newR][newC] = 0;
+					System.out.println("Breeded fish");
+				}
+				else{
+					future[currentR][currentC] = 0;
+					fishState[newR][newC] = fishState[currentR][currentC]+1;
+					System.out.println("Not breeded fish: " + fishState[newR][newC]);
+				}
+				fishState[currentR][currentC] = 0;	
+			}
+			if (state == 2) {
+				if (sharkState[currentR][currentC] == sbreed){
+					future[currentR][currentC] = 2;
+					sharkState[currentR][currentC] = 0;
+					sharkState[newR][newC] = 0;
+					System.out.println("Breeded shark");
+				}
+				else{
+					future[currentR][currentC] = 0;
+					sharkState[newR][newC] = sharkState[currentR][currentC]+1;
+					System.out.println("Not breeded shark: " + sharkState[newR][newC]);
+
+				}
+				
+				if (current[newR][newC] == 1) {
+					sharkStarve[newR][newC] = 0;	
+				}
+				else {
+					sharkStarve[newR][newC] = sharkStarve[currentR][currentC]+1;
+				}
+				sharkState[currentR][currentC] = 0;
+				sharkStarve[currentR][currentC] = 0;
+			}
+		}
+	}
+	
+	private ArrayList<newMove> getMoves(int r, int c){
+		boolean fishAvailable = false;
+		ArrayList<newMove> moves = new ArrayList<newMove>(); 
 		
+		//If shark, check for available fish spaces
+		if (state == 2) {
+			if (r+1<current.length && current[r+1][c] == 1 && future[r+1][c] == 1){
+				moves.add(new newMove(r+1, c, current[r+1][c]));
+				fishAvailable = true;
+			}
+			if (r-1>=0 && current[r-1][c] == 1 && future[r-1][c] == 1){
+				moves.add(new newMove(r-1, c, current[r-1][c]));
+				fishAvailable = true;
+			}
+			if (c+1<current[0].length && current[r][c+1] == 1 && future[r][c+1] == 1){
+				moves.add(new newMove(r, c+1, current[r][c+1]));
+				fishAvailable = true;
+			}
+			if (c-1>=0 && current[r][c-1] == 1 && future[r][c-1] == 1){
+				moves.add(new newMove(r, c-1, current[r][c-1]));
+				fishAvailable = true;
+			}
+			if (fishAvailable)
+				return moves;
+		}
+		
+		//Else, check for blank spaces (for fish and sharks)
+		if (r+1<current.length && current[r+1][c] == 0 && future[r+1][c] == 0){
+			moves.add(new newMove(r+1, c, current[r+1][c]));
+		}
+		if (r-1>=0 && current[r-1][c] == 0 && future[r-1][c] == 0) {
+			moves.add(new newMove(r-1, c, current[r-1][c]));
+		}
+		if (c+1<current[0].length && current[r][c+1] == 0 && future[r][c+1] == 0){
+			moves.add(new newMove(r, c+1, current[r][c+1]));
+		}
+		if (c-1>=0 && current[r][c-1] == 0 && future[r][c-1] == 0){
+			moves.add(new newMove(r, c-1, current[r][c-1]));
+		}
+		
+		return moves;
 	}
 
 }
