@@ -50,7 +50,7 @@ public abstract class Grid {
 	}
 	
 	public KeyFrame startHandlers() {
-		group.setOnKeyPressed(new EventHandler<KeyEvent>(){
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override public void handle(KeyEvent ke) {
 				keyPressed(ke);
 			}			
