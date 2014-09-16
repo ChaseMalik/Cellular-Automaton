@@ -30,8 +30,11 @@ public abstract class Grid {
 	
 	public Grid(Map<String,String> parametersMap, int[][] initialStates) {
 		map = parametersMap;
-		current = initialStates;
 		future = initialStates;
+		current = new int[future.length][];
+		for(int i = 0; i < future.length; i++)
+		    current[i] = future[i].clone();
+		
 		cellHeight = 600.0/(initialStates.length);
 		cellWidth = 600.0/(initialStates[0].length);
 		isRunning = true;
@@ -74,8 +77,6 @@ public abstract class Grid {
 	}
 	
 	protected void updateDisplay(){
-		System.out.println(cellWidth);
-		System.out.println(cellHeight);
 		group.getChildren().removeAll(cells);
 		for (int i=0; i<future.length; i++) {
 			for (int j=0; j<future[0].length; j++) {
@@ -84,6 +85,9 @@ public abstract class Grid {
 				group.getChildren().add(c);
 			}
 		}
+		current = new int[future.length][];
+		for(int i = 0; i < future.length; i++)
+		    current[i] = future[i].clone();
 	}
 	
 	protected abstract void updateCell(int i, int j);
