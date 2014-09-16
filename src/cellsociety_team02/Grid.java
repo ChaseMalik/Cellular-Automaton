@@ -28,7 +28,6 @@ public abstract class Grid {
 	
 	public Grid(Map<String,String> parametersMap, int[][] initialStates) {
 		map = parametersMap;
-		current = initialStates;
 		future = initialStates;
 		current = new int[future.length][];
 		for(int i = 0; i < future.length; i++)
@@ -48,15 +47,9 @@ public abstract class Grid {
 		return scene;
 	}
 	
-	public KeyFrame startHandlers() {
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
-
-			@Override public void handle(KeyEvent ke) {
-				keyPressed(ke);
-			}			
-		});
+	public KeyFrame startHandlers(double speed) {
 		
-		KeyFrame kf = new KeyFrame(Duration.seconds(0.1), new EventHandler<ActionEvent>() {
+		KeyFrame kf = new KeyFrame(Duration.seconds(speed), new EventHandler<ActionEvent>() {
 	    @Override
 	    public void handle(ActionEvent event) {
 	    	if (isRunning){
@@ -93,12 +86,14 @@ public abstract class Grid {
 	
 	protected abstract void updateCell(int r, int c);
 	
-	protected void keyPressed(KeyEvent ke) {
-		switch (ke.getCode()){
-		case RIGHT: if(!isRunning){ updateStates(); updateDisplay();}; break;
-		case SPACE: isRunning = !isRunning; break; //pauses if currently running, resumes if currently paused
-		default:
-			break;
+	public void startStop() {
+		isRunning = !isRunning;
+	}
+	
+	public void step() {
+		if (!isRunning) {
+			updateStates();
+			updateDisplay();
 		}
 	}
 }
