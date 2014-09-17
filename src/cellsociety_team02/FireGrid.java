@@ -12,4 +12,10 @@ public class FireGrid extends Grid {
 	protected void updateCellandPatch(int i, int j) {
 
 	}
+
+	@Override
+	protected void setColors() {
+		// TODO Auto-generated method stub
+		
+	}
 }

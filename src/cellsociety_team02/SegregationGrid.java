@@ -62,4 +62,10 @@ public class SegregationGrid extends Grid {
 		return same;
 	}
 
+	@Override
+	protected void setColors() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -5,9 +5,9 @@
 		<cols>20</cols>
 	</info>	
 	<parameters>
-		<fishBreed>9</fishBreed>
-		<sharkBreed>4</sharkBreed>
-		<sharkStarve>9</sharkStarve>
+		<fishBreed>6</fishBreed>
+		<sharkBreed>10</sharkBreed>
+		<sharkStarve>10</sharkStarve>
 	</parameters>
 	<cell>
 		<r>3</r>
@@ -58,6 +58,71 @@
 	<cell>
 		<r>2</r>
 		<c>8</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>3</r>
+		<c>19</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>12</r>
+		<c>9</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>7</r>
+		<c>17</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>6</r>
+		<c>4</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>17</r>
+		<c>5</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>14</r>
+		<c>7</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>18</r>
+		<c>8</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>19</r>
+		<c>15</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>14</r>
+		<c>18</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>19</r>
+		<c>3</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>10</r>
+		<c>18</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>16</r>
+		<c>4</c>
+		<state>1</state>
+	</cell>	
+	<cell>
+		<r>4</r>
+		<c>14</c>
 		<state>1</state>
 	</cell>	
 	

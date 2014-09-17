@@ -1,9 +1,10 @@
 package cellsociety_team02;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javafx.scene.paint.Color;
 
 public class PredPreyGrid extends Grid {
 	
@@ -45,6 +46,13 @@ public class PredPreyGrid extends Grid {
 		}
 			
 	}
+	
+	@Override
+	protected void setColors() {
+		colorMap.put(0, Color.LIGHTBLUE);
+		colorMap.put(1, Color.LIGHTGREEN);
+		colorMap.put(2, Color.RED);
+	}
 
 	@Override
 	protected void updateCellandPatch(int r, int c) {
@@ -82,7 +90,7 @@ public class PredPreyGrid extends Grid {
 		public void doNextMove(int currentR, int currentC) {
 			futureCells[newR][newC] = currentCells[currentR][currentC];
 			if (state == 1) {
-				if (fishState[currentR][currentC] == fbreed){
+				if (fishState[currentR][currentC] >= fbreed){
 					futureCells[currentR][currentC] = 1;
 					fishState[currentR][currentC] = 0;
 					fishState[newR][newC] = 0;
@@ -96,7 +104,7 @@ public class PredPreyGrid extends Grid {
 				fishState[currentR][currentC] = 0;	
 			}
 			if (state == 2) {
-				if (sharkState[currentR][currentC] == sbreed){
+				if (sharkState[currentR][currentC] >= sbreed){
 					futureCells[currentR][currentC] = 2;
 					sharkState[currentR][currentC] = 0;
 					sharkState[newR][newC] = 0;
@@ -110,7 +118,9 @@ public class PredPreyGrid extends Grid {
 				}
 				
 				if (currentCells[newR][newC] == 1) {
-					sharkStarve[newR][newC] = 0;	
+					sharkStarve[newR][newC] = 0;
+					currentCells[newR][newC] = 0;
+					fishState[newR][newC] = 0;
 				}
 				else {
 					sharkStarve[newR][newC] = sharkStarve[currentR][currentC]+1;
@@ -119,6 +129,13 @@ public class PredPreyGrid extends Grid {
 				sharkStarve[currentR][currentC] = 0;
 			}
 		}
+	}
+	
+	private int checkNeighbor(int r, int c) {
+		if (r>=currentCells.length && r<0 && c>=currentCells[0].length && c<0)
+			return -1;
+		else
+			return currentCells[r][c];
 	}
 	
 	private ArrayList<newMove> getMoves(int r, int c){

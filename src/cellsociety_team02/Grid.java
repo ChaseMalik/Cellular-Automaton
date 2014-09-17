@@ -2,6 +2,7 @@ package cellsociety_team02;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import javafx.animation.KeyFrame;
@@ -9,7 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -24,12 +24,15 @@ public abstract class Grid {
 	protected double[][] futurePatches;
 	protected boolean isRunning;
 	protected Collection<Cell> cells;
+	protected Map colorMap;
 	
 	protected double cellWidth;
 	protected double cellHeight;
 	
 	public Grid(Map<String,String> parametersMap, int[][] initialCells, double[][] initialPatches) {
 		map = parametersMap;
+		colorMap = new HashMap<Integer, Color>();
+		setColors();
 		futureCells = initialCells;
 		futurePatches = initialPatches;
 		currentCells = new int[futureCells.length][];
@@ -52,9 +55,9 @@ public abstract class Grid {
 		return scene;
 	}
 	
-	public KeyFrame startHandlers(double speed) {
+	public KeyFrame startHandlers(double interval) {
 		
-		KeyFrame kf = new KeyFrame(Duration.seconds(speed), new EventHandler<ActionEvent>() {
+		KeyFrame kf = new KeyFrame(Duration.seconds(interval), new EventHandler<ActionEvent>() {
 	    @Override
 	    public void handle(ActionEvent event) {
 	    	if (isRunning){
@@ -79,7 +82,7 @@ public abstract class Grid {
 		cells.clear();
 		for (int r=0; r<futureCells.length; r++) {
 			for (int c=0; c<futureCells[0].length; c++) {
-				Cell newCell = new Cell(c*cellWidth, r*cellHeight, cellWidth, cellHeight, futureCells[r][c]);
+				Cell newCell = new Cell(c*cellWidth, r*cellHeight, cellWidth, cellHeight, futureCells[r][c], colorMap);
 				cells.add(newCell);
 				group.getChildren().add(newCell);
 			}
@@ -93,6 +96,8 @@ public abstract class Grid {
 	}
 	
 	protected abstract void updateCellandPatch(int r, int c);
+	
+	protected abstract void setColors();
 	
 	public void startStop() {
 		isRunning = !isRunning;

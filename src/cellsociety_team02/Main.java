@@ -16,7 +16,7 @@ public class Main extends Application{
 
 	private Grid myGrid;
 	private KeyFrame frame;
-	private double speed;
+	private double interval;
 	private Timeline animation;
 	private Stage myStage;
 	private Scene myScene;
@@ -38,7 +38,7 @@ public class Main extends Application{
 
 	private void startAnimation() {
 		animation.stop();
-		frame = myGrid.startHandlers(speed);
+		frame = myGrid.startHandlers(interval);
 		animation.setCycleCount(Timeline.INDEFINITE);
 		animation.getKeyFrames().clear();
 		animation.getKeyFrames().add(frame);
@@ -65,7 +65,7 @@ public class Main extends Application{
 		myScene = myGrid.init(600, 700);
 		s.setScene(myScene);
 		s.show();
-		speed = 1.0;
+		interval = 1.0;
 		startAnimation();
 		makeKeyHandler();
 	}
@@ -74,11 +74,26 @@ public class Main extends Application{
 		myScene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override public void handle(KeyEvent ke) {
 				switch (ke.getCode()){
-				case UP: speed*=0.5; startAnimation(); System.out.println("Up accessed");break;
-				case DOWN: speed*=2; startAnimation(); System.out.println("Down accessed");break;
-				case SPACE: myGrid.startStop(); break;
-				case RIGHT: myGrid.step(); break;
-				case L: myStage.close(); loadSimulation(myStage); break;
+				case UP: 
+					if (interval <= Math.pow(0.5, 7))
+						break;
+					interval*=0.5; 
+					startAnimation(); 
+					break;
+				case DOWN: 
+					interval*=2;
+					startAnimation();
+					break;
+				case SPACE: 
+					myGrid.startStop(); 
+					break;
+				case RIGHT: 
+					myGrid.step(); 
+					break;
+				case L: 
+					myStage.close(); 
+					loadSimulation(myStage); 
+					break;
 				default:
 					break;
 				}
