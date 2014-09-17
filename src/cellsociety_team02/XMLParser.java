@@ -17,7 +17,8 @@ import org.w3c.dom.NodeList;
 public class XMLParser {
 	private Document myDoc;
 	private String myModel;
-	private int[][] myArray;
+	private int[][] cellsArray;
+	private double[][] patchesArray;
 
 	public XMLParser(File f) {
 		try {
@@ -25,7 +26,7 @@ public class XMLParser {
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			myDoc = dBuilder.parse(f);
 			myDoc.getDocumentElement().normalize();
-			myArray = null;
+			cellsArray = null;
 			myModel = null;					
 		}
 		catch (Exception ex) {
@@ -42,7 +43,8 @@ public class XMLParser {
 			int r = Integer.parseInt(getValue("rows", infoElement));
 			int c = Integer.parseInt(getValue("cols", infoElement));
 			if(myModel.equals("Fire")){ r+=2; c+=2;} // Fire needs padding
-			myArray = new int[r][c];
+			cellsArray = new int[r][c];
+			patchesArray = new double[r][c];
 		}
 		return myModel;
 	}
@@ -63,7 +65,7 @@ public class XMLParser {
 		return pMap;
 	}
 
-	public int[][] makeArray(){
+	public int[][] makeCells(){
 		NodeList cellNodes = myDoc.getElementsByTagName("cell");
 		for(int i = 0; i<cellNodes.getLength(); i++){
 			Node cNode = cellNodes.item(i);
@@ -73,15 +75,21 @@ public class XMLParser {
 				int c = Integer.parseInt(getValue("c",cElement));
 				if(myModel.equals("Fire")){ r+=1; c+=1;}
 				int state = Integer.parseInt(getValue("state",cElement));
-				myArray[r][c] = state;
+				cellsArray[r][c] = state;
 			}
 		}
-		return myArray;
+		return cellsArray;
 	}
+	
+	public double[][] makePatches(){
+		return patchesArray;
+	}
+	
+	
 	public void printArray(){
-		for(int i=0; i<myArray.length; i++){
-			for(int j=0; j<myArray[0].length;j++){
-				System.out.print(myArray[i][j] + " ");
+		for(int i=0; i<cellsArray.length; i++){
+			for(int j=0; j<cellsArray[0].length;j++){
+				System.out.print(cellsArray[i][j] + " ");
 			}
 			System.out.print("\n");
 		}

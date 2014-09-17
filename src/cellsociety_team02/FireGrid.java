@@ -4,14 +4,12 @@ import java.util.Map;
 
 public class FireGrid extends Grid {
 
-	public FireGrid(Map<String, String> parametersMap, int[][] initialStates) {
-		super(parametersMap, initialStates);
+	public FireGrid(Map<String, String> parametersMap, int[][] initialCells, double[][] initialPatches) {
+		super(parametersMap, initialCells, initialPatches);
 	}
 
 	@Override
-	protected void updateCell(int i, int j) {
-		if (i+1<current.length && current[i+1][j] == 1) {
-			future [i][j] = 1;
-		}
+	protected void updateCellandPatch(int i, int j) {
+
 	}
 }

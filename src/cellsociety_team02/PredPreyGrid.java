@@ -25,17 +25,17 @@ public class PredPreyGrid extends Grid {
 	private int starve;
 	private int state;
 
-	public PredPreyGrid(Map<String, String> parametersMap, int[][] initialStates) {
-		super(parametersMap, initialStates);
+	public PredPreyGrid(Map<String, String> parametersMap, int[][] initialCells, double[][] initialPatches) {
+		super(parametersMap, initialCells, initialPatches);
 		fbreed = Integer.parseInt(map.get("fishBreed"));
 		System.out.println("Fbreed: " + fbreed);
 		sbreed = Integer.parseInt(map.get("sharkBreed"));
 		System.out.println("Sbreed: " + sbreed);
 		starve = Integer.parseInt(map.get("sharkStarve"));
 		System.out.println("SharkStarve: " + starve);
-		fishState = new int[initialStates.length][initialStates[0].length];
-		sharkState = new int[initialStates.length][initialStates[0].length];
-		sharkStarve = new int[initialStates.length][initialStates[0].length];
+		fishState = new int[initialCells.length][initialCells[0].length];
+		sharkState = new int[initialCells.length][initialCells[0].length];
+		sharkStarve = new int[initialCells.length][initialCells[0].length];
 		for (int i = 0; i<fishState.length;i++) {
 			for (int j = 0; j<fishState[0].length;j++) {
 				fishState[i][j] = 0;
@@ -47,12 +47,12 @@ public class PredPreyGrid extends Grid {
 	}
 
 	@Override
-	protected void updateCell(int r, int c) {
-		state = current[r][c];
+	protected void updateCellandPatch(int r, int c) {
+		state = currentCells[r][c];
 		if (state == 0) return;
 		if (sharkStarve[r][c] >= starve){
 			sharkStarve[r][c] = 0;
-			future[r][c] = 0;
+			futureCells[r][c] = 0;
 			System.out.println("Removed shark");
 			return;
 		}
@@ -80,16 +80,16 @@ public class PredPreyGrid extends Grid {
 			newC = c;
 		}
 		public void doNextMove(int currentR, int currentC) {
-			future[newR][newC] = current[currentR][currentC];
+			futureCells[newR][newC] = currentCells[currentR][currentC];
 			if (state == 1) {
 				if (fishState[currentR][currentC] == fbreed){
-					future[currentR][currentC] = 1;
+					futureCells[currentR][currentC] = 1;
 					fishState[currentR][currentC] = 0;
 					fishState[newR][newC] = 0;
 					System.out.println("Breeded fish");
 				}
 				else{
-					future[currentR][currentC] = 0;
+					futureCells[currentR][currentC] = 0;
 					fishState[newR][newC] = fishState[currentR][currentC]+1;
 					System.out.println("Not breeded fish: " + fishState[newR][newC]);
 				}
@@ -97,19 +97,19 @@ public class PredPreyGrid extends Grid {
 			}
 			if (state == 2) {
 				if (sharkState[currentR][currentC] == sbreed){
-					future[currentR][currentC] = 2;
+					futureCells[currentR][currentC] = 2;
 					sharkState[currentR][currentC] = 0;
 					sharkState[newR][newC] = 0;
 					System.out.println("Breeded shark");
 				}
 				else{
-					future[currentR][currentC] = 0;
+					futureCells[currentR][currentC] = 0;
 					sharkState[newR][newC] = sharkState[currentR][currentC]+1;
 					System.out.println("Not breeded shark: " + sharkState[newR][newC]);
 
 				}
 				
-				if (current[newR][newC] == 1) {
+				if (currentCells[newR][newC] == 1) {
 					sharkStarve[newR][newC] = 0;	
 				}
 				else {
@@ -127,20 +127,20 @@ public class PredPreyGrid extends Grid {
 		
 		//If shark, check for available fish spaces
 		if (state == 2) {
-			if (r+1<current.length && current[r+1][c] == 1 && future[r+1][c] == 1){
-				moves.add(new newMove(r+1, c, current[r+1][c]));
+			if (r+1<currentCells.length && currentCells[r+1][c] == 1 && futureCells[r+1][c] == 1){
+				moves.add(new newMove(r+1, c, currentCells[r+1][c]));
 				fishAvailable = true;
 			}
-			if (r-1>=0 && current[r-1][c] == 1 && future[r-1][c] == 1){
-				moves.add(new newMove(r-1, c, current[r-1][c]));
+			if (r-1>=0 && currentCells[r-1][c] == 1 && futureCells[r-1][c] == 1){
+				moves.add(new newMove(r-1, c, currentCells[r-1][c]));
 				fishAvailable = true;
 			}
-			if (c+1<current[0].length && current[r][c+1] == 1 && future[r][c+1] == 1){
-				moves.add(new newMove(r, c+1, current[r][c+1]));
+			if (c+1<currentCells[0].length && currentCells[r][c+1] == 1 && futureCells[r][c+1] == 1){
+				moves.add(new newMove(r, c+1, currentCells[r][c+1]));
 				fishAvailable = true;
 			}
-			if (c-1>=0 && current[r][c-1] == 1 && future[r][c-1] == 1){
-				moves.add(new newMove(r, c-1, current[r][c-1]));
+			if (c-1>=0 && currentCells[r][c-1] == 1 && futureCells[r][c-1] == 1){
+				moves.add(new newMove(r, c-1, currentCells[r][c-1]));
 				fishAvailable = true;
 			}
 			if (fishAvailable)
@@ -148,17 +148,17 @@ public class PredPreyGrid extends Grid {
 		}
 		
 		//Else, check for blank spaces (for fish and sharks)
-		if (r+1<current.length && current[r+1][c] == 0 && future[r+1][c] == 0){
-			moves.add(new newMove(r+1, c, current[r+1][c]));
+		if (r+1<currentCells.length && currentCells[r+1][c] == 0 && futureCells[r+1][c] == 0){
+			moves.add(new newMove(r+1, c, currentCells[r+1][c]));
 		}
-		if (r-1>=0 && current[r-1][c] == 0 && future[r-1][c] == 0) {
-			moves.add(new newMove(r-1, c, current[r-1][c]));
+		if (r-1>=0 && currentCells[r-1][c] == 0 && futureCells[r-1][c] == 0) {
+			moves.add(new newMove(r-1, c, currentCells[r-1][c]));
 		}
-		if (c+1<current[0].length && current[r][c+1] == 0 && future[r][c+1] == 0){
-			moves.add(new newMove(r, c+1, current[r][c+1]));
+		if (c+1<currentCells[0].length && currentCells[r][c+1] == 0 && futureCells[r][c+1] == 0){
+			moves.add(new newMove(r, c+1, currentCells[r][c+1]));
 		}
-		if (c-1>=0 && current[r][c-1] == 0 && future[r][c-1] == 0){
-			moves.add(new newMove(r, c-1, current[r][c-1]));
+		if (c-1>=0 && currentCells[r][c-1] == 0 && futureCells[r][c-1] == 0){
+			moves.add(new newMove(r, c-1, currentCells[r][c-1]));
 		}
 		
 		return moves;

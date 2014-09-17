@@ -52,14 +52,15 @@ public class Main extends Application{
 		XMLParser xml = new XMLParser(file);
 		String model = xml.getModel();
 		Map<String,String> parameters = xml.makeParameterMap();
-		int[][] array = xml.makeArray();
+		int[][] cellsArray = xml.makeCells();
+		double[][] patchesArray = xml.makePatches();
 		animation = new Timeline();
 		xml.printArray();
 		s.setTitle("CA Simulation");
 		switch(model)  {
-		case "Fire": myGrid = new FireGrid(parameters, array); break;
-		case "PredPrey" : myGrid = new PredPreyGrid(parameters, array); break;
-		case "Segregation": myGrid = new SegregationGrid(parameters,array); break;
+		case "Fire": myGrid = new FireGrid(parameters, cellsArray, patchesArray); break;
+		case "PredPrey" : myGrid = new PredPreyGrid(parameters, cellsArray, patchesArray); break;
+		case "Segregation": myGrid = new SegregationGrid(parameters,cellsArray, patchesArray); break;
 		}
 		myScene = myGrid.init(600, 700);
 		s.setScene(myScene);

@@ -18,23 +18,28 @@ public abstract class Grid {
 	protected Scene scene;
 	protected Group group;
 	protected Map<String,String> map;
-	protected int[][] current;
-	protected int[][] future;
+	protected int[][] currentCells;
+	protected int[][] futureCells;
+	protected double[][] currentPatches;
+	protected double[][] futurePatches;
 	protected boolean isRunning;
 	protected Collection<Cell> cells;
 	
 	protected double cellWidth;
 	protected double cellHeight;
 	
-	public Grid(Map<String,String> parametersMap, int[][] initialStates) {
+	public Grid(Map<String,String> parametersMap, int[][] initialCells, double[][] initialPatches) {
 		map = parametersMap;
-		future = initialStates;
-		current = new int[future.length][];
-		for(int i = 0; i < future.length; i++)
-		    current[i] = future[i].clone();
-		
-		cellHeight = 600.0/(initialStates.length);
-		cellWidth = 600.0/(initialStates[0].length);
+		futureCells = initialCells;
+		futurePatches = initialPatches;
+		currentCells = new int[futureCells.length][];
+		currentPatches = new double[futurePatches.length][];
+		for(int i = 0; i < futureCells.length; i++) {
+		    currentCells[i] = futureCells[i].clone();
+		    currentPatches[i] = futurePatches[i].clone();
+		}
+		cellHeight = 600.0/(initialCells.length);
+		cellWidth = 600.0/(initialCells[0].length);
 		isRunning = false;
 	}
 	
@@ -62,9 +67,9 @@ public abstract class Grid {
 	}
 	
 	protected void updateStates(){
-		for (int r=0; r<current.length; r++) {
-			for (int c=0; c<current[0].length; c++) {
-				updateCell(r, c);
+		for (int r=0; r<currentCells.length; r++) {
+			for (int c=0; c<currentCells[0].length; c++) {
+				updateCellandPatch(r, c);
 			}
 		}
 	}
@@ -72,19 +77,22 @@ public abstract class Grid {
 	protected void updateDisplay(){
 		group.getChildren().removeAll(cells);
 		cells.clear();
-		for (int r=0; r<future.length; r++) {
-			for (int c=0; c<future[0].length; c++) {
-				Cell newCell = new Cell(c*cellWidth, r*cellHeight, cellWidth, cellHeight, future[r][c]);
+		for (int r=0; r<futureCells.length; r++) {
+			for (int c=0; c<futureCells[0].length; c++) {
+				Cell newCell = new Cell(c*cellWidth, r*cellHeight, cellWidth, cellHeight, futureCells[r][c]);
 				cells.add(newCell);
 				group.getChildren().add(newCell);
 			}
 		}
-		current = new int[future.length][];
-		for(int i = 0; i < future.length; i++)
-		    current[i] = future[i].clone();
+		currentCells = new int[futureCells.length][];
+		currentPatches = new double[futurePatches.length][];
+		for(int i = 0; i < futureCells.length; i++) {
+		    currentCells[i] = futureCells[i].clone();
+		    currentPatches[i] = futurePatches[i].clone();
+		}
 	}
 	
-	protected abstract void updateCell(int r, int c);
+	protected abstract void updateCellandPatch(int r, int c);
 	
 	public void startStop() {
 		isRunning = !isRunning;
