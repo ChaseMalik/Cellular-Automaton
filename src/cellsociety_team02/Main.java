@@ -23,9 +23,9 @@ public class Main extends Application{
 	private Grid myGrid;
 	private double myInterval;
 	private Timeline myAnimation;
-	/*private KeyFrame frame;
+	//private KeyFrame frame;
 	private Stage myStage;
-	private Scene myScene;*/
+	//private Scene myScene;
 	private ResourceBundle myResources;
 
 	@Override
@@ -55,9 +55,9 @@ public class Main extends Application{
 
 
 	private void loadSimulation(Stage s, String language){
-
-                s.setTitle("CA Simulation");
-                XMLParser parser = loadFileToParser(s);
+		myStage = s;
+        myStage.setTitle("CA Simulation");
+        XMLParser parser = loadFileToParser();
 		String model = parser.getModelAndInitialize();
 		Map<String,String> parameters = parser.makeParameterMap();
 		int[][] cellsArray = parser.makeCells();
@@ -74,25 +74,25 @@ public class Main extends Application{
 		
                 myAnimation = new Timeline();
 		Scene scene = myGrid.init(DEFAULT_SIZE.width, DEFAULT_SIZE.height, myResources);
-		s.setScene(scene);
-		s.show();
+		myStage.setScene(scene);
+		myStage.show();
 		myInterval = 1.0;
 		myGrid.updateSpeedText(myInterval);
 		startAnimation();
-		makeKeyHandler(s,scene);
+		makeKeyHandler(scene);
 	}
 
 
 
-	private XMLParser loadFileToParser(Stage s) {
+	private XMLParser loadFileToParser() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choose XML Source File");
-		File file = fileChooser.showOpenDialog(s);
+		File file = fileChooser.showOpenDialog(myStage);
 		XMLParser xml = new XMLParser(file);
 		return xml;
 	}
 
-	private void makeKeyHandler(Stage s, Scene scene){
+	private void makeKeyHandler(Scene scene){
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override public void handle(KeyEvent ke) {
 				switch (ke.getCode()){
@@ -115,9 +115,9 @@ public class Main extends Application{
 					myGrid.step(); 
 					break;
 				case L: 
-				        myAnimation.stop();
-					//s.close();
-					loadSimulation(s, "English"); 
+				    myAnimation.stop();
+					//myStage.close();
+					loadSimulation(myStage, "English"); 
 					break;
 				case Q:
 				        System.exit(0);
