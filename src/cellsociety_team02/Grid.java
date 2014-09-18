@@ -15,7 +15,6 @@ import javafx.util.Duration;
 
 public abstract class Grid {
 	
-	protected Scene scene;
 	protected Group group;
 	protected Map<String,String> map;
 	protected int[][] currentCells;
@@ -34,18 +33,22 @@ public abstract class Grid {
 		futurePatches = initialPatches;
 		currentCells = new int[futureCells.length][];
 		currentPatches = new double[futurePatches.length][];
-		for(int i = 0; i < futureCells.length; i++) {
-		    currentCells[i] = futureCells[i].clone();
-		    currentPatches[i] = futurePatches[i].clone();
-		}
+		setCurrentToFuture();
 		cellHeight = 600.0/(initialCells.length);
 		cellWidth = 600.0/(initialCells[0].length);
 		isRunning = false;
 	}
+
+	private void setCurrentToFuture() {
+		for(int i = 0; i < futureCells.length; i++) {
+		    currentCells[i] = futureCells[i].clone();
+		    currentPatches[i] = futurePatches[i].clone();
+		}
+	}
 	
 	public Scene init(int width, int height) {
 		group = new Group();
-		scene = new Scene(group, width, height, Color.WHITE);
+		Scene scene = new Scene(group, width, height, Color.WHITE);
 		cellsAndPatches = new ArrayList<Rectangle>();
 		group.getChildren().addAll(cellsAndPatches);
 		updateDisplay();
@@ -87,10 +90,7 @@ public abstract class Grid {
 		}
 		currentCells = new int[futureCells.length][];
 		currentPatches = new double[futurePatches.length][];
-		for(int i = 0; i < futureCells.length; i++) {
-		    currentCells[i] = futureCells[i].clone();
-		    currentPatches[i] = futurePatches[i].clone();
-		}
+		setCurrentToFuture();
 	}
 	
 	protected abstract void updateCellandPatch(int r, int c);
