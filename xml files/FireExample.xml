@@ -11,9 +11,6 @@
 			<patch row = "3" column = "3" state = "0.5"></patch>
 			<patch row = "5" column = "10" state = "2"></patch>
 			<patch row = "7" column = "2" state = "2"></patch>
-			<patch row = "8" column = "8" state = "2"></patch>
-			<patch row = "12" column = "1" state = "0.5"></patch>
-			<patch row = "12" column = "12" state = "0.5"></patch>
 		</patches>
 	</animation>
 </CAModel>
