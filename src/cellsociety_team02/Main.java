@@ -46,17 +46,16 @@ public class Main extends Application{
 	}
 
 	private void loadSimulation(Stage s){
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Choose XML Source File");
-		File file = fileChooser.showOpenDialog(s);
-		XMLParser xml = new XMLParser(file);
-		String model = xml.getModelAndInitialize();
-		Map<String,String> parameters = xml.makeParameterMap();
-		int[][] cellsArray = xml.makeCells();
-		double[][] patchesArray = xml.makePatches();
-		xml.printArray();
+		XMLParser parser = loadFileToParser(s);
+
+		String model = parser.getModelAndInitialize();
+		Map<String,String> parameters = parser.makeParameterMap();
+		int[][] cellsArray = parser.makeCells();
+		double[][] patchesArray = parser.makePatches();
+
 		animation = new Timeline();
 		s.setTitle("CA Simulation");
+
 		switch(model)  {
 		case "Fire": myGrid = new FireGrid(parameters, cellsArray, patchesArray); break;
 		case "PredPrey" : myGrid = new PredPreyGrid(parameters, cellsArray, patchesArray); break;
@@ -70,7 +69,17 @@ public class Main extends Application{
 		startAnimation();
 		makeKeyHandler();
 	}
-	
+
+
+
+	private XMLParser loadFileToParser(Stage s) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Choose XML Source File");
+		File file = fileChooser.showOpenDialog(s);
+		XMLParser xml = new XMLParser(file);
+		return xml;
+	}
+
 	private void makeKeyHandler(){
 		myScene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override public void handle(KeyEvent ke) {
@@ -101,5 +110,5 @@ public class Main extends Application{
 			}			
 		});
 	}
-	
+
 }

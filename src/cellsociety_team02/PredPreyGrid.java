@@ -48,10 +48,11 @@ public class PredPreyGrid extends Grid {
 	}
 	
 	@Override
-	protected void setColors() {
-		colorMap.put(0, Color.LIGHTBLUE);
-		colorMap.put(1, Color.LIGHTGREEN);
-		colorMap.put(2, Color.RED);
+	protected Color setColor(int i, int j) {
+		state = currentCells[i][j];
+		if(state == 1) return Color.LIGHTGREEN;
+		else if(state == 2) return Color.RED;
+		else return Color.LIGHTBLUE;
 	}
 
 	@Override

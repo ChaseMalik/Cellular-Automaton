@@ -74,11 +74,11 @@ public class SegregationGrid extends Grid {
 	}
 
 	@Override
-	protected void setColors() {
-		colorMap.put(0, Color.WHITE);
-		colorMap.put(1, Color.RED);
-		colorMap.put(2, Color.BLUE);
-
+	protected Color setColor(int i, int j) {
+		int state = currentCells[i][j];
+		if(state == stateX) return Color.RED;
+		else if (state == stateY) return Color.BLUE;
+		else return Color.WHITE;
 	}
 
 }

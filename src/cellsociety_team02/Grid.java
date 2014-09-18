@@ -2,7 +2,6 @@ package cellsociety_team02;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import javafx.animation.KeyFrame;
@@ -11,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 public abstract class Grid {
@@ -23,16 +23,13 @@ public abstract class Grid {
 	protected double[][] currentPatches;
 	protected double[][] futurePatches;
 	protected boolean isRunning;
-	protected Collection<Cell> cells;
-	protected Map colorMap;
+	protected Collection<Rectangle> cellsAndPatches;
 	
 	protected double cellWidth;
 	protected double cellHeight;
 	
 	public Grid(Map<String,String> parametersMap, int[][] initialCells, double[][] initialPatches) {
 		map = parametersMap;
-		colorMap = new HashMap<Integer, Color>();
-		setColors();
 		futureCells = initialCells;
 		futurePatches = initialPatches;
 		currentCells = new int[futureCells.length][];
@@ -49,8 +46,8 @@ public abstract class Grid {
 	public Scene init(int width, int height) {
 		group = new Group();
 		scene = new Scene(group, width, height, Color.WHITE);
-		cells = new ArrayList<Cell>();
-		group.getChildren().addAll(cells);
+		cellsAndPatches = new ArrayList<Rectangle>();
+		group.getChildren().addAll(cellsAndPatches);
 		updateDisplay();
 		return scene;
 	}
@@ -78,13 +75,14 @@ public abstract class Grid {
 	}
 	
 	protected void updateDisplay(){
-		group.getChildren().removeAll(cells);
-		cells.clear();
+		group.getChildren().removeAll(cellsAndPatches);
+		cellsAndPatches.clear();
 		for (int r=0; r<futureCells.length; r++) {
 			for (int c=0; c<futureCells[0].length; c++) {
-				Cell newCell = new Cell(c*cellWidth, r*cellHeight, cellWidth, cellHeight, futureCells[r][c], colorMap);
-				cells.add(newCell);
-				group.getChildren().add(newCell);
+				Rectangle newDisplay = new Rectangle(c*cellWidth, r*cellHeight, cellWidth, cellHeight);
+				newDisplay.setFill(setColor(r,c));
+				cellsAndPatches.add(newDisplay);
+				group.getChildren().add(newDisplay);
 			}
 		}
 		currentCells = new int[futureCells.length][];
@@ -97,7 +95,7 @@ public abstract class Grid {
 	
 	protected abstract void updateCellandPatch(int r, int c);
 	
-	protected abstract void setColors();
+	protected abstract Color setColor(int r, int c);
 	
 	public void startStop() {
 		isRunning = !isRunning;

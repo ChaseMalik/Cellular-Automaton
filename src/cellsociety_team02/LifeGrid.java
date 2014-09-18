@@ -32,9 +32,10 @@ public class LifeGrid extends Grid {
 	}
 
 	@Override
-	protected void setColors() {
-		colorMap.put(0, Color.WHITE);
-		colorMap.put(1, Color.BLACK);
+	protected Color setColor(int i, int j) {
+		int state = currentCells[i][j];
+		if(state == alive) return Color.BLACK;
+		else return Color.WHITE;
 
 	}
 	private int getNeighbors(int i, int j, int s) {

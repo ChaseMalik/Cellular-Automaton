@@ -5,6 +5,9 @@ import java.util.Map;
 import javafx.scene.paint.Color;
 
 public class FireGrid extends Grid {
+	private static final int burning = 1;
+	private static final int notBurning = 0;
+	private static final double minWood = 1;
 	
 	double probCatch;
 
@@ -17,16 +20,16 @@ public class FireGrid extends Grid {
 	protected void updateCellandPatch(int i, int j) {
 		int burnStatus = currentCells[i][j];
 		double wood = currentPatches[i][j];
-		if (burnStatus==2 && wood>0.65)
+		if (burnStatus==burning && wood>minWood)
 			wood *= .8;
-		else if(burnStatus==2){
-			burnStatus=1;
+		else if(burnStatus==burning){
+			burnStatus=notBurning;
 			wood = 0;
 		}
-		else if(burnStatus==0 && burningNeighbor(i,j) && wood>0){
+		else if(burnStatus==notBurning && burningNeighbor(i,j) && wood>0){
 			double num = Math.random();
 			if (num<probCatch)
-				burnStatus=2;
+				burnStatus=burning;
 		}
 		futureCells[i][j]=burnStatus;
 		futurePatches[i][j]=wood;
@@ -34,17 +37,23 @@ public class FireGrid extends Grid {
 	
 	private boolean burningNeighbor(int r, int c){
 		boolean North=false, East=false, South=false, West=false;
-		if(r+1<currentCells.length) East = (currentCells[r+1][c]==2);
-		if(r-1>0) West = (currentCells[r-1][c]==2);
-		if(c+1<currentCells[0].length) South = (currentCells[r][c+1]==2);
-		if(c-1>0) North = (currentCells[r][c-1]==2);
+		if(r+1<currentCells.length) East = (currentCells[r+1][c]==burning);
+		if(r-1>=0) West = (currentCells[r-1][c]==burning);
+		if(c+1<currentCells[0].length) South = (currentCells[r][c+1]==burning);
+		if(c-1>=0) North = (currentCells[r][c-1]==burning);
 		return (North||East||South||West);
 	}
 
 	@Override
-	protected void setColors() {
-		colorMap.put(0, Color.GREEN);
-		colorMap.put(1, Color.YELLOW);
-		colorMap.put(2, Color.RED);
+	protected Color setColor(int i, int j) {
+		if(currentCells[i][j] == burning) return Color.RED;
+		else return colorOfPatch(i,j);
+	}
+
+	private Color colorOfPatch(int i, int j) {
+		if(futurePatches[i][j]>=2) return Color.DARKGREEN;
+		else if(futurePatches[i][j]>=1) return Color.GREEN;
+		else if(futurePatches[i][j]>0) return Color.LIGHTGREEN;
+		else return Color.YELLOW;
 	}
 }
