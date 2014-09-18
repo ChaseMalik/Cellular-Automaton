@@ -1,7 +1,9 @@
 package cellsociety_team02;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,6 +15,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Main extends Application{
+	
+    public static final Dimension DEFAULT_SIZE = new Dimension(600, 700);
+    public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
 
 	private Grid myGrid;
 	private KeyFrame frame;
@@ -20,12 +25,13 @@ public class Main extends Application{
 	private Timeline animation;
 	private Stage myStage;
 	private Scene myScene;
+	private ResourceBundle myResources;
 
 	@Override
 	public void start (Stage s)
 	{
 		myStage = s;
-		loadSimulation(s);
+		loadSimulation(s, "English");
 	}
 
 	/**
@@ -45,7 +51,7 @@ public class Main extends Application{
 		animation.play();
 	}
 
-	private void loadSimulation(Stage s){
+	private void loadSimulation(Stage s, String language){
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choose XML Source File");
 		File file = fileChooser.showOpenDialog(s);
@@ -55,18 +61,21 @@ public class Main extends Application{
 		int[][] cellsArray = xml.makeCells();
 		double[][] patchesArray = xml.makePatches();
 		xml.printArray();
+		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 		animation = new Timeline();
 		s.setTitle("CA Simulation");
 		switch(model)  {
+		
 		case "Fire": myGrid = new FireGrid(parameters, cellsArray, patchesArray); break;
 		case "PredPrey" : myGrid = new PredPreyGrid(parameters, cellsArray, patchesArray); break;
 		case "Segregation": myGrid = new SegregationGrid(parameters,cellsArray, patchesArray); break;
 		case "Life": myGrid = new LifeGrid(parameters,cellsArray, patchesArray); break;
 		}
-		myScene = myGrid.init(600, 700);
+		myScene = myGrid.init(DEFAULT_SIZE.width, DEFAULT_SIZE.height, myResources);
 		s.setScene(myScene);
 		s.show();
 		interval = 1.0;
+		myGrid.updateSpeedText(interval);
 		startAnimation();
 		makeKeyHandler();
 	}
@@ -79,10 +88,12 @@ public class Main extends Application{
 					if (interval <= Math.pow(0.5, 7))
 						break;
 					interval*=0.5; 
+					myGrid.updateSpeedText(interval);
 					startAnimation(); 
 					break;
 				case DOWN: 
 					interval*=2;
+					myGrid.updateSpeedText(interval);
 					startAnimation();
 					break;
 				case SPACE: 
@@ -93,7 +104,7 @@ public class Main extends Application{
 					break;
 				case L: 
 					myStage.close(); 
-					loadSimulation(myStage); 
+					loadSimulation(myStage, "English"); 
 					break;
 				default:
 					break;

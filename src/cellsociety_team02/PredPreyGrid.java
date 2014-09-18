@@ -14,7 +14,7 @@ public class PredPreyGrid extends Grid {
 	 * 1 = fish
 	 * 2 = shark
 	 * 
-	 * 
+	 * Needs heavy re-factoring
 	 * 
 	 */
 	
@@ -29,11 +29,8 @@ public class PredPreyGrid extends Grid {
 	public PredPreyGrid(Map<String, String> parametersMap, int[][] initialCells, double[][] initialPatches) {
 		super(parametersMap, initialCells, initialPatches);
 		fbreed = Integer.parseInt(map.get("fishBreed"));
-		System.out.println("Fbreed: " + fbreed);
 		sbreed = Integer.parseInt(map.get("sharkBreed"));
-		System.out.println("Sbreed: " + sbreed);
 		starve = Integer.parseInt(map.get("sharkStarve"));
-		System.out.println("SharkStarve: " + starve);
 		fishState = new int[initialCells.length][initialCells[0].length];
 		sharkState = new int[initialCells.length][initialCells[0].length];
 		sharkStarve = new int[initialCells.length][initialCells[0].length];
@@ -61,7 +58,6 @@ public class PredPreyGrid extends Grid {
 		if (sharkStarve[r][c] >= starve){
 			sharkStarve[r][c] = 0;
 			futureCells[r][c] = 0;
-			System.out.println("Removed shark");
 			return;
 		}
 		ArrayList<newMove> possibleMoves = getMoves(r,c);
@@ -94,12 +90,10 @@ public class PredPreyGrid extends Grid {
 					futureCells[currentR][currentC] = 1;
 					fishState[currentR][currentC] = 0;
 					fishState[newR][newC] = 0;
-					System.out.println("Breeded fish");
 				}
 				else{
 					futureCells[currentR][currentC] = 0;
 					fishState[newR][newC] = fishState[currentR][currentC]+1;
-					System.out.println("Not breeded fish: " + fishState[newR][newC]);
 				}
 				fishState[currentR][currentC] = 0;	
 			}
@@ -108,13 +102,10 @@ public class PredPreyGrid extends Grid {
 					futureCells[currentR][currentC] = 2;
 					sharkState[currentR][currentC] = 0;
 					sharkState[newR][newC] = 0;
-					System.out.println("Breeded shark");
 				}
 				else{
 					futureCells[currentR][currentC] = 0;
 					sharkState[newR][newC] = sharkState[currentR][currentC]+1;
-					System.out.println("Not breeded shark: " + sharkState[newR][newC]);
-
 				}
 				
 				if (currentCells[newR][newC] == 1) {
@@ -130,14 +121,14 @@ public class PredPreyGrid extends Grid {
 			}
 		}
 	}
-	
+	/*
 	private int checkNeighbor(int r, int c) {
 		if (r>=currentCells.length && r<0 && c>=currentCells[0].length && c<0)
 			return -1;
 		else
 			return currentCells[r][c];
 	}
-	
+	*/
 	private ArrayList<newMove> getMoves(int r, int c){
 		boolean fishAvailable = false;
 		ArrayList<newMove> moves = new ArrayList<newMove>(); 

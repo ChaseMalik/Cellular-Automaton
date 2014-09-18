@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javafx.animation.KeyFrame;
 import javafx.event.ActionEvent;
@@ -11,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public abstract class Grid {
@@ -24,7 +26,10 @@ public abstract class Grid {
 	protected double[][] futurePatches;
 	protected boolean isRunning;
 	protected Collection<Cell> cells;
-	protected Map colorMap;
+	protected Map<Integer, Color> colorMap;
+	private int stepCount;
+	private Text stepText;
+	private Text speedText;
 	
 	protected double cellWidth;
 	protected double cellHeight;
@@ -46,13 +51,39 @@ public abstract class Grid {
 		isRunning = false;
 	}
 	
-	public Scene init(int width, int height) {
+	public Scene init(int width, int height, ResourceBundle bundle) {
 		group = new Group();
 		scene = new Scene(group, width, height, Color.WHITE);
 		cells = new ArrayList<Cell>();
 		group.getChildren().addAll(cells);
+		stepCount = 0;
 		updateDisplay();
+		updateStepCounter();
+		makeText(bundle);
 		return scene;
+	}
+	
+	private void makeText(ResourceBundle bundle) {
+		group.getChildren().add(new Text(30, 620, bundle.getString("SpeedDisplay")));
+		group.getChildren().add(new Text(30, 640, bundle.getString("StepsDisplay")));
+		group.getChildren().add(new Text(220, 615, bundle.getString("StartStopCommand")));
+		group.getChildren().add(new Text(220, 630, bundle.getString("StepCommand")));
+		group.getChildren().add(new Text(220, 645, bundle.getString("IncreaseSpeedCommand")));
+		group.getChildren().add(new Text(220, 660, bundle.getString("DecreaseSpeedCommand")));
+		group.getChildren().add(new Text(220, 675, bundle.getString("LoadCommand")));
+	}
+	
+	public void updateSpeedText(double interval){
+		group.getChildren().remove(speedText);
+		speedText = new Text(120, 620, String.valueOf(1.0/interval));
+		group.getChildren().add(speedText);
+	}
+	
+	private void updateStepCounter() {
+		group.getChildren().remove(stepText);
+		stepText = new Text(150, 640, String.valueOf(stepCount));
+		group.getChildren().add(stepText);
+		stepCount++;
 	}
 	
 	public KeyFrame startHandlers(double interval) {
@@ -75,6 +106,7 @@ public abstract class Grid {
 				updateCellandPatch(r, c);
 			}
 		}
+		updateStepCounter();
 	}
 	
 	protected void updateDisplay(){
