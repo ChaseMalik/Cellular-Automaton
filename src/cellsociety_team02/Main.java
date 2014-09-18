@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -20,18 +21,19 @@ public class Main extends Application{
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
 
 	private Grid myGrid;
-	private KeyFrame frame;
-	private double interval;
-	private Timeline animation;
+	private double myInterval;
+	private Timeline myAnimation;
+	/*private KeyFrame frame;
 	private Stage myStage;
-	private Scene myScene;
+	private Scene myScene;*/
 	private ResourceBundle myResources;
 
 	@Override
 	public void start (Stage s)
 	{
-		myStage = s;
+		//Platform.setImplicitExit(true);
 		loadSimulation(s, "English");
+		//myStage = s;
 	}
 
 	/**
@@ -43,27 +45,25 @@ public class Main extends Application{
 	}
 
 	private void startAnimation() {
-		animation.stop();
-		frame = myGrid.startHandlers(interval);
-		animation.setCycleCount(Timeline.INDEFINITE);
-		animation.getKeyFrames().clear();
-		animation.getKeyFrames().add(frame);
-		animation.play();
+		myAnimation.stop();
+		KeyFrame frame = myGrid.startHandlers(myInterval);
+		myAnimation.setCycleCount(Timeline.INDEFINITE);
+		myAnimation.getKeyFrames().clear();
+		myAnimation.getKeyFrames().add(frame);
+		myAnimation.play();
 	}
 
+
 	private void loadSimulation(Stage s, String language){
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Choose XML Source File");
-		File file = fileChooser.showOpenDialog(s);
-		XMLParser xml = new XMLParser(file);
-		String model = xml.getModelAndInitialize();
-		Map<String,String> parameters = xml.makeParameterMap();
-		int[][] cellsArray = xml.makeCells();
-		double[][] patchesArray = xml.makePatches();
-		xml.printArray();
+
+                s.setTitle("CA Simulation");
+                XMLParser parser = loadFileToParser(s);
+		String model = parser.getModelAndInitialize();
+		Map<String,String> parameters = parser.makeParameterMap();
+		int[][] cellsArray = parser.makeCells();
+		double[][] patchesArray = parser.makePatches();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
-		animation = new Timeline();
-		s.setTitle("CA Simulation");
+
 		switch(model)  {
 		
 		case "Fire": myGrid = new FireGrid(parameters, cellsArray, patchesArray); break;
@@ -71,30 +71,42 @@ public class Main extends Application{
 		case "Segregation": myGrid = new SegregationGrid(parameters,cellsArray, patchesArray); break;
 		case "Life": myGrid = new LifeGrid(parameters,cellsArray, patchesArray); break;
 		}
-		myScene = myGrid.init(DEFAULT_SIZE.width, DEFAULT_SIZE.height, myResources);
-		s.setScene(myScene);
+		
+                myAnimation = new Timeline();
+		Scene scene = myGrid.init(DEFAULT_SIZE.width, DEFAULT_SIZE.height, myResources);
+		s.setScene(scene);
 		s.show();
-		interval = 1.0;
-		myGrid.updateSpeedText(interval);
+		myInterval = 1.0;
+		myGrid.updateSpeedText(myInterval);
 		startAnimation();
-		makeKeyHandler();
+		makeKeyHandler(s,scene);
 	}
-	
-	private void makeKeyHandler(){
-		myScene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+
+
+	private XMLParser loadFileToParser(Stage s) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Choose XML Source File");
+		File file = fileChooser.showOpenDialog(s);
+		XMLParser xml = new XMLParser(file);
+		return xml;
+	}
+
+	private void makeKeyHandler(Stage s, Scene scene){
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override public void handle(KeyEvent ke) {
 				switch (ke.getCode()){
 				case UP: 
-					if (interval <= Math.pow(0.5, 7))
+					if (myInterval <= Math.pow(0.5, 7))
 						break;
-					interval*=0.5; 
-					myGrid.updateSpeedText(interval);
+					myInterval*=0.5; 
+					myGrid.updateSpeedText(myInterval);
 					startAnimation(); 
 					break;
 				case DOWN: 
-					interval*=2;
-					myGrid.updateSpeedText(interval);
-					startAnimation();
+					myInterval*=2;
+					myGrid.updateSpeedText(myInterval);
+					startAnimation(); 
 					break;
 				case SPACE: 
 					myGrid.startStop(); 
@@ -103,14 +115,17 @@ public class Main extends Application{
 					myGrid.step(); 
 					break;
 				case L: 
-					myStage.close(); 
-					loadSimulation(myStage, "English"); 
+				        myAnimation.stop();
+					//s.close();
+					loadSimulation(s, "English"); 
 					break;
+				case Q:
+				        System.exit(0);
 				default:
 					break;
 				}
 			}			
 		});
 	}
-	
+
 }

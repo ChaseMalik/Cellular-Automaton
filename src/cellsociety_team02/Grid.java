@@ -2,7 +2,6 @@ package cellsociety_team02;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -12,12 +11,12 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public abstract class Grid {
 	
-	protected Scene scene;
 	protected Group group;
 	protected Map<String,String> map;
 	protected int[][] currentCells;
@@ -25,37 +24,39 @@ public abstract class Grid {
 	protected double[][] currentPatches;
 	protected double[][] futurePatches;
 	protected boolean isRunning;
-	protected Collection<Cell> cells;
-	protected Map<Integer, Color> colorMap;
+	protected Collection<Rectangle> cellsAndPatches;
 	private int stepCount;
 	private Text stepText;
 	private Text speedText;
+
 	
 	protected double cellWidth;
 	protected double cellHeight;
 	
 	public Grid(Map<String,String> parametersMap, int[][] initialCells, double[][] initialPatches) {
 		map = parametersMap;
-		colorMap = new HashMap<Integer, Color>();
-		setColors();
 		futureCells = initialCells;
 		futurePatches = initialPatches;
 		currentCells = new int[futureCells.length][];
 		currentPatches = new double[futurePatches.length][];
-		for(int i = 0; i < futureCells.length; i++) {
-		    currentCells[i] = futureCells[i].clone();
-		    currentPatches[i] = futurePatches[i].clone();
-		}
+		setCurrentToFuture();
 		cellHeight = 600.0/(initialCells.length);
 		cellWidth = 600.0/(initialCells[0].length);
 		isRunning = false;
 	}
+
+	private void setCurrentToFuture() {
+		for(int i = 0; i < futureCells.length; i++) {
+		    currentCells[i] = futureCells[i].clone();
+		    currentPatches[i] = futurePatches[i].clone();
+		}
+	}
 	
 	public Scene init(int width, int height, ResourceBundle bundle) {
 		group = new Group();
-		scene = new Scene(group, width, height, Color.WHITE);
-		cells = new ArrayList<Cell>();
-		group.getChildren().addAll(cells);
+		Scene scene = new Scene(group, width, height, Color.WHITE);
+		cellsAndPatches = new ArrayList<Rectangle>();
+		group.getChildren().addAll(cellsAndPatches);
 		stepCount = 0;
 		updateDisplay();
 		updateStepCounter();
@@ -87,10 +88,11 @@ public abstract class Grid {
 	}
 	
 	public KeyFrame startHandlers(double interval) {
-		
+
 		KeyFrame kf = new KeyFrame(Duration.seconds(interval), new EventHandler<ActionEvent>() {
 	    @Override
 	    public void handle(ActionEvent event) {
+
 	    	if (isRunning){
 	    		updateStates();
 	    		updateDisplay();
@@ -110,26 +112,24 @@ public abstract class Grid {
 	}
 	
 	protected void updateDisplay(){
-		group.getChildren().removeAll(cells);
-		cells.clear();
+		group.getChildren().removeAll(cellsAndPatches);
+		cellsAndPatches.clear();
 		for (int r=0; r<futureCells.length; r++) {
 			for (int c=0; c<futureCells[0].length; c++) {
-				Cell newCell = new Cell(c*cellWidth, r*cellHeight, cellWidth, cellHeight, futureCells[r][c], colorMap);
-				cells.add(newCell);
-				group.getChildren().add(newCell);
+				Rectangle newDisplay = new Rectangle(c*cellWidth, r*cellHeight, cellWidth, cellHeight);
+				newDisplay.setFill(setColor(r,c));
+				cellsAndPatches.add(newDisplay);
+				group.getChildren().add(newDisplay);
 			}
 		}
 		currentCells = new int[futureCells.length][];
 		currentPatches = new double[futurePatches.length][];
-		for(int i = 0; i < futureCells.length; i++) {
-		    currentCells[i] = futureCells[i].clone();
-		    currentPatches[i] = futurePatches[i].clone();
-		}
+		setCurrentToFuture();
 	}
 	
 	protected abstract void updateCellandPatch(int r, int c);
 	
-	protected abstract void setColors();
+	protected abstract Color setColor(int r, int c);
 	
 	public void startStop() {
 		isRunning = !isRunning;
