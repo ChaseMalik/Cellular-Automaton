@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -27,7 +26,11 @@ public class Main extends Application{
 	private Stage myStage;
 	//private Scene myScene;
 	private ResourceBundle myResources;
-
+	/**
+         * Load initial simulation and initialize myStage
+         * 
+         * @param s = value to be initialized as myStage
+         */
 	@Override
 	public void start (Stage s)
 	{
@@ -43,21 +46,29 @@ public class Main extends Application{
 	{
 		launch(args);
 	}
-
+	/**
+         * Run the animation.
+         * Can be re-called to change with different speeds
+         */
 	private void startAnimation() {
 		myAnimation.stop();
-		KeyFrame frame = myGrid.startHandlers(myInterval);
+		KeyFrame frame = myGrid.startHandler(myInterval);
 		myAnimation.setCycleCount(Timeline.INDEFINITE);
 		myAnimation.getKeyFrames().clear();
 		myAnimation.getKeyFrames().add(frame);
 		myAnimation.play();
 	}
 
-
+	/**
+         * Loads specific simulation based off XML parameters, including 2D arrays of Cells and Patches
+         * Initialize scene
+         * @param s Stage being acted
+         * @param language of text to be displayed
+         */
 	private void loadSimulation(Stage s, String language){
 		myStage = s;
-        myStage.setTitle("CA Simulation");
-        XMLParser parser = loadFileToParser();
+                myStage.setTitle("CA Simulation");
+                XMLParser parser = loadFileToParser();
 		String model = parser.getModelAndInitialize();
 		Map<String,String> parameters = parser.makeParameterMap();
 		int[][] cellsArray = parser.makeCells();
@@ -83,7 +94,12 @@ public class Main extends Application{
 	}
 
 
-
+	/**
+         * Open window to choose XML file to load
+         * 
+         * @param s Stage to open window in
+         * @return XMLParser with methods to parse the xml file correctly
+         */
 	private XMLParser loadFileToParser() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choose XML Source File");
@@ -91,7 +107,13 @@ public class Main extends Application{
 		XMLParser xml = new XMLParser(file);
 		return xml;
 	}
-
+	/**
+         * The user controls for the simulation 
+         * Up/Down to speed/slow, Space to play/pause
+         * Right to step, "L" to load new XML, "Q" to quit the program
+         * 
+         * @param scene Scene for the keyhandler to act on
+         */
 	private void makeKeyHandler(Scene scene){
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override public void handle(KeyEvent ke) {
