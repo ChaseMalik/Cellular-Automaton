@@ -49,8 +49,8 @@ public class PredPreyGrid extends Grid {
 	
 	@Override
 	protected void setColors() {
-		colorMap.put(0, Color.LIGHTBLUE);
-		colorMap.put(1, Color.LIGHTGREEN);
+		colorMap.put(0, Color.ROYALBLUE);
+		colorMap.put(1, Color.LIMEGREEN);
 		colorMap.put(2, Color.RED);
 	}
 

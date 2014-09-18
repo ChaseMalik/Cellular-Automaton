@@ -5,9 +5,9 @@
 		<cols>20</cols>
 	</info>	
 	<parameters>
-		<fishBreed>6</fishBreed>
-		<sharkBreed>10</sharkBreed>
-		<sharkStarve>10</sharkStarve>
+		<fishBreed>4</fishBreed>
+		<sharkBreed>6</sharkBreed>
+		<sharkStarve>6</sharkStarve>
 	</parameters>
 	<cell>
 		<r>3</r>

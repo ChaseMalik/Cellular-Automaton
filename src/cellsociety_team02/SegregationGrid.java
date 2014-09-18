@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javafx.scene.paint.Color;
+
 public class SegregationGrid extends Grid {
 
 	double threshold;
@@ -64,7 +66,9 @@ public class SegregationGrid extends Grid {
 
 	@Override
 	protected void setColors() {
-		// TODO Auto-generated method stub
+		colorMap.put(0, Color.WHITE);
+		colorMap.put(1, Color.RED);
+		colorMap.put(2, Color.BLUE);
 		
 	}
 
