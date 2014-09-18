@@ -10,16 +10,16 @@ public class FireGrid extends Grid {
 
 	public FireGrid(Map<String, String> parametersMap, int[][] initialCells, double[][] initialPatches) {
 		super(parametersMap, initialCells, initialPatches);
-		probCatch = Double.parseDouble(parametersMap.get("percent"));
+		probCatch = Double.parseDouble(parametersMap.get("probCatch"));
 	}
 
 	@Override
 	protected void updateCellandPatch(int i, int j) {
 		int burnStatus = currentCells[i][j];
 		double wood = currentPatches[i][j];
-		if (burnStatus==2 && wood>0)
+		if (burnStatus==2 && wood>0.6)
 			wood *= .8;
-		else if(burnStatus==2 && wood<.6){
+		else if(burnStatus==2){
 			burnStatus=1;
 			wood = 0;
 		}
