@@ -1,16 +1,26 @@
 <CAModel>
-	<info>
-		<model>Fire</model>
-		<rows>16</rows>
-		<cols>16</cols>
-	</info>	
-	<parameters>
-		<percent>.6</percent>
-	</parameters>	
-	<cell>
-		<r>7</r>
-		<c>7</c>
-		<state>2</state>
-	</cell>	
-	
+	<animation model = "Fire" rows = "16" columns = "16">
+		<parameters>
+			<parameter name = "probCatch" value = "0.60"></parameter>
+		</parameters>
+		<cells>
+			<cell row = "0" column = "2" state = "2"></cell>
+			<cell row = "0" column = "6" state = "2"></cell>
+			<cell row = "1" column = "2" state = "1"></cell>
+			<cell row = "1" column = "5" state = "2"></cell>
+			<cell row = "2" column = "0" state = "1"></cell>
+			<cell row = "2" column = "7" state = "1"></cell>
+			<cell row = "3" column = "1" state = "2"></cell>
+			<cell row = "3" column = "3" state = "1"></cell>
+			<cell row = "5" column = "0" state = "1"></cell>
+			<cell row = "5" column = "5" state = "2"></cell>
+			<cell row = "6" column = "4" state = "1"></cell>
+			<cell row = "6" column = "7" state = "1"></cell>
+			<cell row = "7" column = "2" state = "2"></cell>
+			<cell row = "7" column = "3" state = "1"></cell>
+		</cells>
+		<patches>
+			<patch row = "7" column = "2" state = "2"></patch>
+		</patches>
+	</animation>
 </CAModel>

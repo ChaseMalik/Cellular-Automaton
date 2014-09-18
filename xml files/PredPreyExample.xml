@@ -1,129 +1,33 @@
-<CAPredPrey>
-	<info>
-		<model>PredPrey</model>
-		<rows>20</rows>
-		<cols>20</cols>
-	</info>	
-	<parameters>
-		<fishBreed>6</fishBreed>
-		<sharkBreed>10</sharkBreed>
-		<sharkStarve>10</sharkStarve>
-	</parameters>
-	<cell>
-		<r>3</r>
-		<c>6</c>
-		<state>1</state>
-	</cell>
-		<cell>
-		<r>5</r>
-		<c>14</c>
-		<state>1</state>
-	</cell>
-	<cell>
-		<r>15</r>
-		<c>7</c>
-		<state>1</state>
-	</cell>
-		<cell>
-		<r>8</r>
-		<c>2</c>
-		<state>2</state>
-	</cell>
-	<cell>
-		<r>17</r>
-		<c>3</c>
-		<state>2</state>
-	</cell>
-	<cell>
-		<r>18</r>
-		<c>10</c>
-		<state>2</state>
-	</cell>
-		<cell>
-		<r>4</r>
-		<c>12</c>
-		<state>2</state>
-	</cell>
-	<cell>
-		<r>1</r>
-		<c>1</c>
-		<state>2</state>
-	</cell>
-	<cell>
-		<r>0</r>
-		<c>4</c>
-		<state>1</state>
-	</cell>	
-	
-	<cell>
-		<r>2</r>
-		<c>8</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>3</r>
-		<c>19</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>12</r>
-		<c>9</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>7</r>
-		<c>17</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>6</r>
-		<c>4</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>17</r>
-		<c>5</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>14</r>
-		<c>7</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>18</r>
-		<c>8</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>19</r>
-		<c>15</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>14</r>
-		<c>18</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>19</r>
-		<c>3</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>10</r>
-		<c>18</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>16</r>
-		<c>4</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>4</r>
-		<c>14</c>
-		<state>1</state>
-	</cell>	
-	
-</CAPredPrey>
+<CAModel>
+	<animation model = "PredPrey" rows = "20" columns = "20">
+		<parameters>
+			<parameter name = "fishBreed" value = "6"></parameter>
+			<parameter name = "sharkBreed" value = "10"></parameter>
+			<parameter name = "sharkStarve" value = "10"></parameter>
+		</parameters>
+		<cells>
+			<cell row = "0" column = "4" state = "1"></cell>
+			<cell row = "1" column = "1" state = "2"></cell>
+			<cell row = "2" column = "8" state = "1"></cell>
+			<cell row = "3" column = "6" state = "1"></cell>
+			<cell row = "3" column = "19" state = "1"></cell>
+			<cell row = "4" column = "12" state = "2"></cell>
+			<cell row = "4" column = "14" state = "1"></cell>
+			<cell row = "5" column = "14" state = "1"></cell>
+			<cell row = "6" column = "4" state = "1"></cell>
+			<cell row = "7" column = "17" state = "1"></cell>
+			<cell row = "10" column = "18" state = "1"></cell>
+			<cell row = "12" column = "9" state = "1"></cell>
+			<cell row = "14" column = "7" state = "1"></cell>
+			<cell row = "14" column = "18" state = "1"></cell>
+			<cell row = "15" column = "7" state = "1"></cell>
+			<cell row = "16" column = "4" state = "1"></cell>
+			<cell row = "17" column = "3" state = "2"></cell>
+			<cell row = "17" column = "5" state = "1"></cell>
+			<cell row = "18" column = "8" state = "1"></cell>
+			<cell row = "18" column = "10" state = "2"></cell>
+			<cell row = "19" column = "3" state = "1"></cell>
+			<cell row = "19" column = "15" state = "1"></cell>
+		</cells>
+	</animation>
+</CAModel>

@@ -50,17 +50,18 @@ public class Main extends Application{
 		fileChooser.setTitle("Choose XML Source File");
 		File file = fileChooser.showOpenDialog(s);
 		XMLParser xml = new XMLParser(file);
-		String model = xml.getModel();
+		String model = xml.getModelAndInitialize();
 		Map<String,String> parameters = xml.makeParameterMap();
 		int[][] cellsArray = xml.makeCells();
 		double[][] patchesArray = xml.makePatches();
-		animation = new Timeline();
 		xml.printArray();
+		animation = new Timeline();
 		s.setTitle("CA Simulation");
 		switch(model)  {
 		case "Fire": myGrid = new FireGrid(parameters, cellsArray, patchesArray); break;
 		case "PredPrey" : myGrid = new PredPreyGrid(parameters, cellsArray, patchesArray); break;
 		case "Segregation": myGrid = new SegregationGrid(parameters,cellsArray, patchesArray); break;
+		case "Life": myGrid = new LifeGrid(parameters,cellsArray, patchesArray); break;
 		}
 		myScene = myGrid.init(600, 700);
 		s.setScene(myScene);
