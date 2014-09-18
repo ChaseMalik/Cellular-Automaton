@@ -1,0 +1,33 @@
+<CAModel>
+	<animation model = "Life" rows = "20" columns = "20">
+		<parameters>
+			<parameter name = "fishBreed" value = "6"></parameter>
+			<parameter name = "sharkBreed" value = "10"></parameter>
+			<parameter name = "sharkStarve" value = "10"></parameter>
+		</parameters>
+		<cells>
+			<cell row = "1" column = "1" state = "1"></cell>
+			<cell row = "1" column = "2" state = "1"></cell>
+			<cell row = "2" column = "1" state = "1"></cell>
+			<cell row = "2" column = "2" state = "1"></cell>
+			<cell row = "2" column = "4" state = "1"></cell>
+			<cell row = "2" column = "5" state = "1"></cell>
+			<cell row = "2" column = "6" state = "1"></cell>
+			<cell row = "3" column = "3" state = "1"></cell>
+			<cell row = "3" column = "4" state = "1"></cell>
+			<cell row = "3" column = "5" state = "1"></cell>
+			<cell row = "5" column = "7" state = "1"></cell>
+			<cell row = "6" column = "8" state = "1"></cell>
+			<cell row = "7" column = "6" state = "1"></cell>
+			<cell row = "7" column = "7" state = "1"></cell>
+			<cell row = "7" column = "8" state = "1"></cell>
+			<cell row = "16" column = "4" state = "1"></cell>
+			<cell row = "17" column = "3" state = "1"></cell>
+			<cell row = "17" column = "5" state = "1"></cell>
+			<cell row = "18" column = "8" state = "1"></cell>
+			<cell row = "18" column = "10" state = "1"></cell>
+			<cell row = "19" column = "3" state = "1"></cell>
+			<cell row = "19" column = "15" state = "1"></cell>
+		</cells>
+	</animation>
+</CAModel>

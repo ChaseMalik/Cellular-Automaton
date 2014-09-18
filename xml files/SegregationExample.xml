@@ -1,60 +1,24 @@
 <CAModel>
-	<info>
-		<model>Segregation</model>
-		<rows>8</rows>
-		<cols>8</cols>
-	</info>	
-	<parameters>
-		<threshold>0.30</threshold>
-	</parameters>
-	<cell>
-		<r>3</r>
-		<c>6</c>
-		<state>1</state>
-	</cell>
-	<cell>
-		<r>1</r>
-		<c>1</c>
-		<state>2</state>
-	</cell>
-	<cell>
-		<r>0</r>
-		<c>4</c>
-		<state>1</state>
-	</cell>	
-	<cell>
-		<r>7</r>
-		<c>7</c>
-		<state>1</state>
-	</cell>	
-		<cell>
-		<r>2</r>
-		<c>2</c>
-		<state>2</state>
-	</cell>	
-		<cell>
-		<r>5</r>
-		<c>5</c>
-		<state>1</state>
-	</cell>	
-		<cell>
-		<r>4</r>
-		<c>1</c>
-		<state>1</state>
-	</cell>	
-		<cell>
-		<r>1</r>
-		<c>0</c>
-		<state>1</state>
-	</cell>	
-		<cell>
-		<r>0</r>
-		<c>7</c>
-		<state>2</state>
-	</cell>	
-		<cell>
-		<r>6</r>
-		<c>3</c>
-		<state>2</state>
-	</cell>	
+	<animation model = "Segregation" rows = "8" columns = "8">
+		<parameters>
+			<parameter name = "threshold" value = "0.30"></parameter>
+		</parameters>
+		<cells>
+			<cell row = "0" column = "2" state = "2"></cell>
+			<cell row = "0" column = "6" state = "2"></cell>
+			<cell row = "0" column = "7" state = "2"></cell>
+			<cell row = "1" column = "2" state = "1"></cell>
+			<cell row = "1" column = "5" state = "1"></cell>
+			<cell row = "2" column = "0" state = "1"></cell>
+			<cell row = "2" column = "7" state = "1"></cell>
+			<cell row = "3" column = "1" state = "2"></cell>
+			<cell row = "3" column = "3" state = "1"></cell>
+			<cell row = "5" column = "0" state = "1"></cell>
+			<cell row = "5" column = "5" state = "2"></cell>
+			<cell row = "6" column = "4" state = "1"></cell>
+			<cell row = "6" column = "7" state = "1"></cell>
+			<cell row = "7" column = "2" state = "2"></cell>
+			<cell row = "7" column = "3" state = "1"></cell>
+		</cells>
+	</animation>
 </CAModel>

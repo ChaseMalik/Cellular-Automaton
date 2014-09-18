@@ -34,58 +34,71 @@ public class XMLParser {
 		}
 	}
 
-	public String getModel(){
-		NodeList infoNodes = myDoc.getElementsByTagName("info");
-		Node infoNode = infoNodes.item(0);
-		if(infoNode.getNodeType() == Node.ELEMENT_NODE) {
-			Element infoElement = (Element) infoNode;
-			myModel = getValue("model", infoElement);
-			int r = Integer.parseInt(getValue("rows", infoElement));
-			int c = Integer.parseInt(getValue("cols", infoElement));
-			if(myModel.equals("Fire")){ r+=2; c+=2;} // Fire needs padding
+	public String getModelAndInitialize(){
+		NodeList modelNodes = myDoc.getElementsByTagName("animation");
+		Node modelNode = modelNodes.item(0);
+		if(modelNode instanceof Element) {
+			myModel = getAttribute(modelNode, "model");
+			int r = Integer.parseInt(getAttribute(modelNode, "rows"));
+			int c = Integer.parseInt(getAttribute(modelNode, "columns"));
 			cellsArray = new int[r][c];
 			patchesArray = new double[r][c];
+			for(int i = 0; i<patchesArray.length; i++){
+				for(int j=0; j<patchesArray[0].length; j++){
+					patchesArray[i][j]=1;
+				}
+			}
 		}
 		return myModel;
 	}
-	public Map<String,String> makeParameterMap(){		
 
+	private String getAttribute(Node n, String s) {
+		return n.getAttributes().getNamedItem(s).getNodeValue();
+	}
+
+	public Map<String,String> makeParameterMap(){		
 		Map<String, String> pMap = new HashMap<>();
-		NodeList pNodes = myDoc.getElementsByTagName("parameters");
-		Node pNode = pNodes.item(0);
-		NodeList childNodes = pNode.getChildNodes();
-		for(int i = 0; i<childNodes.getLength(); i++){
-			Node cNode = childNodes.item(i);
-			if(cNode.getNodeType() == Node.ELEMENT_NODE){
-				Element cElement = (Element) cNode;
-				String content = cNode.getLastChild().getTextContent().trim();
-				pMap.put(cNode.getNodeName(),content);
+		NodeList parameterNodes = myDoc.getElementsByTagName("parameter");
+		for(int i = 0; i<parameterNodes.getLength(); i++){
+			Node parameter = parameterNodes.item(i);
+			if(parameter instanceof Element){
+				pMap.put(getAttribute(parameter,"name"), getAttribute(parameter,"value"));
 			}
 		}
 		return pMap;
 	}
 
 	public int[][] makeCells(){
-		NodeList cellNodes = myDoc.getElementsByTagName("cell");
-		for(int i = 0; i<cellNodes.getLength(); i++){
-			Node cNode = cellNodes.item(i);
-			if(cNode.getNodeType() == Node.ELEMENT_NODE){
-				Element cElement = (Element) cNode;
-				int r = Integer.parseInt(getValue("r",cElement));
-				int c = Integer.parseInt(getValue("c",cElement));
-				if(myModel.equals("Fire")){ r+=1; c+=1;}
-				int state = Integer.parseInt(getValue("state",cElement));
-				cellsArray[r][c] = state;
-			}
-		}
+		constructArray("cell");
 		return cellsArray;
 	}
-	
 	public double[][] makePatches(){
+		constructArray("patch");
 		return patchesArray;
 	}
-	
-	
+
+	private void constructArray(String s) {
+		boolean isInt = true;
+		if(s.equals("patch")) isInt = false;
+
+		NodeList nodes = myDoc.getElementsByTagName(s);
+		for(int i = 0; i<nodes.getLength(); i++){
+			Node node = nodes.item(i);
+			if(node instanceof Element){
+				int r = Integer.parseInt(getAttribute(node,"row"));
+				int c = Integer.parseInt(getAttribute(node,"column"));
+				if(isInt){
+					int state = Integer.parseInt(getAttribute(node,"state"));
+					cellsArray[r][c] = state;
+				}
+				else{ 
+					double state = Double.parseDouble(getAttribute(node,"state"));
+					patchesArray[r][c] = state;
+				}
+			}
+		}
+	}
+
 	public void printArray(){
 		for(int i=0; i<cellsArray.length; i++){
 			for(int j=0; j<cellsArray[0].length;j++){
@@ -93,10 +106,5 @@ public class XMLParser {
 			}
 			System.out.print("\n");
 		}
-	}
-	private static String getValue(String tag, Element element) {
-		NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
-		Node node = (Node) nodes.item(0);
-		return node.getNodeValue();
 	}
 }
