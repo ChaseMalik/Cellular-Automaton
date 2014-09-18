@@ -46,7 +46,7 @@ public class FireGrid extends Grid {
 
 	@Override
 	protected Color setColor(int i, int j) {
-		if(currentCells[i][j] == burning) return Color.RED;
+		if(futureCells[i][j] == burning) return Color.RED;
 		else return colorOfPatch(i,j);
 	}
 

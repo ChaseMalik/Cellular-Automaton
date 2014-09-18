@@ -75,7 +75,7 @@ public class SegregationGrid extends Grid {
 
 	@Override
 	protected Color setColor(int i, int j) {
-		int state = currentCells[i][j];
+		int state = futureCells[i][j];
 		if(state == stateX) return Color.RED;
 		else if (state == stateY) return Color.BLUE;
 		else return Color.WHITE;

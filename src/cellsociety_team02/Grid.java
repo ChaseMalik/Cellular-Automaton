@@ -56,10 +56,11 @@ public abstract class Grid {
 	}
 	
 	public KeyFrame startHandlers(double interval) {
-		
+
 		KeyFrame kf = new KeyFrame(Duration.seconds(interval), new EventHandler<ActionEvent>() {
 	    @Override
 	    public void handle(ActionEvent event) {
+
 	    	if (isRunning){
 	    		updateStates();
 	    		updateDisplay();

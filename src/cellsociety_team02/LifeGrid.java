@@ -33,7 +33,7 @@ public class LifeGrid extends Grid {
 
 	@Override
 	protected Color setColor(int i, int j) {
-		int state = currentCells[i][j];
+		int state = futureCells[i][j];
 		if(state == alive) return Color.BLACK;
 		else return Color.WHITE;
 

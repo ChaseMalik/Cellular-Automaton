@@ -16,15 +16,13 @@ import javafx.stage.Stage;
 public class Main extends Application{
 
 	private Grid myGrid;
-	private KeyFrame frame;
-	private double interval;
-	private Timeline animation;
-	private Scene myScene;
+	private double myInterval;
+	private Timeline myAnimation;
 
 	@Override
 	public void start (Stage s)
 	{
-		Platform.setImplicitExit(false);
+		//Platform.setImplicitExit(true);
 		loadSimulation(s);
 	}
 
@@ -37,12 +35,12 @@ public class Main extends Application{
 	}
 
 	private void startAnimation() {
-		animation.stop();
-		frame = myGrid.startHandlers(interval);
-		animation.setCycleCount(Timeline.INDEFINITE);
-		animation.getKeyFrames().clear();
-		animation.getKeyFrames().add(frame);
-		animation.play();
+		myAnimation.stop();
+		KeyFrame frame = myGrid.startHandlers(myInterval);
+		myAnimation.setCycleCount(Timeline.INDEFINITE);
+		myAnimation.getKeyFrames().clear();
+		myAnimation.getKeyFrames().add(frame);
+		myAnimation.play();
 	}
 
 	private void loadSimulation(Stage s){
@@ -53,8 +51,6 @@ public class Main extends Application{
 		int[][] cellsArray = parser.makeCells();
 		double[][] patchesArray = parser.makePatches();
 
-		animation = new Timeline();
-
 		switch(model)  {
 		case "Fire": myGrid = new FireGrid(parameters, cellsArray, patchesArray); break;
 		case "PredPrey" : myGrid = new PredPreyGrid(parameters, cellsArray, patchesArray); break;
@@ -62,12 +58,13 @@ public class Main extends Application{
 		case "Life": myGrid = new LifeGrid(parameters,cellsArray, patchesArray); break;
 		}
 		
-		myScene = myGrid.init(600, 700);
-		s.setScene(myScene);
+		Scene scene = myGrid.init(600, 700);
+		s.setScene(scene);
 		s.show();
-		interval = 1.0;
+		myInterval = 1.0;
+                myAnimation = new Timeline();
 		startAnimation();
-		makeKeyHandler(s);
+		makeKeyHandler(s,scene);
 	}
 
 
@@ -80,18 +77,18 @@ public class Main extends Application{
 		return xml;
 	}
 
-	private void makeKeyHandler(Stage s){
-		myScene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+	private void makeKeyHandler(Stage s, Scene scene){
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override public void handle(KeyEvent ke) {
 				switch (ke.getCode()){
 				case UP: 
-					if (interval <= Math.pow(0.5, 7))
+					if (myInterval <= Math.pow(0.5, 7))
 						break;
-					interval*=0.5; 
+					myInterval*=0.5; 
 					startAnimation(); 
 					break;
 				case DOWN: 
-					interval*=2;
+					myInterval*=2;
 					startAnimation();
 					break;
 				case SPACE: 
@@ -101,9 +98,12 @@ public class Main extends Application{
 					myGrid.step(); 
 					break;
 				case L: 
-					s.close();
-					loadSimulation(new Stage()); 
+				        myAnimation.stop();
+					//s.close();
+					loadSimulation(s); 
 					break;
+				case Q:
+				        System.exit(0);
 				default:
 					break;
 				}
