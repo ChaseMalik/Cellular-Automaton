@@ -17,13 +17,13 @@ public class FireGrid extends Grid {
 	protected void updateCellandPatch(int i, int j) {
 		int burnStatus = currentCells[i][j];
 		double wood = currentPatches[i][j];
-		if (burnStatus==2 && wood>0.6)
+		if (burnStatus==2 && wood>0.65)
 			wood *= .8;
 		else if(burnStatus==2){
 			burnStatus=1;
 			wood = 0;
 		}
-		else if(burnStatus==0 && burningNeighbor(i,j)){
+		else if(burnStatus==0 && burningNeighbor(i,j) && wood>0){
 			double num = Math.random();
 			if (num<probCatch)
 				burnStatus=2;
