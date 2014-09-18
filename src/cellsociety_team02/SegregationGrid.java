@@ -26,12 +26,12 @@ public class SegregationGrid extends Grid {
 		int state = currentCells[i][j];
 		double xNeighbors = getNeighbors(i,j, stateX);
 		double yNeighbors = getNeighbors(i,j, stateY);
-		
+
 		if(xNeighbors+yNeighbors == 0){
 			move(i,j);
 			return;
 		}
-		
+
 		double xRatio = xNeighbors/(xNeighbors+yNeighbors);
 		double yRatio = yNeighbors/(xNeighbors+yNeighbors);
 		if(!(state==stateX && xRatio>threshold) && !(state==stateY && yRatio>threshold)){

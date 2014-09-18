@@ -7,7 +7,7 @@ import java.util.Map;
 import javafx.scene.paint.Color;
 
 public class PredPreyGrid extends Grid {
-	
+
 	/*
 	 * STATES:
 	 * 0 = empty
@@ -17,7 +17,7 @@ public class PredPreyGrid extends Grid {
 	 * Needs heavy re-factoring
 	 * 
 	 */
-	
+
 	private int[][] fishState;
 	private int[][] sharkState;
 	private int[][] sharkStarve;
@@ -42,7 +42,7 @@ public class PredPreyGrid extends Grid {
 			}
 		}
 	}
-	
+
 	@Override
 	protected Color setColor(int i, int j) {
 		state = currentCells[i][j];
@@ -75,7 +75,7 @@ public class PredPreyGrid extends Grid {
 		newMove nextMove = possibleMoves.get(random);
 		nextMove.doNextMove(r,c);
 	}
-	
+
 	public class newMove {
 		private int newR;
 		private int newC;
@@ -107,7 +107,7 @@ public class PredPreyGrid extends Grid {
 					futureCells[currentR][currentC] = 0;
 					sharkState[newR][newC] = sharkState[currentR][currentC]+1;
 				}
-				
+
 				if (currentCells[newR][newC] == 1) {
 					sharkStarve[newR][newC] = 0;
 					currentCells[newR][newC] = 0;
@@ -128,78 +128,78 @@ public class PredPreyGrid extends Grid {
 		else
 			return currentCells[r][c];
 	}
-	*/
-	private ArrayList<newMove> getMoves(int r, int c){
-		boolean fishAvailable = false;
-		ArrayList<newMove> moves = new ArrayList<newMove>(); 
-		
-		//If shark, check for available fish spaces
-		if (state == 2) {
+	 */
+	 private ArrayList<newMove> getMoves(int r, int c){
+		 boolean fishAvailable = false;
+		 ArrayList<newMove> moves = new ArrayList<newMove>(); 
 
-			if (r+1<currentCells.length && currentCells[r+1][c] == 1 && futureCells[r+1][c] == 1){
-				moves.add(new newMove(r+1, c, currentCells[r+1][c]));
-				fishAvailable = true;
-			}
-			if (r+1>=currentCells.length && currentCells[0][c] == 1 && futureCells[0][c] == 1) {
-				moves.add(new newMove(0, c, currentCells[0][c]));
-				fishAvailable = true;
-			}
-			if (r-1>=0 && currentCells[r-1][c] == 1 && futureCells[r-1][c] == 1){
-				moves.add(new newMove(r-1, c, currentCells[r-1][c]));
-				fishAvailable = true;
-			}
-			if (r-1<0 && currentCells[currentCells.length-1][c] == 1 && futureCells[currentCells.length-1][c] == 1){
-				moves.add(new newMove(currentCells.length-1, c, currentCells[currentCells.length-1][c]));
-				fishAvailable = true;
-			}
-			if (c+1<currentCells[0].length && currentCells[r][c+1] == 1 && futureCells[r][c+1] == 1){
-				moves.add(new newMove(r, c+1, currentCells[r][c+1]));
-				fishAvailable = true;
-			}
-			if (c+1>=currentCells[0].length && currentCells[r][0] == 1 && futureCells[r][0] == 1){
-				moves.add(new newMove(r, 0, currentCells[r][0]));
-				fishAvailable = true;
-			}
-			if (c-1>=0 && currentCells[r][c-1] == 1 && futureCells[r][c-1] == 1){
-				moves.add(new newMove(r, c-1, currentCells[r][c-1]));
-				fishAvailable = true;
-			}
-			if (c-1<0 && currentCells[r][currentCells[0].length-1] == 1 && futureCells[r][currentCells[0].length-1] == 1){
-				moves.add(new newMove(r, currentCells[0].length-1, currentCells[r][currentCells[0].length-1]));
-				fishAvailable = true;
-			}
-			if (fishAvailable)
-				return moves;
-		}
-		
-		//Else, check for blank spaces (for fish and sharks)
-		if (r+1<currentCells.length && currentCells[r+1][c] == 0 && futureCells[r+1][c] == 0){
-			moves.add(new newMove(r+1, c, currentCells[r+1][c]));
-		}
-		if (r+1>=currentCells.length && currentCells[0][c] == 0 && futureCells[0][c] == 0) {
-			moves.add(new newMove(0, c, currentCells[0][c]));
-		}
-		if (r-1>=0 && currentCells[r-1][c] == 0 && futureCells[r-1][c] == 0) {
-			moves.add(new newMove(r-1, c, currentCells[r-1][c]));
-		}
-		if (r-1<0 && currentCells[currentCells.length-1][c] == 0 && futureCells[currentCells.length-1][c] == 0){
-			moves.add(new newMove(currentCells.length-1, c, currentCells[currentCells.length-1][c]));
-		}
-		if (c+1<currentCells[0].length && currentCells[r][c+1] == 0 && futureCells[r][c+1] == 0){
-			moves.add(new newMove(r, c+1, currentCells[r][c+1]));
-		}
-		if (c+1>=currentCells[0].length && currentCells[r][0] == 0 && futureCells[r][0] == 0){
-			moves.add(new newMove(r, 0, currentCells[r][0]));
-		}
-		if (c-1>=0 && currentCells[r][c-1] == 0 && futureCells[r][c-1] == 0){
-			moves.add(new newMove(r, c-1, currentCells[r][c-1]));
-		}
-		if (c-1<0 && currentCells[r][currentCells[0].length-1] == 1 && futureCells[r][currentCells[0].length-1] == 1){
-			moves.add(new newMove(r, currentCells[0].length-1, currentCells[r][currentCells[0].length-1]));
-		}
-		
-		
-		return moves;
-	}
+		 //If shark, check for available fish spaces
+		 if (state == 2) {
+
+			 if (r+1<currentCells.length && currentCells[r+1][c] == 1 && futureCells[r+1][c] == 1){
+				 moves.add(new newMove(r+1, c, currentCells[r+1][c]));
+				 fishAvailable = true;
+			 }
+			 if (r+1>=currentCells.length && currentCells[0][c] == 1 && futureCells[0][c] == 1) {
+				 moves.add(new newMove(0, c, currentCells[0][c]));
+				 fishAvailable = true;
+			 }
+			 if (r-1>=0 && currentCells[r-1][c] == 1 && futureCells[r-1][c] == 1){
+				 moves.add(new newMove(r-1, c, currentCells[r-1][c]));
+				 fishAvailable = true;
+			 }
+			 if (r-1<0 && currentCells[currentCells.length-1][c] == 1 && futureCells[currentCells.length-1][c] == 1){
+				 moves.add(new newMove(currentCells.length-1, c, currentCells[currentCells.length-1][c]));
+				 fishAvailable = true;
+			 }
+			 if (c+1<currentCells[0].length && currentCells[r][c+1] == 1 && futureCells[r][c+1] == 1){
+				 moves.add(new newMove(r, c+1, currentCells[r][c+1]));
+				 fishAvailable = true;
+			 }
+			 if (c+1>=currentCells[0].length && currentCells[r][0] == 1 && futureCells[r][0] == 1){
+				 moves.add(new newMove(r, 0, currentCells[r][0]));
+				 fishAvailable = true;
+			 }
+			 if (c-1>=0 && currentCells[r][c-1] == 1 && futureCells[r][c-1] == 1){
+				 moves.add(new newMove(r, c-1, currentCells[r][c-1]));
+				 fishAvailable = true;
+			 }
+			 if (c-1<0 && currentCells[r][currentCells[0].length-1] == 1 && futureCells[r][currentCells[0].length-1] == 1){
+				 moves.add(new newMove(r, currentCells[0].length-1, currentCells[r][currentCells[0].length-1]));
+				 fishAvailable = true;
+			 }
+			 if (fishAvailable)
+				 return moves;
+		 }
+
+		 //Else, check for blank spaces (for fish and sharks)
+		 if (r+1<currentCells.length && currentCells[r+1][c] == 0 && futureCells[r+1][c] == 0){
+			 moves.add(new newMove(r+1, c, currentCells[r+1][c]));
+		 }
+		 if (r+1>=currentCells.length && currentCells[0][c] == 0 && futureCells[0][c] == 0) {
+			 moves.add(new newMove(0, c, currentCells[0][c]));
+		 }
+		 if (r-1>=0 && currentCells[r-1][c] == 0 && futureCells[r-1][c] == 0) {
+			 moves.add(new newMove(r-1, c, currentCells[r-1][c]));
+		 }
+		 if (r-1<0 && currentCells[currentCells.length-1][c] == 0 && futureCells[currentCells.length-1][c] == 0){
+			 moves.add(new newMove(currentCells.length-1, c, currentCells[currentCells.length-1][c]));
+		 }
+		 if (c+1<currentCells[0].length && currentCells[r][c+1] == 0 && futureCells[r][c+1] == 0){
+			 moves.add(new newMove(r, c+1, currentCells[r][c+1]));
+		 }
+		 if (c+1>=currentCells[0].length && currentCells[r][0] == 0 && futureCells[r][0] == 0){
+			 moves.add(new newMove(r, 0, currentCells[r][0]));
+		 }
+		 if (c-1>=0 && currentCells[r][c-1] == 0 && futureCells[r][c-1] == 0){
+			 moves.add(new newMove(r, c-1, currentCells[r][c-1]));
+		 }
+		 if (c-1<0 && currentCells[r][currentCells[0].length-1] == 1 && futureCells[r][currentCells[0].length-1] == 1){
+			 moves.add(new newMove(r, currentCells[0].length-1, currentCells[r][currentCells[0].length-1]));
+		 }
+
+
+		 return moves;
+	 }
 
 }

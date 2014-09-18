@@ -8,7 +8,7 @@ public class FireGrid extends Grid {
 	private static final int burning = 1;
 	private static final int notBurning = 0;
 	private static final double minWood = 1;
-	
+
 	double probCatch;
 
 	public FireGrid(Map<String, String> parametersMap, int[][] initialCells, double[][] initialPatches) {
@@ -34,7 +34,7 @@ public class FireGrid extends Grid {
 		futureCells[i][j]=burnStatus;
 		futurePatches[i][j]=wood;
 	}
-	
+
 	private boolean burningNeighbor(int r, int c){
 		boolean North=false, East=false, South=false, West=false;
 		if(r+1<currentCells.length) East = (currentCells[r+1][c]==burning);

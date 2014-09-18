@@ -5,14 +5,14 @@ import java.util.Map;
 import javafx.scene.paint.Color;
 
 public class LifeGrid extends Grid {
-	
+
 	private static final int alive = 1;
 	private static final int dead = 0;
-	
+
 	public LifeGrid(Map<String, String> parametersMap,
 			int[][] initialCells, double[][] initialPatches) {
 		super(parametersMap, initialCells, initialPatches);
-		
+
 	}
 
 	@Override
