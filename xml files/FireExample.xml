@@ -21,6 +21,9 @@
 		</cells>
 		<patches>
 			<patch row = "7" column = "2" state = "2"></patch>
+			<patch row = "15" column = "12" state = "2"></patch>
+			<patch row = "8" column = "8" state = "2"></patch>
+			<patch row = "0" column = "0" state = "0.6"></patch>
 		</patches>
 	</animation>
 </CAModel>

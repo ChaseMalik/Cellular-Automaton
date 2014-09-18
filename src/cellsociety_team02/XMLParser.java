@@ -43,6 +43,11 @@ public class XMLParser {
 			int c = Integer.parseInt(getAttribute(modelNode, "columns"));
 			cellsArray = new int[r][c];
 			patchesArray = new double[r][c];
+			for(int i = 0; i<patchesArray.length; i++){
+				for(int j=0; j<patchesArray[0].length; j++){
+					patchesArray[i][j]=1;
+				}
+			}
 		}
 		return myModel;
 	}
