@@ -19,6 +19,7 @@ import org.w3c.dom.NodeList;
  * @author Kevin Rhine
  */
 public class XMLParser {
+	private static final int DEFAULT_PATCH_VALUE = 1;
 	private Document myDoc;
 	private String myModel;
 	private int[][] cellsArray;
@@ -44,7 +45,9 @@ public class XMLParser {
 	}
 	/**
 	 * Gets the model type of the simulation
-	 * Initializes the arrays of cells and patches
+	 * Initializes the arrays of cells and patches with default values
+	 * Default value of cell is 0
+	 * Default value of patch is 1.0
 	 *
 	 */
 	public String getModelAndInitialize(){
@@ -56,9 +59,9 @@ public class XMLParser {
 			int c = Integer.parseInt(getAttribute(modelNode, "columns"));
 			cellsArray = new int[r][c];
 			patchesArray = new double[r][c];
-			for(int i = 1; i<patchesArray.length-1; i++){
-				for(int j=1; j<patchesArray[0].length-1; j++){
-					patchesArray[i][j]=1;
+			for(int i = 0; i<patchesArray.length; i++){
+				for(int j=0; j<patchesArray[0].length; j++){
+					patchesArray[i][j]=DEFAULT_PATCH_VALUE;
 				}
 			}
 		}

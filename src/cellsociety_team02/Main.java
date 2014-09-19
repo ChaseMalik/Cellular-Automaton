@@ -111,7 +111,7 @@ public class Main extends Application{
 	private XMLParser loadFileToParser() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir"))); // Needs to be tested on Macs +"\\xml files"
 		fileChooser.setTitle("Choose XML Source File");
 		File file = fileChooser.showOpenDialog(myStage);
 		XMLParser xml = new XMLParser(file);
