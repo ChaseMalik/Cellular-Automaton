@@ -13,11 +13,19 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+/**
+ * Prompts the user for an XML file for a CA simulation
+ * Starts the simulation
+ * Handles user input via key presses
+ * 
+ * @author Chase Malik
+ * @author Greg Lyons
+ * @author Kevin Rhine
+ */
 public class Main extends Application{
-	
-    public static final Dimension DEFAULT_SIZE = new Dimension(600, 700);
-    public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
+
+	public static final Dimension DEFAULT_SIZE = new Dimension(600, 700);
+	public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
 
 	private Grid myGrid;
 	private double myInterval;
@@ -27,10 +35,10 @@ public class Main extends Application{
 	//private Scene myScene;
 	private ResourceBundle myResources;
 	/**
-         * Load initial simulation and initialize myStage
-         * 
-         * @param s = value to be initialized as myStage
-         */
+	 * Load initial simulation and initialize myStage
+	 * 
+	 * @param s = value to be initialized as myStage
+	 */
 	@Override
 	public void start (Stage s)
 	{
@@ -47,9 +55,9 @@ public class Main extends Application{
 		launch(args);
 	}
 	/**
-         * Run the animation.
-         * Can be re-called to change with different speeds
-         */
+	 * Run the animation.
+	 * Can be re-called to change with different speeds
+	 */
 	private void startAnimation() {
 		myAnimation.stop();
 		KeyFrame frame = myGrid.startHandler(myInterval);
@@ -60,15 +68,15 @@ public class Main extends Application{
 	}
 
 	/**
-         * Loads specific simulation based off XML parameters, including 2D arrays of Cells and Patches
-         * Initialize scene
-         * @param s Stage being acted
-         * @param language of text to be displayed
-         */
+	 * Loads specific simulation based off XML parameters, including 2D arrays of Cells and Patches
+	 * Initialize scene
+	 * @param s Stage being acted
+	 * @param language of text to be displayed
+	 */
 	private void loadSimulation(Stage s, String language){
 		myStage = s;
-                myStage.setTitle("CA Simulation");
-                XMLParser parser = loadFileToParser();
+		myStage.setTitle("CA Simulation");
+		XMLParser parser = loadFileToParser();
 		String model = parser.getModelAndInitialize();
 		Map<String,String> parameters = parser.makeParameterMap();
 		int[][] cellsArray = parser.makeCells();
@@ -76,14 +84,14 @@ public class Main extends Application{
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 
 		switch(model)  {
-		
+
 		case "Fire": myGrid = new FireGrid(parameters, cellsArray, patchesArray); break;
 		case "PredPrey" : myGrid = new PredPreyGrid(parameters, cellsArray, patchesArray); break;
 		case "Segregation": myGrid = new SegregationGrid(parameters,cellsArray, patchesArray); break;
 		case "Life": myGrid = new LifeGrid(parameters,cellsArray, patchesArray); break;
 		}
-		
-                myAnimation = new Timeline();
+
+		myAnimation = new Timeline();
 		Scene scene = myGrid.init(DEFAULT_SIZE.width, DEFAULT_SIZE.height, myResources);
 		myStage.setScene(scene);
 		myStage.show();
@@ -95,25 +103,27 @@ public class Main extends Application{
 
 
 	/**
-         * Open window to choose XML file to load
-         * 
-         * @param s Stage to open window in
-         * @return XMLParser with methods to parse the xml file correctly
-         */
+	 * Open window to choose XML file to load
+	 * 
+	 * @param s Stage to open window in
+	 * @return XMLParser with methods to parse the xml file correctly
+	 */
 	private XMLParser loadFileToParser() {
 		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir"))); // Needs to be tested on Macs +"\\xml files"
 		fileChooser.setTitle("Choose XML Source File");
 		File file = fileChooser.showOpenDialog(myStage);
 		XMLParser xml = new XMLParser(file);
 		return xml;
 	}
 	/**
-         * The user controls for the simulation 
-         * Up/Down to speed/slow, Space to play/pause
-         * Right to step, "L" to load new XML, "Q" to quit the program
-         * 
-         * @param scene Scene for the keyhandler to act on
-         */
+	 * The user controls for the simulation 
+	 * Up/Down to speed/slow, Space to play/pause
+	 * Right to step, "L" to load new XML, "Q" to quit the program
+	 * 
+	 * @param scene Scene for the keyhandler to act on
+	 */
 	private void makeKeyHandler(Scene scene){
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override public void handle(KeyEvent ke) {
@@ -137,12 +147,12 @@ public class Main extends Application{
 					myGrid.step(); 
 					break;
 				case L: 
-				    myAnimation.stop();
+					myAnimation.stop();
 					//myStage.close();
 					loadSimulation(myStage, "English"); 
 					break;
 				case Q:
-				        System.exit(0);
+					System.exit(0);
 				default:
 					break;
 				}
