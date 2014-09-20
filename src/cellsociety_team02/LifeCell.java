@@ -2,6 +2,8 @@ package cellsociety_team02;
 
 import java.util.List;
 
+import javafx.scene.paint.Color;
+
 public class LifeCell extends Cell {
 	
 	private static final int alive = 1;
@@ -30,6 +32,7 @@ public class LifeCell extends Cell {
 
 	@Override
 	protected void getNeighbors(List<Cell> cellList) {
+		neighborsList.clear();
 		for (Cell c: cellList) {
 			double x = c.getCurrentX();
 			double y = c.getCurrentY();
@@ -52,6 +55,16 @@ public class LifeCell extends Cell {
 				result++;
 		}
 		return result;
+	}
+
+	@Override
+	public Color getColor() {
+		
+		if (futureState == 0)
+			myColor = Color.WHITE;
+		else
+			myColor = Color.BLACK;
+		return myColor;
 	}
 
 }

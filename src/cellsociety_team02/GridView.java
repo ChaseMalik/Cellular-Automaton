@@ -2,6 +2,7 @@ package cellsociety_team02;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -10,6 +11,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,6 +22,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -39,16 +44,18 @@ public class GridView {
 	private GridModel myModel;
 	private Timeline myAnimation;
 	private double myInterval;
+	private List<Rectangle> myRectangleList;
+	private BorderPane root;
 	
 	
 	public GridView (GridModel model, String language) {
 		myModel = model;
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
-		load();
 		myAnimation = new Timeline();
 		myInterval = 1.0;
-		startAnimation();
+		myRectangleList = new ArrayList<Rectangle>();
 
+		load();
 	}
 
 	private XMLParser loadFileToParser() {
@@ -75,7 +82,7 @@ public class GridView {
 		Button stepButton = makeButton("StepButton", new EventHandler<ActionEvent>() {
 			@Override
 			public void handle (ActionEvent event) {
-				myModel.step();
+				step();
 			}
 		});
 		box.getChildren().add(stepButton);
@@ -90,6 +97,7 @@ public class GridView {
 		List<Cell> initialCells = parser.makeCells();
 		List<Patch> initialPatches = parser.makePatches();
 		myModel.initialize(initialCells, initialPatches, parameters);
+		startAnimation();
 	}
 
 	private Button makeButton (String property, EventHandler<ActionEvent> handler) {
@@ -104,14 +112,9 @@ public class GridView {
 		return null;
 	}
 
-	private Node makeGrid() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public void initialize() {
-		BorderPane root = new BorderPane();
-		root.setCenter(makeGrid());
+		root = new BorderPane();
 		root.setTop(makeGraph());
 		root.setBottom(makeButtons());
 		myScene = new Scene(root, DEFAULT_SIZE.width, DEFAULT_SIZE.height);
@@ -135,7 +138,8 @@ public class GridView {
 		KeyFrame kf = new KeyFrame(Duration.seconds(interval), new EventHandler<ActionEvent>() {
 	    @Override
 	    	public void handle(ActionEvent event) {
-	    		update();
+	    		myModel.update();
+	    		root.setCenter(makeGrid());
 	    	}
 	    });
 		return kf;
@@ -147,6 +151,19 @@ public class GridView {
 	}
 	
 	public void step(){
-		update();
+		myModel.update();
+		makeGrid();
+	}
+	
+	private Node makeGrid() {
+		Group g = new Group();
+		myRectangleList.clear();
+		for (Cell c: myModel.getCells()) {
+			Rectangle newDisplay = new Rectangle(c.getCurrentX()*30, c.getCurrentY()*30, 30, 30);
+			newDisplay.setFill(c.getColor());
+			myRectangleList.add(newDisplay);
+			g.getChildren().add(newDisplay);
+		}
+		return g;
 	}
 }

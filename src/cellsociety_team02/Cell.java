@@ -3,6 +3,9 @@ package cellsociety_team02;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+
 
 public abstract class Cell {
 	
@@ -13,6 +16,7 @@ public abstract class Cell {
 	protected double futureX;
 	protected double futureY;
 	protected List<Cell> neighborsList;
+	protected Color myColor;
 	
 	public Cell(double state, double x, double y) {
 		currentState = state;
@@ -66,5 +70,9 @@ public abstract class Cell {
 	}
 	
 	protected abstract void getNeighbors(List<Cell> cellList);
+
+	public Paint getColor() {
+		return myColor;
+	}
 	
 }
