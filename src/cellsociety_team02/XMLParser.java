@@ -1,6 +1,8 @@
 package cellsociety_team02;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -21,9 +23,11 @@ import org.w3c.dom.NodeList;
 public class XMLParser {
 	private static final int DEFAULT_PATCH_VALUE = 1;
 	private Document myDoc;
-	private String myModel;
-	private int[][] cellsArray;
-	private double[][] patchesArray;
+	private String myType;
+	private List<Cell> cellsList;
+	private List<Patch> patchesList;
+	private int maxRow;
+	private int maxCol;
 
 	/**
 	 * Takes an xml file and creates a document that can be parsed
@@ -35,9 +39,7 @@ public class XMLParser {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			myDoc = dBuilder.parse(f);
-			myDoc.getDocumentElement().normalize();
-			cellsArray = null;
-			myModel = null;					
+			myDoc.getDocumentElement().normalize();			
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -50,22 +52,16 @@ public class XMLParser {
 	 * Default value of patch is 1.0
 	 *
 	 */
-	public String getModelAndInitialize(){
+	public void initialize(){
 		NodeList modelNodes = myDoc.getElementsByTagName("animation");
 		Node modelNode = modelNodes.item(0);
 		if(modelNode instanceof Element) {
-			myModel = getAttribute(modelNode, "model");
-			int r = Integer.parseInt(getAttribute(modelNode, "rows"));
-			int c = Integer.parseInt(getAttribute(modelNode, "columns"));
-			cellsArray = new int[r][c];
-			patchesArray = new double[r][c];
-			for(int i = 0; i<patchesArray.length; i++){
-				for(int j=0; j<patchesArray[0].length; j++){
-					patchesArray[i][j]=DEFAULT_PATCH_VALUE;
-				}
-			}
+			myType = getAttribute(modelNode, "model");
+			maxRow = Integer.parseInt(getAttribute(modelNode, "rows"));
+			maxCol = Integer.parseInt(getAttribute(modelNode, "columns"));
+			cellsList = new ArrayList<Cell>();
+			patchesList = new ArrayList<Patch>();
 		}
-		return myModel;
 	}
 	/**
 	 * Gets the value of the attribute associated with the node and string
@@ -96,35 +92,55 @@ public class XMLParser {
 	/**
 	 * Using the xml input, creates an array of states for the cells
 	 *
-	 *@return int[][] representing the array of cell states
+	 *@return 
 	 */
-	public int[][] makeCells(){
-		constructArray("cell");
-		return cellsArray;
+	public List<Cell> makeCells(){
+		constructList("cell");
+		return cellsList;
 	}
 	/**
 	 * Using the xml input, creates an array of states for the patches
 	 *
-	 *@return double[][] representing the array of patch states
+	 *@return 
 	 */
-	public double[][] makePatches(){
-		constructArray("patch");
-		return patchesArray;
+	public List<Patch> makePatches(){
+		constructList("patch");
+		return patchesList;
 	}
 	/**
 	 * Using the xml input, creates an array of states for either cells or patches
 	 * 
 	 * @param s String that defines whether to create array for cells or patches
 	 */
-	private void constructArray(String s) {
+	private void constructList(String s) {
 		NodeList nodes = myDoc.getElementsByTagName(s);
 		for(int i = 0; i<nodes.getLength(); i++){
 			Node node = nodes.item(i);
 			if(node instanceof Element){
-				int r = Integer.parseInt(getAttribute(node,"row"));
-				int c = Integer.parseInt(getAttribute(node,"column"));
-				if(s.equals("cell")) cellsArray[r][c] = Integer.parseInt(getAttribute(node,"state"));
-				else patchesArray[r][c] = Double.parseDouble(getAttribute(node,"state"));				
+				double r = Double.parseDouble(getAttribute(node,"row"));	
+				double c = Double.parseDouble(getAttribute(node,"column"));	
+				double state = Double.parseDouble(getAttribute(node,"state"));
+				
+				Cell newCell = null;
+				Patch newPatch = null;
+				switch(myType){
+				case "Fire": 
+		//			if (s.equals("cell")) newCell = new FireCell(state, r, c); 
+		//			else newPatch = new FirePatch(state, r, c); 
+					break;
+				case "PredPrey":
+	//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
+					break;
+				case "Segregation": 
+//					if (s.equals("cell")) newCell = new SegCell(state, r, c); 
+					break;
+				case "Life":
+					if (s.equals("cell")) newCell = new LifeCell(state, r, c); 
+					break;
+				}
+				
+				cellsList.add(newCell);
+				patchesList.add(newPatch);		
 			}
 		}
 	}
@@ -133,11 +149,11 @@ public class XMLParser {
 	 * Used for testing purposes
 	 */
 	public void printCellsArray(){
-		for(int i=0; i<cellsArray.length; i++){
+		/*for(int i=0; i<cellsArray.length; i++){
 			for(int j=0; j<cellsArray[0].length;j++){
 				System.out.print(cellsArray[i][j] + " ");
 			}
 			System.out.print("\n");
-		}
+		}*/
 	}
 }
