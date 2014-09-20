@@ -1,7 +1,6 @@
 package cellsociety_team02;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import javafx.scene.paint.Color;
@@ -140,34 +139,34 @@ public class PredPreyGrid extends Grid {
 				moves.add(new newMove(r+1, c, currentCells[r+1][c]));
 				fishAvailable = true;
 			}
-			if (r+1>=currentCells.length && currentCells[0][c] == 1 && futureCells[0][c] == 1) {
+			/*if (r+1>=currentCells.length && currentCells[0][c] == 1 && futureCells[0][c] == 1) {
 				moves.add(new newMove(0, c, currentCells[0][c]));
 				fishAvailable = true;
-			}
+			}*/
 			if (r-1>=0 && currentCells[r-1][c] == 1 && futureCells[r-1][c] == 1){
 				moves.add(new newMove(r-1, c, currentCells[r-1][c]));
 				fishAvailable = true;
 			}
-			if (r-1<0 && currentCells[currentCells.length-1][c] == 1 && futureCells[currentCells.length-1][c] == 1){
+			/*if (r-1<0 && currentCells[currentCells.length-1][c] == 1 && futureCells[currentCells.length-1][c] == 1){
 				moves.add(new newMove(currentCells.length-1, c, currentCells[currentCells.length-1][c]));
 				fishAvailable = true;
-			}
+			}*/
 			if (c+1<currentCells[0].length && currentCells[r][c+1] == 1 && futureCells[r][c+1] == 1){
 				moves.add(new newMove(r, c+1, currentCells[r][c+1]));
 				fishAvailable = true;
-			}
+			}/*
 			if (c+1>=currentCells[0].length && currentCells[r][0] == 1 && futureCells[r][0] == 1){
 				moves.add(new newMove(r, 0, currentCells[r][0]));
 				fishAvailable = true;
-			}
+			}*/
 			if (c-1>=0 && currentCells[r][c-1] == 1 && futureCells[r][c-1] == 1){
 				moves.add(new newMove(r, c-1, currentCells[r][c-1]));
 				fishAvailable = true;
-			}
+			}/*
 			if (c-1<0 && currentCells[r][currentCells[0].length-1] == 1 && futureCells[r][currentCells[0].length-1] == 1){
 				moves.add(new newMove(r, currentCells[0].length-1, currentCells[r][currentCells[0].length-1]));
 				fishAvailable = true;
-			}
+			}*/
 			if (fishAvailable)
 				return moves;
 		}
@@ -176,27 +175,27 @@ public class PredPreyGrid extends Grid {
 		if (r+1<currentCells.length && currentCells[r+1][c] == 0 && futureCells[r+1][c] == 0){
 			moves.add(new newMove(r+1, c, currentCells[r+1][c]));
 		}
-		if (r+1>=currentCells.length && currentCells[0][c] == 0 && futureCells[0][c] == 0) {
+		/*if (r+1>=currentCells.length && currentCells[0][c] == 0 && futureCells[0][c] == 0) {
 			moves.add(new newMove(0, c, currentCells[0][c]));
-		}
+		}*/
 		if (r-1>=0 && currentCells[r-1][c] == 0 && futureCells[r-1][c] == 0) {
 			moves.add(new newMove(r-1, c, currentCells[r-1][c]));
 		}
-		if (r-1<0 && currentCells[currentCells.length-1][c] == 0 && futureCells[currentCells.length-1][c] == 0){
+		/*if (r-1<0 && currentCells[currentCells.length-1][c] == 0 && futureCells[currentCells.length-1][c] == 0){
 			moves.add(new newMove(currentCells.length-1, c, currentCells[currentCells.length-1][c]));
-		}
+		}*/
 		if (c+1<currentCells[0].length && currentCells[r][c+1] == 0 && futureCells[r][c+1] == 0){
 			moves.add(new newMove(r, c+1, currentCells[r][c+1]));
 		}
-		if (c+1>=currentCells[0].length && currentCells[r][0] == 0 && futureCells[r][0] == 0){
+		/*if (c+1>=currentCells[0].length && currentCells[r][0] == 0 && futureCells[r][0] == 0){
 			moves.add(new newMove(r, 0, currentCells[r][0]));
-		}
+		}*/
 		if (c-1>=0 && currentCells[r][c-1] == 0 && futureCells[r][c-1] == 0){
 			moves.add(new newMove(r, c-1, currentCells[r][c-1]));
 		}
-		if (c-1<0 && currentCells[r][currentCells[0].length-1] == 1 && futureCells[r][currentCells[0].length-1] == 1){
+		/*if (c-1<0 && currentCells[r][currentCells[0].length-1] == 1 && futureCells[r][currentCells[0].length-1] == 1){
 			moves.add(new newMove(r, currentCells[0].length-1, currentCells[r][currentCells[0].length-1]));
-		}
+		}*/
 		
 		
 		return moves;
