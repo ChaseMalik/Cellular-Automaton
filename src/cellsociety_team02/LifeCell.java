@@ -56,12 +56,10 @@ public class LifeCell extends Cell {
 
 	@Override
 	public Color getColor() {
-
 		if (futureState == 0)
-			myColor = Color.WHITE;
+			return Color.WHITE;
 		else
-			myColor = Color.BLACK;
-		return myColor;
+			return Color.BLACK;
 	}
 
 }
