@@ -2,6 +2,7 @@ package cellsociety_team02;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -17,8 +18,9 @@ public abstract class Cell {
 	protected int futureY;
 	protected List<Cell> neighborsList;
 	protected Color myColor;
+	protected Map<String,String> myParameters;
 	
-	public Cell(double state, int x, int y) {
+	public Cell(double state, int x, int y, Map<String,String> parameters) {
 		currentState = state;
 		futureState = state;
 		currentX = x;
@@ -26,6 +28,7 @@ public abstract class Cell {
 		futureX = x;
 		futureY = y;
 		neighborsList = new ArrayList<Cell>();
+		myParameters = parameters;
 	}
 	
 	public double getCurrentState(){

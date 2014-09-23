@@ -1,6 +1,8 @@
 package cellsociety_team02;
 
 
+import java.util.Map;
+
 import javafx.scene.paint.Color;
 
 public class LifeCell extends Cell {
@@ -8,8 +10,8 @@ public class LifeCell extends Cell {
 	private static final int alive = 1;
 	private static final int dead = 0;
 
-	public LifeCell(double state, int x, int y) {
-		super(state, x, y);
+	public LifeCell(double state, int x, int y, Map<String,String> parameters) {
+		super(state, x, y, parameters);
 	}
 
 	@Override

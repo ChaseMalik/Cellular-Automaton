@@ -33,7 +33,7 @@ import javafx.util.Duration;
 public class GridView {
 
 	private Scene myScene;
-	public static final Dimension DEFAULT_SIZE = new Dimension(800, 600);
+	public static final Dimension DEFAULT_SIZE = new Dimension(600, 800);
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
 	public static final String PROTOCOL_PREFIX = "http://";
 	public static final String BLANK = " ";
@@ -123,8 +123,8 @@ public class GridView {
 		KeyFrame kf = new KeyFrame(Duration.seconds(interval), new EventHandler<ActionEvent>() {
 	    @Override
 	    	public void handle(ActionEvent event) {
-	    		myModel.update();
 	    		root.setCenter(makeGrid());
+	    		myModel.update();
 	    	}
 	    });
 		return kf;
@@ -136,18 +136,20 @@ public class GridView {
 	}
 	
 	public void step(){
-		myModel.update();
 		makeGrid();
+		myModel.update();
 	}
 	
 	private Node makeGrid() {
 		Group g = new Group();
 		myRectangleList.clear();
 		Cell[][] cells = myModel.getCells();
+		double cellHeight = 600.0/(cells.length);
+		double cellWidth = 600.0/cells[0].length;
 		for(int i=0;i<cells.length;i++){
 			for(int j=0; j<cells[0].length;j++){
 				Cell c = cells[i][j];
-				Rectangle newDisplay = new Rectangle(c.getCurrentX()*30, c.getCurrentY()*30, 30, 30);
+				Rectangle newDisplay = new Rectangle(j*cellWidth, i*cellHeight, cellWidth, cellHeight);
 				newDisplay.setFill(c.getColor());
 				myRectangleList.add(newDisplay);
 				g.getChildren().add(newDisplay);

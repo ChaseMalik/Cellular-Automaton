@@ -150,24 +150,32 @@ public class XMLParser {
 //					if (s.equals("cell")) newCell = new SegCell(state, r, c); 
 					break;
 				case "Life":
-					if (s.equals("cell")) newCell = new LifeCell(state, r, c); 
+					if (s.equals("cell")) newCell = new LifeCell(state, r, c, makeParameterMap()); 
 					break;
 				}
 				cellsList[r][c] = newCell;
 				patchesList[r][c] = newPatch;
 			}
 		}
+		for(int i=0; i<cellsList.length;i++){
+			for(int j =0; j<cellsList[0].length;j++){
+				if(cellsList[i][j] == null){
+					cellsList[i][j] = new LifeCell(0,i,j,makeParameterMap());
+				}
+			}
+		}
+		
 	}
 	/**
 	 * Prints the cellsArray to the console
 	 * Used for testing purposes
 	 */
 	public void printCellsArray(){
-		/*for(int i=0; i<cellsArray.length; i++){
-			for(int j=0; j<cellsArray[0].length;j++){
-				System.out.print(cellsArray[i][j] + " ");
+		for(int i=0; i<cellsList.length; i++){
+			for(int j=0; j<cellsList[0].length;j++){
+				System.out.print(cellsList[i][j] + " ");
 			}
 			System.out.print("\n");
-		}*/
+		}
 	}
 }

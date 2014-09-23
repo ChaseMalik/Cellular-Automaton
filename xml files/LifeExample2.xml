@@ -7,7 +7,6 @@
 		<cells>
 			<cell row = "0" column = "1" state = "1"></cell>
 			<cell row = "0" column = "2" state = "1"></cell>
-			<cell row = "0" column = "0" state = "0"></cell>
 			<cell row = "1" column = "1" state = "1"></cell>
 			<cell row = "1" column = "2" state = "1"></cell>
 			<cell row = "1" column = "0" state = "0"></cell>
