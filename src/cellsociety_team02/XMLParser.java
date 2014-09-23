@@ -147,7 +147,7 @@ public class XMLParser {
 	//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
 					break;
 				case "Segregation": 
-//					if (s.equals("cell")) newCell = new SegCell(state, r, c); 
+					if (s.equals("cell")) newCell = new SegregationCell(state, r, c, makeParameterMap()); 
 					break;
 				case "Life":
 					if (s.equals("cell")) newCell = new LifeCell(state, r, c, makeParameterMap()); 
@@ -161,6 +161,21 @@ public class XMLParser {
 			for(int j =0; j<cellsList[0].length;j++){
 				if(cellsList[i][j] == null){
 					cellsList[i][j] = new LifeCell(0,i,j,makeParameterMap());
+					switch(myType){
+					case "Fire": 
+			//			if (s.equals("cell")) newCell = new FireCell(state, r, c); 
+			//			else newPatch = new FirePatch(state, r, c); 
+						break;
+					case "PredPrey":
+		//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
+						break;
+					case "Segregation": 
+						cellsList[i][j] = new SegregationCell(0,i,j,makeParameterMap()); 
+						break;
+					case "Life":
+						cellsList[i][j] = new LifeCell(0,i,j,makeParameterMap());
+						break;
+					}
 				}
 			}
 		}

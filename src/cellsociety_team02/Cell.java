@@ -17,7 +17,6 @@ public abstract class Cell {
 	protected int futureX;
 	protected int futureY;
 	protected List<Cell> neighborsList;
-	protected Color myColor;
 	protected Map<String,String> myParameters;
 	
 	public Cell(double state, int x, int y, Map<String,String> parameters) {
@@ -74,8 +73,10 @@ public abstract class Cell {
 	
 	protected abstract void getNeighbors(Cell[][] cellList);
 
-	public Paint getColor() {
-		return myColor;
+	public abstract Paint getColor();
+
+	public void setFutureState(double futureState) {
+		this.futureState = futureState;
 	}
 	
 }

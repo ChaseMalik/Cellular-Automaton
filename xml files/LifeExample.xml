@@ -1,5 +1,5 @@
 <CAModel>
-	<animation model = "Life" rows = "20" columns = "20">
+	<animation model = "Life" config = "Given" rows = "20" columns = "20">
 		<cells>
 			<cell row = "1" column = "1" state = "1"></cell>
 			<cell row = "1" column = "2" state = "1"></cell>

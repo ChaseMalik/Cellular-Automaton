@@ -55,7 +55,7 @@ public class GridModel {
 		for(int i=0;i<myCells.length;i++){
 			for(int j=0; j<myCells[0].length;j++){
 				myCells[i][j].updateStateandMove(myCells,myPatches);
-				System.out.print(myCells[i][j].getCurrentState());
+				//System.out.print(myCells[i][j].getCurrentState());
 				//myPatches[i][j].updateState(myCells[i][j]);
 			}
 		}
@@ -68,7 +68,7 @@ public class GridModel {
 				//myPatches[i][j].updateState(myCells[i][j]);
 			}
 		}
-		System.out.println();
+		//System.out.println();
 	}
 
 	public Cell[][] getCells() {

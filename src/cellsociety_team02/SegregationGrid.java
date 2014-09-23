@@ -11,8 +11,8 @@ import javafx.scene.paint.Color;
 public class SegregationGrid extends Grid {
 	private static final int stateX = 1;
 	private static final int stateY = 2;
-
-	double threshold;
+	private double threshold;
+	
 	public SegregationGrid(Map<String, String> parametersMap, int[][] initialCells, double[][] initialPatches) {
 		super(parametersMap, initialCells, initialPatches);
 		threshold = Double.parseDouble(parametersMap.get("threshold"));
@@ -31,7 +31,6 @@ public class SegregationGrid extends Grid {
 			move(i,j);
 			return;
 		}
-
 		double xRatio = xNeighbors/(xNeighbors+yNeighbors);
 		double yRatio = yNeighbors/(xNeighbors+yNeighbors);
 		if(!(state==stateX && xRatio>threshold) && !(state==stateY && yRatio>threshold)){
