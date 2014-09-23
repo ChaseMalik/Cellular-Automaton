@@ -58,16 +58,6 @@ public class GridView {
 		load();
 	}
 
-	private XMLParser loadFileToParser() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir"))); // Needs to be tested on Macs +"\\xml files"
-		fileChooser.setTitle("Choose XML Source File");
-		File file = fileChooser.showOpenDialog(new Stage());
-		XMLParser xml = new XMLParser(file);
-		return xml;
-	}
-
 	private Node makeButtons() {
 		HBox box = new HBox();
 
@@ -91,12 +81,7 @@ public class GridView {
 	}
 
 	private void load(){
-		XMLParser parser = loadFileToParser();
-		parser.initialize();
-		Map<String,String> parameters = parser.makeParameterMap();
-		List<Cell> initialCells = parser.makeCells();
-		List<Patch> initialPatches = parser.makePatches();
-		myModel.initialize(initialCells, initialPatches, parameters);
+		myModel.load();
 		startAnimation();
 	}
 
@@ -124,7 +109,7 @@ public class GridView {
 		return myScene;
 	}
 	
-	
+	// Maybe move to model
 	private void startAnimation() {
 		myAnimation.stop();
 		KeyFrame frame = startHandler(myInterval);
@@ -158,11 +143,15 @@ public class GridView {
 	private Node makeGrid() {
 		Group g = new Group();
 		myRectangleList.clear();
-		for (Cell c: myModel.getCells()) {
-			Rectangle newDisplay = new Rectangle(c.getCurrentX()*30, c.getCurrentY()*30, 30, 30);
-			newDisplay.setFill(c.getColor());
-			myRectangleList.add(newDisplay);
-			g.getChildren().add(newDisplay);
+		Cell[][] cells = myModel.getCells();
+		for(int i=0;i<cells.length;i++){
+			for(int j=0; j<cells[0].length;j++){
+				Cell c = cells[i][j];
+				Rectangle newDisplay = new Rectangle(c.getCurrentX()*30, c.getCurrentY()*30, 30, 30);
+				newDisplay.setFill(c.getColor());
+				myRectangleList.add(newDisplay);
+				g.getChildren().add(newDisplay);
+			}
 		}
 		return g;
 	}

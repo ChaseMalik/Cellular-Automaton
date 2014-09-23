@@ -1,10 +1,5 @@
 <CAModel>
 	<animation model = "Life" rows = "20" columns = "20">
-		<parameters>
-			<parameter name = "fishBreed" value = "6"></parameter>
-			<parameter name = "sharkBreed" value = "10"></parameter>
-			<parameter name = "sharkStarve" value = "10"></parameter>
-		</parameters>
 		<cells>
 			<cell row = "1" column = "1" state = "1"></cell>
 			<cell row = "1" column = "2" state = "1"></cell>

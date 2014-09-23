@@ -1,20 +1,19 @@
 package cellsociety_team02;
 
-import java.util.List;
 
 import javafx.scene.paint.Color;
 
 public class LifeCell extends Cell {
-	
+
 	private static final int alive = 1;
 	private static final int dead = 0;
 
-	public LifeCell(double state, double x, double y) {
+	public LifeCell(double state, int x, int y) {
 		super(state, x, y);
 	}
 
 	@Override
-	public void updateStateandMove(List<Cell> cellList) {
+	public void updateStateandMove(Cell[][] cellList, Patch[][] patches) {
 		double state = currentState;
 		getNeighbors(cellList);
 		int aliveNeighbors = aliveNeighbors();
@@ -31,20 +30,16 @@ public class LifeCell extends Cell {
 	}
 
 	@Override
-	protected void getNeighbors(List<Cell> cellList) {
+	protected void getNeighbors(Cell[][] cellList) {
 		neighborsList.clear();
-		for (Cell c: cellList) {
-			double x = c.getCurrentX();
-			double y = c.getCurrentY();
-			if ((x == currentX-1 && y == currentY-1)||
-				(x == currentX-1 && y == currentY)||
-				(x == currentX-1 && y == currentY+1)||
-				(x == currentX && y == currentY-1)||
-				(x == currentX && y == currentY+1)||
-				(x == currentX+1 && y == currentY-1)||
-				(x == currentX+1 && y == currentY)||
-				(x == currentX+1 && y == currentY+1))
-					neighborsList.add(c);
+		int[] xDelta = {-1, -1, -1, 0, 0, 1, 1, 1};
+		int[] yDelta = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+		for(int k=0; k<xDelta.length;k++){
+			if(currentX+xDelta[k]>=0 && currentX+xDelta[k] <cellList.length
+					&& currentY+yDelta[k] >= 0 && currentY+yDelta[k] <cellList[0].length){
+				neighborsList.add(cellList[currentX+xDelta[k]][currentY+yDelta[k]]);
+			}
 		}
 	}
 
@@ -59,7 +54,7 @@ public class LifeCell extends Cell {
 
 	@Override
 	public Color getColor() {
-		
+
 		if (futureState == 0)
 			myColor = Color.WHITE;
 		else

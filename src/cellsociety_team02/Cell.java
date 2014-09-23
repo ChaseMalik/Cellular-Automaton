@@ -11,14 +11,14 @@ public abstract class Cell {
 	
 	protected double currentState;
 	protected double futureState;
-	protected double currentX;
-	protected double currentY;
-	protected double futureX;
-	protected double futureY;
+	protected int currentX;
+	protected int currentY;
+	protected int futureX;
+	protected int futureY;
 	protected List<Cell> neighborsList;
 	protected Color myColor;
 	
-	public Cell(double state, double x, double y) {
+	public Cell(double state, int x, int y) {
 		currentState = state;
 		futureState = state;
 		currentX = x;
@@ -36,32 +36,32 @@ public abstract class Cell {
 		return futureState;
 	}
 	
-	public double getCurrentX() {
+	public int getCurrentX() {
 		return currentX;
 	}
 	
-	public double getCurrentY() {
+	public int getCurrentY() {
 		return currentY;
 	}
 
-	public double getFutureX() {
+	public int getFutureX() {
 		return futureX;
 	}
 
-	public void setFutureX(double futureX) {
+	public void setFutureX(int futureX) {
 		this.futureX = futureX;
 	}
 
-	public double getFutureY() {
+	public int getFutureY() {
 		return futureY;
 	}
 
-	public void setFutureY(double futureY) {
+	public void setFutureY(int futureY) {
 		this.futureY = futureY;
 	}
 
 	
-	public abstract void updateStateandMove(List<Cell> cellList);
+	public abstract void updateStateandMove(Cell[][] cellList, Patch[][] patches);
 	
 	public void currentToFuture(){
 		currentX = futureX;
@@ -69,7 +69,7 @@ public abstract class Cell {
 		currentState = futureState;
 	}
 	
-	protected abstract void getNeighbors(List<Cell> cellList);
+	protected abstract void getNeighbors(Cell[][] cellList);
 
 	public Paint getColor() {
 		return myColor;

@@ -1,0 +1,19 @@
+<CAModel>
+	<animation model = "Life" config = "Given" rows = "3" columns = "3">
+		<probabilities>
+			<cellProb name = "1" value = "0.4"></cellProb>
+			<cellProb name = "0" value = "0.6"></cellProb> 
+		</probabilities>
+		<cells>
+			<cell row = "0" column = "1" state = "1"></cell>
+			<cell row = "0" column = "2" state = "1"></cell>
+			<cell row = "0" column = "0" state = "0"></cell>
+			<cell row = "1" column = "1" state = "1"></cell>
+			<cell row = "1" column = "2" state = "1"></cell>
+			<cell row = "1" column = "0" state = "0"></cell>
+			<cell row = "2" column = "1" state = "1"></cell>
+			<cell row = "2" column = "2" state = "1"></cell>
+			<cell row = "2" column = "0" state = "1"></cell>
+		</cells>
+	</animation>
+</CAModel>

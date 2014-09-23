@@ -24,8 +24,9 @@ public class XMLParser {
 	private static final int DEFAULT_PATCH_VALUE = 1;
 	private Document myDoc;
 	private String myType;
-	private List<Cell> cellsList;
-	private List<Patch> patchesList;
+	private String myConfig;
+	private Cell[][] cellsList;
+	private Patch[][] patchesList;
 	private int maxRow;
 	private int maxCol;
 
@@ -57,10 +58,11 @@ public class XMLParser {
 		Node modelNode = modelNodes.item(0);
 		if(modelNode instanceof Element) {
 			myType = getAttribute(modelNode, "model");
+			myConfig = getAttribute(modelNode, "config");
 			maxRow = Integer.parseInt(getAttribute(modelNode, "rows"));
 			maxCol = Integer.parseInt(getAttribute(modelNode, "columns"));
-			cellsList = new ArrayList<Cell>();
-			patchesList = new ArrayList<Patch>();
+			cellsList = new Cell[maxRow][maxCol];
+			patchesList = new Patch[maxRow][maxCol];
 		}
 	}
 	/**
@@ -79,8 +81,11 @@ public class XMLParser {
 	 *@return Map<String,String> with keys defined by the xml parameter name and value equal to its value
 	 */
 	public Map<String,String> makeParameterMap(){		
+		return makeMap("parameter");
+	}
+	private Map<String, String> makeMap(String s) {
 		Map<String, String> pMap = new HashMap<>();
-		NodeList parameterNodes = myDoc.getElementsByTagName("parameter");
+		NodeList parameterNodes = myDoc.getElementsByTagName(s);
 		for(int i = 0; i<parameterNodes.getLength(); i++){
 			Node parameter = parameterNodes.item(i);
 			if(parameter instanceof Element){
@@ -94,7 +99,7 @@ public class XMLParser {
 	 *
 	 *@return 
 	 */
-	public List<Cell> makeCells(){
+	public Cell[][] makeCells(){
 		constructList("cell");
 		return cellsList;
 	}
@@ -103,7 +108,7 @@ public class XMLParser {
 	 *
 	 *@return 
 	 */
-	public List<Patch> makePatches(){
+	public Patch[][] makePatches(){
 		constructList("patch");
 		return patchesList;
 	}
@@ -113,12 +118,22 @@ public class XMLParser {
 	 * @param s String that defines whether to create array for cells or patches
 	 */
 	private void constructList(String s) {
+		
+		/*switch(myConfig){
+		case "Given": break;
+		case "Random": break;
+		case "Probability":
+			Map<String, String> cellProb = makeMap("cellProb");
+			Map<String, String> patchProb = makeMap("patchProb");
+			break;
+		}*/
+		
 		NodeList nodes = myDoc.getElementsByTagName(s);
 		for(int i = 0; i<nodes.getLength(); i++){
 			Node node = nodes.item(i);
 			if(node instanceof Element){
-				double r = Double.parseDouble(getAttribute(node,"row"));	
-				double c = Double.parseDouble(getAttribute(node,"column"));	
+				int r = Integer.parseInt(getAttribute(node,"row"));	
+				int c = Integer.parseInt(getAttribute(node,"column"));	
 				double state = Double.parseDouble(getAttribute(node,"state"));
 				
 				Cell newCell = null;
@@ -138,9 +153,8 @@ public class XMLParser {
 					if (s.equals("cell")) newCell = new LifeCell(state, r, c); 
 					break;
 				}
-				
-				cellsList.add(newCell);
-				patchesList.add(newPatch);		
+				cellsList[r][c] = newCell;
+				patchesList[r][c] = newPatch;
 			}
 		}
 	}
