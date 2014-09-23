@@ -1,6 +1,8 @@
 package cellsociety_team02;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -21,9 +23,12 @@ import org.w3c.dom.NodeList;
 public class XMLParser {
 	private static final int DEFAULT_PATCH_VALUE = 1;
 	private Document myDoc;
-	private String myModel;
-	private int[][] cellsArray;
-	private double[][] patchesArray;
+	private String myType;
+	private String myConfig;
+	private Cell[][] cellsList;
+	private Patch[][] patchesList;
+	private int maxRow;
+	private int maxCol;
 
 	/**
 	 * Takes an xml file and creates a document that can be parsed
@@ -35,9 +40,7 @@ public class XMLParser {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			myDoc = dBuilder.parse(f);
-			myDoc.getDocumentElement().normalize();
-			cellsArray = null;
-			myModel = null;					
+			myDoc.getDocumentElement().normalize();			
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -50,22 +53,17 @@ public class XMLParser {
 	 * Default value of patch is 1.0
 	 *
 	 */
-	public String getModelAndInitialize(){
+	public void initialize(){
 		NodeList modelNodes = myDoc.getElementsByTagName("animation");
 		Node modelNode = modelNodes.item(0);
 		if(modelNode instanceof Element) {
-			myModel = getAttribute(modelNode, "model");
-			int r = Integer.parseInt(getAttribute(modelNode, "rows"));
-			int c = Integer.parseInt(getAttribute(modelNode, "columns"));
-			cellsArray = new int[r][c];
-			patchesArray = new double[r][c];
-			for(int i = 0; i<patchesArray.length; i++){
-				for(int j=0; j<patchesArray[0].length; j++){
-					patchesArray[i][j]=DEFAULT_PATCH_VALUE;
-				}
-			}
+			myType = getAttribute(modelNode, "model");
+			myConfig = getAttribute(modelNode, "config");
+			maxRow = Integer.parseInt(getAttribute(modelNode, "rows"));
+			maxCol = Integer.parseInt(getAttribute(modelNode, "columns"));
+			cellsList = new Cell[maxRow][maxCol];
+			patchesList = new Patch[maxRow][maxCol];
 		}
-		return myModel;
 	}
 	/**
 	 * Gets the value of the attribute associated with the node and string
@@ -83,8 +81,11 @@ public class XMLParser {
 	 *@return Map<String,String> with keys defined by the xml parameter name and value equal to its value
 	 */
 	public Map<String,String> makeParameterMap(){		
+		return makeMap("parameter");
+	}
+	private Map<String, String> makeMap(String s) {
 		Map<String, String> pMap = new HashMap<>();
-		NodeList parameterNodes = myDoc.getElementsByTagName("parameter");
+		NodeList parameterNodes = myDoc.getElementsByTagName(s);
 		for(int i = 0; i<parameterNodes.getLength(); i++){
 			Node parameter = parameterNodes.item(i);
 			if(parameter instanceof Element){
@@ -96,46 +97,83 @@ public class XMLParser {
 	/**
 	 * Using the xml input, creates an array of states for the cells
 	 *
-	 *@return int[][] representing the array of cell states
+	 *@return 
 	 */
-	public int[][] makeCells(){
-		constructArray("cell");
-		return cellsArray;
+	public Cell[][] makeCells(){
+		constructList("cell");
+		return cellsList;
 	}
 	/**
 	 * Using the xml input, creates an array of states for the patches
 	 *
-	 *@return double[][] representing the array of patch states
+	 *@return 
 	 */
-	public double[][] makePatches(){
-		constructArray("patch");
-		return patchesArray;
+	public Patch[][] makePatches(){
+		constructList("patch");
+		return patchesList;
 	}
 	/**
 	 * Using the xml input, creates an array of states for either cells or patches
 	 * 
 	 * @param s String that defines whether to create array for cells or patches
 	 */
-	private void constructArray(String s) {
+	private void constructList(String s) {
+		
+		/*switch(myConfig){
+		case "Given": break;
+		case "Random": break;
+		case "Probability":
+			Map<String, String> cellProb = makeMap("cellProb");
+			Map<String, String> patchProb = makeMap("patchProb");
+			break;
+		}*/
+		
 		NodeList nodes = myDoc.getElementsByTagName(s);
 		for(int i = 0; i<nodes.getLength(); i++){
 			Node node = nodes.item(i);
 			if(node instanceof Element){
-				int r = Integer.parseInt(getAttribute(node,"row"));
-				int c = Integer.parseInt(getAttribute(node,"column"));
-				if(s.equals("cell")) cellsArray[r][c] = Integer.parseInt(getAttribute(node,"state"));
-				else patchesArray[r][c] = Double.parseDouble(getAttribute(node,"state"));				
+				int r = Integer.parseInt(getAttribute(node,"row"));	
+				int c = Integer.parseInt(getAttribute(node,"column"));	
+				double state = Double.parseDouble(getAttribute(node,"state"));
+				
+				Cell newCell = null;
+				Patch newPatch = null;
+				switch(myType){
+				case "Fire": 
+		//			if (s.equals("cell")) newCell = new FireCell(state, r, c); 
+		//			else newPatch = new FirePatch(state, r, c); 
+					break;
+				case "PredPrey":
+	//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
+					break;
+				case "Segregation": 
+//					if (s.equals("cell")) newCell = new SegCell(state, r, c); 
+					break;
+				case "Life":
+					if (s.equals("cell")) newCell = new LifeCell(state, r, c, makeParameterMap()); 
+					break;
+				}
+				cellsList[r][c] = newCell;
+				patchesList[r][c] = newPatch;
 			}
 		}
+		for(int i=0; i<cellsList.length;i++){
+			for(int j =0; j<cellsList[0].length;j++){
+				if(cellsList[i][j] == null){
+					cellsList[i][j] = new LifeCell(0,i,j,makeParameterMap());
+				}
+			}
+		}
+		
 	}
 	/**
 	 * Prints the cellsArray to the console
 	 * Used for testing purposes
 	 */
 	public void printCellsArray(){
-		for(int i=0; i<cellsArray.length; i++){
-			for(int j=0; j<cellsArray[0].length;j++){
-				System.out.print(cellsArray[i][j] + " ");
+		for(int i=0; i<cellsList.length; i++){
+			for(int j=0; j<cellsList[0].length;j++){
+				System.out.print(cellsList[i][j] + " ");
 			}
 			System.out.print("\n");
 		}

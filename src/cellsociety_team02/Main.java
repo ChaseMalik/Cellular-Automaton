@@ -22,6 +22,7 @@ import javafx.stage.Stage;
  * @author Greg Lyons
  * @author Kevin Rhine
  */
+
 public class Main extends Application{
 
 	public static final Dimension DEFAULT_SIZE = new Dimension(600, 700);
@@ -77,19 +78,19 @@ public class Main extends Application{
 		myStage = s;
 		myStage.setTitle("CA Simulation");
 		XMLParser parser = loadFileToParser();
-		String model = parser.getModelAndInitialize();
+		//String model = parser.initialize();
 		Map<String,String> parameters = parser.makeParameterMap();
-		int[][] cellsArray = parser.makeCells();
-		double[][] patchesArray = parser.makePatches();
+		//int[][] cellsArray = parser.makeCells();
+		//double[][] patchesArray = parser.makePatches();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 
-		switch(model)  {
+		/*switch(model)  {
 
 		case "Fire": myGrid = new FireGrid(parameters, cellsArray, patchesArray); break;
 		case "PredPrey" : myGrid = new PredPreyGrid(parameters, cellsArray, patchesArray); break;
 		case "Segregation": myGrid = new SegregationGrid(parameters,cellsArray, patchesArray); break;
 		case "Life": myGrid = new LifeGrid(parameters,cellsArray, patchesArray); break;
-		}
+		}*/
 
 		myAnimation = new Timeline();
 		Scene scene = myGrid.init(DEFAULT_SIZE.width, DEFAULT_SIZE.height, myResources);
