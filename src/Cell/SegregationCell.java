@@ -1,4 +1,4 @@
-package cellsociety_team02;
+package Cell;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import Patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -19,6 +20,8 @@ public class SegregationCell extends Cell{
 	public SegregationCell(double state, int x, int y,
 			Map<String, String> parameters) {
 		super(state, x, y, parameters);
+		xDelta = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
+		yDelta = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 		if(parameters.containsKey(THRESHOLD))
 			threshold = Double.parseDouble(parameters.get(THRESHOLD));
 		else threshold = 0.3; //Default value
@@ -27,12 +30,11 @@ public class SegregationCell extends Cell{
 	@Override
 	public void updateStateandMove(Cell[][] cellList, Patch[][] patches) {
 		double state = currentState;
-		getNeighbors(cellList);
 		if(state == 0) return;
 		double xNeighbors = 0;
 		double yNeighbors = 0;
 		
-		for(Cell c: neighborsList){
+		for(Cell c: getNeighbors(cellList)){
 			switch((int) c.getCurrentState()){
 			case stateX: xNeighbors++; break;
 			case stateY: yNeighbors++; break;
@@ -51,7 +53,7 @@ public class SegregationCell extends Cell{
 		List<Point2D> possibleDest = new ArrayList<>();
 		for(int r=0;r<cellList.length;r++){
 			for(int c=0;c<cellList[0].length;c++){
-				if((cellList[r][c].getCurrentState() == 0) && (cellList[r][c].getFutureState() == 0)){
+				if((cellList[r][c].getFutureState() == 0)){ //(cellList[r][c].getCurrentState() == 0) && 
 					possibleDest.add(new Point2D.Double(r,c));
 				}
 			}
@@ -61,20 +63,6 @@ public class SegregationCell extends Cell{
 		int y = (int) possibleDest.get(index).getY();
 		cellList[x][y].setFutureState(currentState);
 		futureState = 0;
-	}
-
-	@Override
-	protected void getNeighbors(Cell[][] cellList) {
-		neighborsList.clear();
-		int[] xDelta = {-1, -1, -1, 0, 0, 1, 1, 1};
-		int[] yDelta = {-1, 0, 1, -1, 1, -1, 0, 1};
-
-		for(int k=0; k<xDelta.length;k++){
-			if(currentX+xDelta[k]>=0 && currentX+xDelta[k] <cellList.length
-					&& currentY+yDelta[k] >= 0 && currentY+yDelta[k] <cellList[0].length){
-				neighborsList.add(cellList[currentX+xDelta[k]][currentY+yDelta[k]]);
-			}
-		}
 	}
 
 	@Override

@@ -1,8 +1,10 @@
-package cellsociety_team02;
+package Cell;
 
 
+import java.util.List;
 import java.util.Map;
 
+import Patch.Patch;
 import javafx.scene.paint.Color;
 
 public class LifeCell extends Cell {
@@ -12,13 +14,14 @@ public class LifeCell extends Cell {
 
 	public LifeCell(double state, int x, int y, Map<String,String> parameters) {
 		super(state, x, y, parameters);
+		xDelta = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
+		yDelta = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 	}
 
 	@Override
 	public void updateStateandMove(Cell[][] cellList, Patch[][] patches) {
 		double state = currentState;
-		getNeighbors(cellList);
-		int aliveNeighbors = aliveNeighbors();
+		int aliveNeighbors = aliveNeighbors(getNeighbors(cellList));
 		if(state == dead && aliveNeighbors == 3)
 			futureState = alive;
 		else if(state == dead)
@@ -31,21 +34,8 @@ public class LifeCell extends Cell {
 			futureState = dead;
 	}
 
-	@Override
-	protected void getNeighbors(Cell[][] cellList) {
-		neighborsList.clear();
-		int[] xDelta = {-1, -1, -1, 0, 0, 1, 1, 1};
-		int[] yDelta = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-		for(int k=0; k<xDelta.length;k++){
-			if(currentX+xDelta[k]>=0 && currentX+xDelta[k] <cellList.length
-					&& currentY+yDelta[k] >= 0 && currentY+yDelta[k] <cellList[0].length){
-				neighborsList.add(cellList[currentX+xDelta[k]][currentY+yDelta[k]]);
-			}
-		}
-	}
-
-	private int aliveNeighbors() {
+	private int aliveNeighbors(List<Cell> neighborsList) {
 		int result = 0;
 		for (Cell c: neighborsList){
 			if (c.getCurrentState() == alive)

@@ -1,9 +1,10 @@
-package cellsociety_team02;
+package Cell;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import Patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -16,7 +17,8 @@ public abstract class Cell {
 	protected int currentY;
 	protected int futureX;
 	protected int futureY;
-	protected List<Cell> neighborsList;
+	protected int[] xDelta;
+	protected int[] yDelta;
 	protected Map<String,String> myParameters;
 	
 	public Cell(double state, int x, int y, Map<String,String> parameters) {
@@ -26,7 +28,6 @@ public abstract class Cell {
 		currentY = y;
 		futureX = x;
 		futureY = y;
-		neighborsList = new ArrayList<Cell>();
 		myParameters = parameters;
 	}
 	
@@ -71,7 +72,16 @@ public abstract class Cell {
 		currentState = futureState;
 	}
 	
-	protected abstract void getNeighbors(Cell[][] cellList);
+	protected List<Cell> getNeighbors(Cell[][] cellList){
+		List<Cell> neighborsList = new ArrayList<Cell>();
+		for(int k=0; k<xDelta.length;k++){
+			if(currentX+xDelta[k]>=0 && currentX+xDelta[k] <cellList.length
+					&& currentY+yDelta[k] >= 0 && currentY+yDelta[k] <cellList[0].length){
+				neighborsList.add(cellList[currentX+xDelta[k]][currentY+yDelta[k]]);
+			}
+		}
+		return neighborsList;
+	}
 
 	public abstract Paint getColor();
 

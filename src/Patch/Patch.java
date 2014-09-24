@@ -1,6 +1,8 @@
-package cellsociety_team02;
+package Patch;
 
 import java.util.List;
+
+import Cell.Cell;
 
 public abstract class Patch {
 	protected double currentState;
