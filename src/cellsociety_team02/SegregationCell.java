@@ -51,7 +51,7 @@ public class SegregationCell extends Cell{
 		List<Point2D> possibleDest = new ArrayList<>();
 		for(int r=0;r<cellList.length;r++){
 			for(int c=0;c<cellList[0].length;c++){
-				if((cellList[r][c].getCurrentState() == 0) && (cellList[r][c].getFutureState() == 0)){
+				if((cellList[r][c].getFutureState() == 0)){ //(cellList[r][c].getCurrentState() == 0) && 
 					possibleDest.add(new Point2D.Double(r,c));
 				}
 			}

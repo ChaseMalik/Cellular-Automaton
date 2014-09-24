@@ -81,6 +81,7 @@ public class GridView {
 	}
 
 	private void load(){
+		myAnimation.stop();
 		myModel.load();
 		startAnimation();
 	}

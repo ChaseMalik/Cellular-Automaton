@@ -118,28 +118,42 @@ public class XMLParser {
 	 * @param s String that defines whether to create array for cells or patches
 	 */
 	private void constructList(String s) {
-		
-		/*switch(myConfig){
-		case "Given": break;
-		case "Random": break;
+
+		CellFactory factory = new CellFactory();
+
+		switch(myConfig){
+		case "Given": doGiven(s,factory); break;
+		case "Random": doRandom(s,factory); break;
 		case "Probability":
 			Map<String, String> cellProb = makeMap("cellProb");
 			Map<String, String> patchProb = makeMap("patchProb");
 			break;
-		}*/
-		
+		}
+	}
+	private void doGiven(String s, CellFactory factory) {
 		NodeList nodes = myDoc.getElementsByTagName(s);
-		CellFactory factory = new CellFactory();
 		for(int i = 0; i<nodes.getLength(); i++){
 			Node node = nodes.item(i);
 			if(node instanceof Element){
 				int r = Integer.parseInt(getAttribute(node,"row"));	
 				int c = Integer.parseInt(getAttribute(node,"column"));	
 				double state = Double.parseDouble(getAttribute(node,"state"));
-				cellsList[r][c] = factory.makeCell(myType, r, c, state, makeParameterMap());
-				patchesList[r][c] = null;
+				if(s.equals("cell")) cellsList[r][c] = factory.makeCell(myType, r, c, state, makeParameterMap());
+				else patchesList[r][c] = factory.makePatch(myType, r, c, state, makeParameterMap());
 			}
 		}
+
+		setNullState(factory);
+	}
+
+	private void doRandom(String s, CellFactory factory){
+		for(int i=0;i<cellsList.length;i++){
+			for(int j=0;j<cellsList[0].length;j++){
+				if(s.equals("cell")) cellsList[i][j] = factory.makeRandomCell(myType, i, j, makeParameterMap());
+			}
+		}
+	}
+	private void setNullState(CellFactory factory) {
 		for(int i=0; i<cellsList.length;i++){
 			for(int j =0; j<cellsList[0].length;j++){
 				if(cellsList[i][j] == null){
@@ -147,7 +161,6 @@ public class XMLParser {
 				}
 			}
 		}
-		
 	}
 	/**
 	 * Prints the cellsArray to the console
