@@ -33,7 +33,7 @@ import javafx.util.Duration;
 public class GridView {
 
 	private Scene myScene;
-	public static final Dimension DEFAULT_SIZE = new Dimension(600, 800);
+	public static final Dimension DEFAULT_SIZE = new Dimension(600, 700);
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
 	public static final String PROTOCOL_PREFIX = "http://";
 	public static final String BLANK = " ";

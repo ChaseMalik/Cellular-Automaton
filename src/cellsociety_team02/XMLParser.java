@@ -129,53 +129,21 @@ public class XMLParser {
 		}*/
 		
 		NodeList nodes = myDoc.getElementsByTagName(s);
+		CellFactory factory = new CellFactory();
 		for(int i = 0; i<nodes.getLength(); i++){
 			Node node = nodes.item(i);
 			if(node instanceof Element){
 				int r = Integer.parseInt(getAttribute(node,"row"));	
 				int c = Integer.parseInt(getAttribute(node,"column"));	
 				double state = Double.parseDouble(getAttribute(node,"state"));
-				
-				Cell newCell = null;
-				Patch newPatch = null;
-				switch(myType){
-				case "Fire": 
-		//			if (s.equals("cell")) newCell = new FireCell(state, r, c); 
-		//			else newPatch = new FirePatch(state, r, c); 
-					break;
-				case "PredPrey":
-	//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
-					break;
-				case "Segregation": 
-					if (s.equals("cell")) newCell = new SegregationCell(state, r, c, makeParameterMap()); 
-					break;
-				case "Life":
-					if (s.equals("cell")) newCell = new LifeCell(state, r, c, makeParameterMap()); 
-					break;
-				}
-				cellsList[r][c] = newCell;
-				patchesList[r][c] = newPatch;
+				cellsList[r][c] = factory.makeCell(myType, r, c, state, makeParameterMap());
+				patchesList[r][c] = null;
 			}
 		}
 		for(int i=0; i<cellsList.length;i++){
 			for(int j =0; j<cellsList[0].length;j++){
 				if(cellsList[i][j] == null){
-					cellsList[i][j] = new LifeCell(0,i,j,makeParameterMap());
-					switch(myType){
-					case "Fire": 
-			//			if (s.equals("cell")) newCell = new FireCell(state, r, c); 
-			//			else newPatch = new FirePatch(state, r, c); 
-						break;
-					case "PredPrey":
-		//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
-						break;
-					case "Segregation": 
-						cellsList[i][j] = new SegregationCell(0,i,j,makeParameterMap()); 
-						break;
-					case "Life":
-						cellsList[i][j] = new LifeCell(0,i,j,makeParameterMap());
-						break;
-					}
+					cellsList[i][j] = factory.makeCell(myType, i, j, 0, makeParameterMap());
 				}
 			}
 		}
