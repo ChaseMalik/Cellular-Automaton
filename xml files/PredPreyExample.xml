@@ -1,5 +1,5 @@
 <CAModel>
-	<animation model = "PredPrey" rows = "20" columns = "20">
+	<animation model = "PredPrey" config = "Given" numStates = "3" rows = "20" columns = "20">
 		<parameters>
 			<parameter name = "fishBreed" value = "6"></parameter>
 			<parameter name = "sharkBreed" value = "10"></parameter>

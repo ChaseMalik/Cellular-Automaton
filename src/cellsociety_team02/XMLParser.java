@@ -32,6 +32,9 @@ public class XMLParser {
 	private Patch[][] patchesList;
 	private int maxRow;
 	private int maxCol;
+	private Map<String,String> paramMap;
+	private int myNumStates;
+	private Factory factory;
 
 	/**
 	 * Takes an xml file and creates a document that can be parsed
@@ -43,7 +46,9 @@ public class XMLParser {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			myDoc = dBuilder.parse(f);
-			myDoc.getDocumentElement().normalize();			
+			myDoc.getDocumentElement().normalize();		
+			paramMap = new HashMap<String,String>();
+			factory = new Factory();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -62,6 +67,7 @@ public class XMLParser {
 		if(modelNode instanceof Element) {
 			myType = getAttribute(modelNode, "model");
 			myConfig = getAttribute(modelNode, "config");
+			myNumStates = Integer.parseInt(getAttribute(modelNode, "numStates"));
 			maxRow = Integer.parseInt(getAttribute(modelNode, "rows"));
 			maxCol = Integer.parseInt(getAttribute(modelNode, "columns"));
 			cellsList = new Cell[maxRow][maxCol];
@@ -73,7 +79,7 @@ public class XMLParser {
 	 * 
 	 *@param n Node in the xml file
 	 *@param s String representing the attribute of interest
-	 *@return String representing the value assoicated with attribute s
+	 *@return String representing the value associated with attribute s
 	 */
 	private String getAttribute(Node n, String s) {
 		return n.getAttributes().getNamedItem(s).getNodeValue();
@@ -84,8 +90,10 @@ public class XMLParser {
 	 *@return Map<String,String> with keys defined by the xml parameter name and value equal to its value
 	 */
 	public Map<String,String> makeParameterMap(){		
-		return makeMap("parameter");
+		paramMap = makeMap("parameter");
+		return paramMap;
 	}
+	
 	private Map<String, String> makeMap(String s) {
 		Map<String, String> pMap = new HashMap<>();
 		NodeList parameterNodes = myDoc.getElementsByTagName(s);
@@ -121,19 +129,16 @@ public class XMLParser {
 	 * @param s String that defines whether to create array for cells or patches
 	 */
 	private void constructList(String s) {
-
-		CellFactory factory = new CellFactory();
-
 		switch(myConfig){
-		case "Given": doGiven(s,factory); break;
-		case "Random": doRandom(s,factory); break;
+		case "Given": doGiven(s); break;
+		case "Random": doRandom(s); break;
 		case "Probability":
 			Map<String, String> cellProb = makeMap("cellProb");
 			Map<String, String> patchProb = makeMap("patchProb");
 			break;
 		}
 	}
-	private void doGiven(String s, CellFactory factory) {
+	private void doGiven(String s) {
 		NodeList nodes = myDoc.getElementsByTagName(s);
 		for(int i = 0; i<nodes.getLength(); i++){
 			Node node = nodes.item(i);
@@ -141,27 +146,29 @@ public class XMLParser {
 				int r = Integer.parseInt(getAttribute(node,"row"));	
 				int c = Integer.parseInt(getAttribute(node,"column"));	
 				double state = Double.parseDouble(getAttribute(node,"state"));
-				if(s.equals("cell")) cellsList[r][c] = factory.makeCell(myType, r, c, state, makeParameterMap());
-				else patchesList[r][c] = factory.makePatch(myType, r, c, state, makeParameterMap());
+				if(s.equals("cell")) cellsList[r][c] = factory.makeCell(myType, r, c, state, paramMap);
+				else patchesList[r][c] = factory.makePatch(myType, r, c, state, paramMap);
 			}
 		}
 
-		setNullState(factory);
+		setNullState();
 	}
 
-	private void doRandom(String s, CellFactory factory){
+	private void doRandom(String s){
 		for(int i=0;i<cellsList.length;i++){
 			for(int j=0;j<cellsList[0].length;j++){
-				if(s.equals("cell")) cellsList[i][j] = factory.makeRandomCell(myType, i, j, makeParameterMap());
+				if(s.equals("cell")) cellsList[i][j] = factory.makeRandomCell(myType, i, j, paramMap,myNumStates);
 			}
 		}
 	}
-	private void setNullState(CellFactory factory) {
+	private void setNullState() {
 		for(int i=0; i<cellsList.length;i++){
 			for(int j =0; j<cellsList[0].length;j++){
 				if(cellsList[i][j] == null){
-					cellsList[i][j] = factory.makeCell(myType, i, j, 0, makeParameterMap());
+					cellsList[i][j] = factory.makeCell(myType, i, j, 0, paramMap);
 				}
+				if(patchesList[i][j]== null)
+					patchesList[i][j] = factory.makePatch(myType, i, j, DEFAULT_PATCH_VALUE, paramMap);
 			}
 		}
 	}

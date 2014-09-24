@@ -1,5 +1,5 @@
 <CAModel>
-	<animation model = "Life" config = "Random" rows = "20" columns = "20">
+	<animation model = "Life" config = "Random" numStates = "2" rows = "20" columns = "20">
 		<probabilities>
 			<cellProb name = "1" value = "0.4"></cellProb>
 			<cellProb name = "0" value = "0.6"></cellProb> 
