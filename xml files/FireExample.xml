@@ -1,5 +1,5 @@
 <CAModel>
-	<animation model = "Fire" rows = "16" columns = "16">
+	<animation model = "Fire" rows = "16" columns = "16" config="Given">
 		<parameters>
 			<parameter name = "probCatch" value = "0.60"></parameter>
 		</parameters>

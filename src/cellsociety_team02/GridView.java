@@ -144,13 +144,14 @@ public class GridView {
 		Group g = new Group();
 		myRectangleList.clear();
 		Cell[][] cells = myModel.getCells();
+		Patch[][] patches = myModel.getPatches();
 		double cellHeight = 600.0/(cells.length);
 		double cellWidth = 600.0/cells[0].length;
 		for(int i=0;i<cells.length;i++){
 			for(int j=0; j<cells[0].length;j++){
 				Cell c = cells[i][j];
 				Rectangle newDisplay = new Rectangle(j*cellWidth, i*cellHeight, cellWidth, cellHeight);
-				newDisplay.setFill(c.getColor());
+				newDisplay.setFill(c.getColor(patches[i][j]));
 				myRectangleList.add(newDisplay);
 				g.getChildren().add(newDisplay);
 			}

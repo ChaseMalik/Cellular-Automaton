@@ -73,7 +73,7 @@ public abstract class Cell {
 	
 	protected abstract void getNeighbors(Cell[][] cellList);
 
-	public abstract Paint getColor();
+	public abstract Paint getColor(Patch patch);
 
 	public void setFutureState(double futureState) {
 		this.futureState = futureState;

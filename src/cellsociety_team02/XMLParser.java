@@ -140,8 +140,8 @@ public class XMLParser {
 				Patch newPatch = null;
 				switch(myType){
 				case "Fire": 
-		//			if (s.equals("cell")) newCell = new FireCell(state, r, c); 
-		//			else newPatch = new FirePatch(state, r, c); 
+					if (s.equals("cell")) newCell = new FireCell(state, r, c, makeParameterMap()); 
+					else newPatch = new FirePatch(state, r, c); 
 					break;
 				case "PredPrey":
 	//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
@@ -160,11 +160,11 @@ public class XMLParser {
 		for(int i=0; i<cellsList.length;i++){
 			for(int j =0; j<cellsList[0].length;j++){
 				if(cellsList[i][j] == null){
-					cellsList[i][j] = new LifeCell(0,i,j,makeParameterMap());
+					//cellsList[i][j] = new LifeCell(0,i,j,makeParameterMap());
 					switch(myType){
 					case "Fire": 
-			//			if (s.equals("cell")) newCell = new FireCell(state, r, c); 
-			//			else newPatch = new FirePatch(state, r, c); 
+						cellsList[i][j] = new FireCell(0, i, j, makeParameterMap()); 
+						//else patchesList[i][j] = new FirePatch(1, i, j); 
 						break;
 					case "PredPrey":
 		//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
@@ -177,10 +177,19 @@ public class XMLParser {
 						break;
 					}
 				}
+				if(patchesList[i][j] == null){
+					switch(myType){
+					case "Fire": 
+						if (s.equals("patch"))patchesList[i][j] = new FirePatch(1, i, j); 
+						break;
+					}
+				}
 			}
 		}
-		
 	}
+	
+		
+	
 	/**
 	 * Prints the cellsArray to the console
 	 * Used for testing purposes
@@ -188,7 +197,15 @@ public class XMLParser {
 	public void printCellsArray(){
 		for(int i=0; i<cellsList.length; i++){
 			for(int j=0; j<cellsList[0].length;j++){
-				System.out.print(cellsList[i][j] + " ");
+				System.out.print(cellsList[i][j].getCurrentState() + " ");
+			}
+			System.out.print("\n");
+		}
+	}
+	public void printPatchArray(){
+		for(int i=0; i<patchesList.length; i++){
+			for(int j=0; j<patchesList[0].length;j++){
+				System.out.print(patchesList[i][j].getCurrentState() + " ");
 			}
 			System.out.print("\n");
 		}

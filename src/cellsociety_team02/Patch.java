@@ -27,5 +27,9 @@ public abstract class Patch {
 		return myY;
 	}
 	
+	public void setFutureState(double futureState) {
+		this.futureState = futureState;
+	}
+	
 	public abstract void updateState(Cell cell);
 }
