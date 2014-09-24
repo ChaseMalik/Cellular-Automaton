@@ -3,6 +3,11 @@ package cellsociety_team02;
 import java.util.Map;
 import java.util.Random;
 
+import Cell.Cell;
+import Cell.LifeCell;
+import Cell.SegregationCell;
+import Patch.Patch;
+
 public class CellFactory {
 	Random rand = new Random();
 	public Cell makeCell(String s, int r, int c, double state, Map<String, String> params){
@@ -12,7 +17,7 @@ public class CellFactory {
 			//			else newPatch = new FirePatch(state, r, c); 
 			break;
 		case "PredPrey":
-			//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
+			//return new PredPreyCell(state, r, c,params).makeCell(); 
 			break;
 		case "Segregation": 
 			return new SegregationCell(state, r, c, params);
