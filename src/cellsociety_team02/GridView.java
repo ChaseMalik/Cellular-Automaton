@@ -87,12 +87,11 @@ public class GridView {
 		});
 		box.getChildren().add(stepButton);
 		
-		Slider speedSlider = setUpSlider();
-		box.getChildren().add(speedSlider);
+		box.getChildren().add(setUpSpeedSlider());
 		return box;
 	}
 
-	private Slider setUpSlider() {
+	private Slider setUpSpeedSlider() {
 		Slider s = new Slider();
 		s.setMin(0.1);
 		s.setMax(2.2);

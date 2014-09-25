@@ -36,4 +36,22 @@ public class Factory {
 	public Cell makeRandomCell(String myType, int i, int j,Map<String, String> params, int numStates) {
 		return makeCell(myType,i,j,rand.nextInt(numStates),params);
 	}
+
+	public Cell makeProbCell(String myType, int i, int j, Map<String, String> paramMap, int myNumStates,
+			Map<String, String> cellProb) {
+		double value = rand.nextDouble();
+		double current = 0;
+		for(String s: cellProb.keySet()){
+			current += Double.parseDouble(cellProb.get(s));
+			if(value<current) return makeCell(myType,i,j,Integer.parseInt(s),paramMap);
+		}
+		return null;
+	}
+
+	public Patch makeProbPatch(String myType, int i, int j,
+			Map<String, String> paramMap, int myNumStates,
+			Map<String, String> patchProb) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

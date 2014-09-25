@@ -132,10 +132,18 @@ public class XMLParser {
 		switch(myConfig){
 		case "Given": doGiven(s); break;
 		case "Random": doRandom(s); break;
-		case "Probability":
-			Map<String, String> cellProb = makeMap("cellProb");
-			Map<String, String> patchProb = makeMap("patchProb");
-			break;
+		case "Probability": doProbability(s); break;
+		}
+	}
+	
+	private void doProbability(String s) {
+		Map<String, String> cellProb = makeMap("cellProb");
+		Map<String, String> patchProb = makeMap("patchProb");
+		for(int i=0;i<cellsList.length;i++){
+			for(int j=0;j<cellsList[0].length;j++){
+				if(s.equals("cell")) cellsList[i][j] = factory.makeProbCell(myType, i, j, paramMap,myNumStates, cellProb);
+				else patchesList[i][j] = factory.makeProbPatch(myType, i, j, paramMap,myNumStates, patchProb);
+			}
 		}
 	}
 	private void doGiven(String s) {
