@@ -86,7 +86,7 @@ public abstract class Cell {
 		return neighborsList;
 	}
 
-	public abstract Paint getColor();
+	public abstract Paint getColor(Patch patch);
 
 	public void setFutureState(double futureState) {
 		this.futureState = futureState;

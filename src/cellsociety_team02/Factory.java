@@ -4,9 +4,12 @@ import java.util.Map;
 import java.util.Random;
 
 import Cell.Cell;
+import Cell.FireCell;
 import Cell.LifeCell;
 import Cell.PredPreyCell;
 import Cell.SegregationCell;
+import Patch.FirePatch;
+import Patch.NullPatch;
 import Patch.Patch;
 
 public class Factory {
@@ -14,9 +17,7 @@ public class Factory {
 	public Cell makeCell(String s, int r, int c, double state, Map<String, String> params){
 		switch(s){
 		case "Fire": 
-			//			if (s.equals("cell")) newCell = new FireCell(state, r, c); 
-			//			else newPatch = new FirePatch(state, r, c); 
-			break;
+			return new FireCell(state, r, c, params); 
 		case "PredPrey":
 			return new PredPreyCell(state, r, c,params).makeCell(); 
 		case "Segregation": 
@@ -28,9 +29,11 @@ public class Factory {
 	}
 
 	public Patch makePatch(String myType, int r, int c, double state,
-			Map<String, String> makeParameterMap) {
-		// TODO Auto-generated method stub
-		return null;
+			Map<String, String> params) {
+		switch(myType){
+		case "Fire": return new FirePatch(state,r,c);
+		}
+		return new NullPatch(0,r,c);
 	}
 
 	public Cell makeRandomCell(String myType, int i, int j,Map<String, String> params, int numStates) {
@@ -53,5 +56,8 @@ public class Factory {
 			Map<String, String> patchProb) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	public Patch makeRandomPatch(String myType, int i, int j, Map<String, String> params, int maxPatch){
+		return makePatch(myType,i,j,rand.nextInt(maxPatch),params);
 	}
 }

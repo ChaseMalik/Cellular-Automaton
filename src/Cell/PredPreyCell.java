@@ -62,8 +62,8 @@ public class PredPreyCell extends Cell {
 		return futureCell;
 	}
 	
-
-	public Paint getColor() {
+	@Override
+	public Paint getColor(Patch patch) {
 		if (currentState == SHARK)
 			return Color.RED;
 		if (currentState == FISH)

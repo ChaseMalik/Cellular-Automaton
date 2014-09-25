@@ -43,8 +43,8 @@ public class LifeCell extends Cell {
 	}
 
 	@Override
-	public Color getColor() {
-		if (futureState == 0)
+	public Color getColor(Patch p) {
+		if (futureState == dead)
 			return Color.WHITE;
 		else
 			return Color.BLACK;

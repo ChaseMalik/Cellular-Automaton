@@ -23,7 +23,7 @@ public class SharkCell extends PredPreyCell {
 	}
 	
 	@Override
-	public Paint getColor(){
+	public Paint getColor(Patch p){
 		return Color.RED;
 	}
 	

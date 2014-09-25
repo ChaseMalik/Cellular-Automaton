@@ -42,6 +42,8 @@ public class GridModel {
 		Cell[][] initialCells = parser.makeCells();
 		Patch[][] initialPatches = parser.makePatches();
 		initialize(initialCells, initialPatches, parameters);
+		//parser.printCellsArray();
+		//parser.printPatchArray();
 	}
 	
 	public void initialize(Cell[][] cells, Patch[][] patches, Map<String, String> parameters){
@@ -71,7 +73,7 @@ public class GridModel {
 					myCells[i][j]=((PredPreyCell) myCells[i][j]).getFutureCell();
 				else{ 
 					myCells[i][j].currentToFuture();
-					//myPatches[i][j].updateState(myCells[i][j]);
+					myPatches[i][j].updateState(myCells[i][j]);
 				}
 			}
 		}
@@ -80,6 +82,10 @@ public class GridModel {
 
 	public Cell[][] getCells() {
 		return myCells;
+	}
+
+	public Patch[][] getPatches() {
+		return myPatches;
 	}
 
 	

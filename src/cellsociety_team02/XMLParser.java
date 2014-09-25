@@ -34,6 +34,7 @@ public class XMLParser {
 	private int maxCol;
 	private Map<String,String> paramMap;
 	private int myNumStates;
+	private int myNumPatches;
 	private Factory factory;
 
 	/**
@@ -68,6 +69,8 @@ public class XMLParser {
 			myType = getAttribute(modelNode, "model");
 			myConfig = getAttribute(modelNode, "config");
 			myNumStates = Integer.parseInt(getAttribute(modelNode, "numStates"));
+			try {myNumPatches = Integer.parseInt(getAttribute(modelNode, "numPatches"));}
+			catch(Exception ex){myNumPatches = 1;}
 			maxRow = Integer.parseInt(getAttribute(modelNode, "rows"));
 			maxCol = Integer.parseInt(getAttribute(modelNode, "columns"));
 			cellsList = new Cell[maxRow][maxCol];
@@ -166,6 +169,7 @@ public class XMLParser {
 		for(int i=0;i<cellsList.length;i++){
 			for(int j=0;j<cellsList[0].length;j++){
 				if(s.equals("cell")) cellsList[i][j] = factory.makeRandomCell(myType, i, j, paramMap,myNumStates);
+				else patchesList[i][j] = factory.makeRandomPatch(myType, i, j, paramMap,myNumPatches);
 			}
 		}
 	}
@@ -180,6 +184,9 @@ public class XMLParser {
 			}
 		}
 	}
+	
+		
+	
 	/**
 	 * Prints the cellsArray to the console
 	 * Used for testing purposes
@@ -187,7 +194,15 @@ public class XMLParser {
 	public void printCellsArray(){
 		for(int i=0; i<cellsList.length; i++){
 			for(int j=0; j<cellsList[0].length;j++){
-				System.out.print(cellsList[i][j] + " ");
+				System.out.print(cellsList[i][j].getCurrentState() + " ");
+			}
+			System.out.print("\n");
+		}
+	}
+	public void printPatchArray(){
+		for(int i=0; i<patchesList.length; i++){
+			for(int j=0; j<patchesList[0].length;j++){
+				System.out.print(patchesList[i][j].getCurrentState() + " ");
 			}
 			System.out.print("\n");
 		}
