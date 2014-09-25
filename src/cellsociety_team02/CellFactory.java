@@ -33,7 +33,7 @@ public class CellFactory {
 		switch(myType){
 		case "Fire": return new FirePatch(state,r,c);
 		}
-		return new NullPatch(0,r,c);
+		return null;
 	}
 
 	public Cell makeRandomCell(String myType, int i, int j,Map<String, String> params) {
@@ -48,5 +48,12 @@ public class CellFactory {
 			return makeCell(myType,i,j,rand.nextInt()%2,params);
 		}
 		return null;
+	}
+	
+	public Patch makeRandomPatch(String myType, int i, int j, Map<String, String> params){
+		switch(myType){
+		case "Fire": return makePatch(myType,i,j,rand.nextInt(3),params);
+		}
+		return new NullPatch(0,i,j);
 	}
 }

@@ -153,6 +153,7 @@ public class XMLParser {
 		for(int i=0;i<cellsList.length;i++){
 			for(int j=0;j<cellsList[0].length;j++){
 				if(s.equals("cell")) cellsList[i][j] = factory.makeRandomCell(myType, i, j, makeParameterMap());
+				else patchesList[i][j] = factory.makeRandomPatch(myType, i, j, makeParameterMap());
 			}
 		}
 	}

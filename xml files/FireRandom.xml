@@ -1,0 +1,4 @@
+<CAModel>
+	<animation model="Fire" config="Random" rows="10" columns="10">
+		<parameters>
+			<parameter name="probCatch" value="0.60"></parameter></parameters></animation></CAModel>

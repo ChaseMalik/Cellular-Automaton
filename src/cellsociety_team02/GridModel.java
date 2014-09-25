@@ -41,7 +41,7 @@ public class GridModel {
 		Cell[][] initialCells = parser.makeCells();
 		Patch[][] initialPatches = parser.makePatches();
 		initialize(initialCells, initialPatches, parameters);
-		parser.printCellsArray();
+		//parser.printCellsArray();
 		//parser.printPatchArray();
 	}
 	
