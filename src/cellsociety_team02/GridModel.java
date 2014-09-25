@@ -67,9 +67,12 @@ public class GridModel {
 		}*/
 		for(int i=0;i<myCells.length;i++){
 			for(int j=0; j<myCells[0].length;j++){
-				myCells[i][j] = ((PredPreyCell) myCells[i][j]).getFutureCell();
-				//myCells[i][j].currentToFuture();
-				//myPatches[i][j].updateState(myCells[i][j]);
+				if(myCells[i][j] instanceof PredPreyCell)
+					myCells[i][j]=((PredPreyCell) myCells[i][j]).getFutureCell();
+				else{ 
+					myCells[i][j].currentToFuture();
+					//myPatches[i][j].updateState(myCells[i][j]);
+				}
 			}
 		}
 		//System.out.println();

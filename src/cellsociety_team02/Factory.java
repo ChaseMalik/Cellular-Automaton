@@ -9,7 +9,7 @@ import Cell.PredPreyCell;
 import Cell.SegregationCell;
 import Patch.Patch;
 
-public class CellFactory {
+public class Factory {
 	Random rand = new Random();
 	public Cell makeCell(String s, int r, int c, double state, Map<String, String> params){
 		switch(s){
@@ -33,17 +33,25 @@ public class CellFactory {
 		return null;
 	}
 
-	public Cell makeRandomCell(String myType, int i, int j,Map<String, String> params) {
-		switch(myType){
-		case "Fire": return makeCell(myType,i,j,rand.nextInt()%2,params);
-		case "PredPrey":
-			//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
-			break;
-		case "Segregation":
-			return makeCell(myType,i,j,rand.nextInt()%3,params);
-		case "Life":
-			return makeCell(myType,i,j,rand.nextInt()%2,params);
+	public Cell makeRandomCell(String myType, int i, int j,Map<String, String> params, int numStates) {
+		return makeCell(myType,i,j,rand.nextInt(numStates),params);
+	}
+
+	public Cell makeProbCell(String myType, int i, int j, Map<String, String> paramMap, int myNumStates,
+			Map<String, String> cellProb) {
+		double value = rand.nextDouble();
+		double current = 0;
+		for(String s: cellProb.keySet()){
+			current += Double.parseDouble(cellProb.get(s));
+			if(value<current) return makeCell(myType,i,j,Integer.parseInt(s),paramMap);
 		}
+		return null;
+	}
+
+	public Patch makeProbPatch(String myType, int i, int j,
+			Map<String, String> paramMap, int myNumStates,
+			Map<String, String> patchProb) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

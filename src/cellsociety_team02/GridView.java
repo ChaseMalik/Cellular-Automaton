@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import Cell.Cell;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -18,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,8 +39,6 @@ public class GridView {
 	private Scene myScene;
 	public static final Dimension DEFAULT_SIZE = new Dimension(600, 700);
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
-	public static final String PROTOCOL_PREFIX = "http://";
-	public static final String BLANK = " ";
 
 	//private Label myStatus;
 
@@ -47,21 +48,29 @@ public class GridView {
 	private double myInterval;
 	private List<Rectangle> myRectangleList;
 	private BorderPane root;
-	
-	
+	private boolean isRunning;
+
 	public GridView (GridModel model, String language) {
 		myModel = model;
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 		myAnimation = new Timeline();
 		myInterval = 0.25;
 		myRectangleList = new ArrayList<Rectangle>();
-
+		isRunning = false;
+		initialize();
 		load();
 	}
 
 	private Node makeButtons() {
 		HBox box = new HBox();
 
+		Button playPauseButton = makeButton("PlayPauseButton", new EventHandler<ActionEvent>() {
+			@Override
+			public void handle (ActionEvent event) {
+				playPause();
+			}
+		});
+		box.getChildren().add(playPauseButton);
 		Button loadButton = makeButton("LoadButton", new EventHandler<ActionEvent>() {
 			@Override
 			public void handle (ActionEvent event) {
@@ -69,7 +78,7 @@ public class GridView {
 			}
 		});
 		box.getChildren().add(loadButton);
-		
+
 		Button stepButton = makeButton("StepButton", new EventHandler<ActionEvent>() {
 			@Override
 			public void handle (ActionEvent event) {
@@ -78,13 +87,36 @@ public class GridView {
 		});
 		box.getChildren().add(stepButton);
 		
+		box.getChildren().add(setUpSpeedSlider());
 		return box;
 	}
 
+	private Slider setUpSpeedSlider() {
+		Slider s = new Slider();
+		s.setMin(0.1);
+		s.setMax(2.2);
+		s.setValue(1);
+		s.setShowTickMarks(true);
+		s.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                    updateSpeed(new_val.doubleValue());
+            }
+        });
+		
+		return s;
+	}
+
+	protected void playPause() {
+		isRunning = !isRunning;
+		startAnimation();
+	}
+
 	private void load(){
+		isRunning = false;
 		myAnimation.stop();
 		myModel.load();
-		startAnimation();
+		root.setCenter(makeGrid());
 	}
 
 	private Button makeButton (String property, EventHandler<ActionEvent> handler) {
@@ -110,7 +142,7 @@ public class GridView {
 	public Scene getScene() {
 		return myScene;
 	}
-	
+
 	// Maybe move to model
 	private void startAnimation() {
 		myAnimation.stop();
@@ -120,28 +152,29 @@ public class GridView {
 		myAnimation.getKeyFrames().add(frame);
 		myAnimation.play();
 	}
-	
+
 	public KeyFrame startHandler(double interval) {
 		KeyFrame kf = new KeyFrame(Duration.seconds(interval), new EventHandler<ActionEvent>() {
-	    @Override
-	    	public void handle(ActionEvent event) {
-	    		root.setCenter(makeGrid());
-	    		myModel.update();
-	    	}
-	    });
+			@Override
+			public void handle(ActionEvent event) {
+				if(isRunning){
+					step();
+				}
+			}
+		});
 		return kf;
 	}
-	
+
 	public void updateSpeed(double value) {
 		myInterval = value;
 		startAnimation();
 	}
-	
+
 	public void step(){
-		makeGrid();
+		root.setCenter(makeGrid());
 		myModel.update();
 	}
-	
+
 	private Node makeGrid() {
 		Group g = new Group();
 		myRectangleList.clear();

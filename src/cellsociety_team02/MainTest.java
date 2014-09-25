@@ -13,7 +13,6 @@ public class MainTest extends Application {
 	public void start(Stage stage) throws Exception {
         GridModel model = new GridModel();
         GridView view = new GridView(model, "English");
-        view.initialize();
         stage.setScene(view.getScene());
         stage.show();
 	}

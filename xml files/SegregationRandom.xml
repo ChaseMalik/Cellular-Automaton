@@ -1,5 +1,5 @@
 <CAModel>
-	<animation model = "Segregation" config = "Random" rows = "8" columns = "8">
+	<animation model = "Segregation" config = "Random" numStates = "3" rows = "8" columns = "8">
 		<parameters>
 			<parameter name = "threshold" value = "0.30"></parameter>
 		</parameters>

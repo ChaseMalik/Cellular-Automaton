@@ -1,0 +1,12 @@
+<CAModel>
+	<animation model = "Segregation" config = "Probability" numStates = "3" rows = "8" columns = "8">
+		<parameters>
+			<parameter name = "threshold" value = "0.50"></parameter>
+		</parameters>
+		<probabilities>
+			<cellProb name = "0" value = ".10"></cellProb>
+			<cellProb name = "1" value = ".5"></cellProb>
+			<cellProb name = "2" value = ".40"></cellProb>
+		</probabilities>
+	</animation>
+</CAModel>
