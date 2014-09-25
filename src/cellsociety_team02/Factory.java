@@ -34,6 +34,6 @@ public class Factory {
 	}
 
 	public Cell makeRandomCell(String myType, int i, int j,Map<String, String> params, int numStates) {
-		return makeCell(myType,i,j,rand.nextInt()%numStates,params);
+		return makeCell(myType,i,j,rand.nextInt(numStates),params);
 	}
 }
