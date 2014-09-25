@@ -12,6 +12,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import Cell.Cell;
+import Patch.Patch;
 /**
  * Retrieves information from XML files designed for CA simulations
  * Stores the information in relevant data structures
@@ -118,16 +121,19 @@ public class XMLParser {
 	 * @param s String that defines whether to create array for cells or patches
 	 */
 	private void constructList(String s) {
-		
-		/*switch(myConfig){
-		case "Given": break;
-		case "Random": break;
+
+		CellFactory factory = new CellFactory();
+
+		switch(myConfig){
+		case "Given": doGiven(s,factory); break;
+		case "Random": doRandom(s,factory); break;
 		case "Probability":
 			Map<String, String> cellProb = makeMap("cellProb");
 			Map<String, String> patchProb = makeMap("patchProb");
 			break;
-		}*/
-		
+		}
+	}
+	private void doGiven(String s, CellFactory factory) {
 		NodeList nodes = myDoc.getElementsByTagName(s);
 		for(int i = 0; i<nodes.getLength(); i++){
 			Node node = nodes.item(i);
@@ -135,54 +141,29 @@ public class XMLParser {
 				int r = Integer.parseInt(getAttribute(node,"row"));	
 				int c = Integer.parseInt(getAttribute(node,"column"));	
 				double state = Double.parseDouble(getAttribute(node,"state"));
-				
-				Cell newCell = null;
-				Patch newPatch = null;
-				switch(myType){
-				case "Fire": 
-					if (s.equals("cell")) newCell = new FireCell(state, r, c, makeParameterMap()); 
-					else newPatch = new FirePatch(state, r, c); 
-					break;
-				case "PredPrey":
-	//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
-					break;
-				case "Segregation": 
-					if (s.equals("cell")) newCell = new SegregationCell(state, r, c, makeParameterMap()); 
-					break;
-				case "Life":
-					if (s.equals("cell")) newCell = new LifeCell(state, r, c, makeParameterMap()); 
-					break;
-				}
-				cellsList[r][c] = newCell;
-				patchesList[r][c] = newPatch;
+				if(s.equals("cell")) cellsList[r][c] = factory.makeCell(myType, r, c, state, makeParameterMap());
+				else patchesList[r][c] = factory.makePatch(myType, r, c, state, makeParameterMap());
 			}
 		}
+
+		setNullState(factory);
+	}
+
+	private void doRandom(String s, CellFactory factory){
+		for(int i=0;i<cellsList.length;i++){
+			for(int j=0;j<cellsList[0].length;j++){
+				if(s.equals("cell")) cellsList[i][j] = factory.makeRandomCell(myType, i, j, makeParameterMap());
+			}
+		}
+	}
+	private void setNullState(CellFactory factory) {
 		for(int i=0; i<cellsList.length;i++){
 			for(int j =0; j<cellsList[0].length;j++){
 				if(cellsList[i][j] == null){
-					//cellsList[i][j] = new LifeCell(0,i,j,makeParameterMap());
-					switch(myType){
-					case "Fire": 
-						cellsList[i][j] = new FireCell(0, i, j, makeParameterMap()); 
-						//else patchesList[i][j] = new FirePatch(1, i, j); 
-						break;
-					case "PredPrey":
-		//				if (s.equals("cell")) newCell = new PredPreyCell(state, r, c); 
-						break;
-					case "Segregation": 
-						cellsList[i][j] = new SegregationCell(0,i,j,makeParameterMap()); 
-						break;
-					case "Life":
-						cellsList[i][j] = new LifeCell(0,i,j,makeParameterMap());
-						break;
-					}
+					cellsList[i][j] = factory.makeCell(myType, i, j, 0, makeParameterMap());
 				}
 				if(patchesList[i][j] == null){
-					switch(myType){
-					case "Fire": 
-						if (s.equals("patch"))patchesList[i][j] = new FirePatch(1, i, j); 
-						break;
-					}
+					patchesList[i][j]=factory.makePatch(myType, i, j, DEFAULT_PATCH_VALUE, makeParameterMap());
 				}
 			}
 		}
