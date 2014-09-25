@@ -8,9 +8,11 @@ import Cell.FireCell;
 import Cell.LifeCell;
 import Cell.PredPreyCell;
 import Cell.SegregationCell;
+import Cell.SugarCell;
 import Patch.FirePatch;
 import Patch.NullPatch;
 import Patch.Patch;
+import Patch.SugarPatch;
 
 public class Factory {
 	Random rand = new Random();
@@ -24,6 +26,8 @@ public class Factory {
 			return new SegregationCell(state, r, c, params);
 		case "Life":
 			return new LifeCell(state, r, c, params);
+		case "Sugar":
+			return new SugarCell(state,r,c,params);
 		}
 		return null;
 	}
@@ -31,9 +35,10 @@ public class Factory {
 	public Patch makePatch(String myType, int r, int c, double state,
 			Map<String, String> params) {
 		switch(myType){
-		case "Fire": return new FirePatch(state,r,c);
+		case "Fire": return new FirePatch(state,r,c, params);
+		case "Sugar": return new SugarPatch(state,r,c,params);
 		}
-		return new NullPatch(0,r,c);
+		return new NullPatch(0,r,c , params);
 	}
 
 	public Cell makeRandomCell(String myType, int i, int j,Map<String, String> params, int numStates) {

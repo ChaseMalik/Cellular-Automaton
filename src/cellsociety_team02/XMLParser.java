@@ -1,8 +1,6 @@
 package cellsociety_team02;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -36,6 +34,7 @@ public class XMLParser {
 	private int myNumStates;
 	private int myNumPatches;
 	private Factory factory;
+	private String myGridType;
 
 	/**
 	 * Takes an xml file and creates a document that can be parsed
@@ -73,9 +72,12 @@ public class XMLParser {
 			catch(Exception ex){myNumPatches = 1;}
 			maxRow = Integer.parseInt(getAttribute(modelNode, "rows"));
 			maxCol = Integer.parseInt(getAttribute(modelNode, "columns"));
+			try{myGridType = getAttribute(modelNode,"gridType");}
+			catch(Exception ex){myGridType = "Rectangle";}
 			cellsList = new Cell[maxRow][maxCol];
 			patchesList = new Patch[maxRow][maxCol];
 		}
+		paramMap = makeParameterMap();
 	}
 	/**
 	 * Gets the value of the attribute associated with the node and string
@@ -93,8 +95,7 @@ public class XMLParser {
 	 *@return Map<String,String> with keys defined by the xml parameter name and value equal to its value
 	 */
 	public Map<String,String> makeParameterMap(){		
-		paramMap = makeMap("parameter");
-		return paramMap;
+		return makeMap("parameter");
 	}
 	
 	private Map<String, String> makeMap(String s) {
@@ -185,8 +186,6 @@ public class XMLParser {
 		}
 	}
 	
-		
-	
 	/**
 	 * Prints the cellsArray to the console
 	 * Used for testing purposes
@@ -206,5 +205,8 @@ public class XMLParser {
 			}
 			System.out.print("\n");
 		}
+	}
+	public String getGridType() {
+		return myGridType;
 	}
 }
