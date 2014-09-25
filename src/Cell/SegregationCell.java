@@ -64,7 +64,7 @@ public class SegregationCell extends Cell{
 	}
 
 	@Override
-	public Paint getColor(Patch p) {
+	public Paint getColor() {
 		switch((int) futureState){
 		case stateX: return Color.RED;
 		case stateY: return Color.BLUE;

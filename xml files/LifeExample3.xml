@@ -1,0 +1,4 @@
+<CAModel>
+	<animation model = "Life" config = "Random" gridType = "Triangle" numStates = "2" rows = "20" columns = "20">
+	</animation>
+</CAModel>

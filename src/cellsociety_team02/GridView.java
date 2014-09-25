@@ -1,10 +1,8 @@
 package cellsociety_team02;
 
 import java.awt.Dimension;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import Cell.Cell;
@@ -19,20 +17,10 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.web.WebView;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 public class GridView {
@@ -47,16 +35,17 @@ public class GridView {
 	private GridModel myModel;
 	private Timeline myAnimation;
 	private double myInterval;
-	private List<Rectangle> myRectangleList;
+	private List<Shape> myShapeList;
 	private BorderPane root;
 	private boolean isRunning;
-
+	private String gridType;
+	
 	public GridView (GridModel model, String language) {
 		myModel = model;
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 		myAnimation = new Timeline();
 		myInterval = 1.0;
-		myRectangleList = new ArrayList<Rectangle>();
+		myShapeList = new ArrayList<Shape>();
 		isRunning = false;
 		initialize();
 		load();
@@ -117,6 +106,7 @@ public class GridView {
 		isRunning = false;
 		myAnimation.stop();
 		myModel.load();
+		gridType = myModel.getGridType();
 		root.setCenter(makeGrid());
 	}
 
@@ -172,23 +162,27 @@ public class GridView {
 	}
 
 	public void step(){
-		root.setCenter(makeGrid());
 		myModel.update();
+		root.setCenter(makeGrid());
 	}
 
 	private Node makeGrid() {
+		Draw draw = new Draw();
 		Group g = new Group();
-		myRectangleList.clear();
+		myShapeList.clear();
 		Cell[][] cells = myModel.getCells();
 		Patch[][] patches = myModel.getPatches();
-		double cellHeight = 600.0/(cells.length);
-		double cellWidth = 600.0/cells[0].length;
+		double height = cells.length;
+		double width = cells[0].length;
+		/*double cellHeight = 500.0/(cells.length);
+		double cellWidth = 500.0/cells[0].length;*/
 		for(int i=0;i<cells.length;i++){
 			for(int j=0; j<cells[0].length;j++){
 				Cell c = cells[i][j];
-				Rectangle newDisplay = new Rectangle(j*cellWidth, i*cellHeight, cellWidth, cellHeight);
-				newDisplay.setFill(c.getColor(patches[i][j]));
-				myRectangleList.add(newDisplay);
+				Shape newDisplay = draw.drawShape(height,width,i,j,gridType);
+				if(c.getColor() != null) newDisplay.setFill(c.getColor());
+				else newDisplay.setFill(patches[i][j].getColor());
+				myShapeList.add(newDisplay);
 				g.getChildren().add(newDisplay);
 			}
 		}

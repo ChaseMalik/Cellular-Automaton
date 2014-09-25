@@ -22,7 +22,7 @@ public class FishCell extends PredPreyCell {
 	}
 
 	@Override
-	public Paint getColor(Patch p){
+	public Paint getColor(){
 		return Color.LIMEGREEN;
 	}
 	

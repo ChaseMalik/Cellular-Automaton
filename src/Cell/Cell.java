@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import Patch.Patch;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 
@@ -64,6 +63,11 @@ public abstract class Cell {
 		this.futureY = futureY;
 	}
 
+
+	protected double errorCheck(String string, double result) {
+		if(myParameters.containsKey(string)) return Double.parseDouble(myParameters.get(string));
+		else return result;
+	}
 	
 	public abstract void updateStateandMove(Cell[][] cellList, Patch[][] patches);
 	
@@ -86,7 +90,7 @@ public abstract class Cell {
 		return neighborsList;
 	}
 
-	public abstract Paint getColor(Patch patch);
+	public abstract Paint getColor();
 
 	public void setFutureState(double futureState) {
 		this.futureState = futureState;

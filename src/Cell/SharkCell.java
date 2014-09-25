@@ -17,13 +17,12 @@ public class SharkCell extends PredPreyCell {
 		super(state, x, y, parameters);
 		myChronons = chronons;
 		starve = Integer.parseInt(myParameters.get("sharkStarve"));
-		System.out.println(starve);
 		myBreed = Integer.parseInt(myParameters.get("sharkBreed"));
 		myHunger = hunger;
 	}
 	
 	@Override
-	public Paint getColor(Patch p){
+	public Paint getColor(){
 		return Color.RED;
 	}
 	
