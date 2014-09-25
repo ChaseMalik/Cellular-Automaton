@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import Cell.Cell;
+import Patch.Patch;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -33,7 +35,7 @@ import javafx.util.Duration;
 public class GridView {
 
 	private Scene myScene;
-	public static final Dimension DEFAULT_SIZE = new Dimension(600, 800);
+	public static final Dimension DEFAULT_SIZE = new Dimension(600, 700);
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
 	public static final String PROTOCOL_PREFIX = "http://";
 	public static final String BLANK = " ";
@@ -81,6 +83,7 @@ public class GridView {
 	}
 
 	private void load(){
+		myAnimation.stop();
 		myModel.load();
 		startAnimation();
 	}

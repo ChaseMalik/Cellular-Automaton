@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import Cell.Cell;
+import Patch.Patch;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -39,7 +41,7 @@ public class GridModel {
 		Cell[][] initialCells = parser.makeCells();
 		Patch[][] initialPatches = parser.makePatches();
 		initialize(initialCells, initialPatches, parameters);
-		//parser.printCellsArray();
+		parser.printCellsArray();
 		//parser.printPatchArray();
 	}
 	
