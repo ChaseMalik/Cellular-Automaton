@@ -53,7 +53,7 @@ public class GridView {
 		myModel = model;
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 		myAnimation = new Timeline();
-		myInterval = 1.0;
+		myInterval = 0.25;
 		myRectangleList = new ArrayList<Rectangle>();
 
 		load();

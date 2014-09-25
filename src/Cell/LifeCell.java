@@ -14,8 +14,6 @@ public class LifeCell extends Cell {
 
 	public LifeCell(double state, int x, int y, Map<String,String> parameters) {
 		super(state, x, y, parameters);
-		xDelta = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
-		yDelta = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 	}
 
 	@Override
@@ -50,6 +48,12 @@ public class LifeCell extends Cell {
 			return Color.WHITE;
 		else
 			return Color.BLACK;
+	}
+
+	@Override
+	protected void setDeltas() {
+		xDelta = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
+		yDelta = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 	}
 
 }

@@ -20,8 +20,6 @@ public class SegregationCell extends Cell{
 	public SegregationCell(double state, int x, int y,
 			Map<String, String> parameters) {
 		super(state, x, y, parameters);
-		xDelta = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
-		yDelta = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 		if(parameters.containsKey(THRESHOLD))
 			threshold = Double.parseDouble(parameters.get(THRESHOLD));
 		else threshold = 0.3; //Default value
@@ -72,6 +70,12 @@ public class SegregationCell extends Cell{
 		case stateY: return Color.BLUE;
 		}
 		return Color.WHITE;
+	}
+
+	@Override
+	protected void setDeltas() {
+		xDelta = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
+		yDelta = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 	}
 
 }

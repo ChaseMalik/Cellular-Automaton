@@ -5,6 +5,7 @@ import java.util.Random;
 
 import Cell.Cell;
 import Cell.LifeCell;
+import Cell.PredPreyCell;
 import Cell.SegregationCell;
 import Patch.Patch;
 
@@ -17,8 +18,7 @@ public class CellFactory {
 			//			else newPatch = new FirePatch(state, r, c); 
 			break;
 		case "PredPrey":
-			//return new PredPreyCell(state, r, c,params).makeCell(); 
-			break;
+			return new PredPreyCell(state, r, c,params).makeCell(); 
 		case "Segregation": 
 			return new SegregationCell(state, r, c, params);
 		case "Life":

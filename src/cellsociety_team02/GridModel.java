@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import Cell.Cell;
+import Cell.PredPreyCell;
 import Patch.Patch;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -66,7 +67,8 @@ public class GridModel {
 		}*/
 		for(int i=0;i<myCells.length;i++){
 			for(int j=0; j<myCells[0].length;j++){
-				myCells[i][j].currentToFuture();
+				myCells[i][j] = ((PredPreyCell) myCells[i][j]).getFutureCell();
+				//myCells[i][j].currentToFuture();
 				//myPatches[i][j].updateState(myCells[i][j]);
 			}
 		}

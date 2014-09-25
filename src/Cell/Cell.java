@@ -29,6 +29,7 @@ public abstract class Cell {
 		futureX = x;
 		futureY = y;
 		myParameters = parameters;
+		setDeltas();
 	}
 	
 	public double getCurrentState(){
@@ -66,6 +67,8 @@ public abstract class Cell {
 	
 	public abstract void updateStateandMove(Cell[][] cellList, Patch[][] patches);
 	
+	protected abstract void setDeltas();
+	
 	public void currentToFuture(){
 		currentX = futureX;
 		currentY = futureY;
@@ -88,5 +91,7 @@ public abstract class Cell {
 	public void setFutureState(double futureState) {
 		this.futureState = futureState;
 	}
+	
+	
 	
 }

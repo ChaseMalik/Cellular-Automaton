@@ -1,9 +1,9 @@
 <CAModel>
-	<animation model = "PredPrey" rows = "20" columns = "20">
+	<animation model = "PredPrey"  config = "Given" rows = "20" columns = "20">
 		<parameters>
-			<parameter name = "fishBreed" value = "6"></parameter>
-			<parameter name = "sharkBreed" value = "10"></parameter>
-			<parameter name = "sharkStarve" value = "10"></parameter>
+			<parameter name = "fishBreed" value = "11"></parameter>
+			<parameter name = "sharkBreed" value = "4"></parameter>
+			<parameter name = "sharkStarve" value = "8"></parameter>
 		</parameters>
 		<cells>
 			<cell row = "0" column = "4" state = "1"></cell>
