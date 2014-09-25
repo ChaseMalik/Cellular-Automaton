@@ -77,9 +77,14 @@ public class SugarCell extends Cell {
 	private Patch findHighestSugar(List<Patch> neighborPatches, Cell[][] cellList) {
 		Patch newLocation = new NullPatch(0,0,0,null);
 		double high = 0;
+		int dist = Integer.MAX_VALUE;
 		for(Patch p :neighborPatches){
-			Cell c = cellList[(int) p.getCurrentX()][(int) p.getCurrentY()];
-			if(p.getCurrentState()>high && c.getCurrentState() == dead && c.getFutureState() == dead){
+			int pX = (int) p.getCurrentX();
+			int pY = (int) p.getCurrentY();
+			Cell c = cellList[pX][pY];
+			if(p.getCurrentState()>high && c.getCurrentState() == dead && c.getFutureState() == dead){//&&
+					//Math.abs(pX-currentX)+Math.abs(pY-currentY)<dist){
+				//dist = Math.abs(pX-currentX)+Math.abs(pY-currentY);
 				high = p.getCurrentState();
 				newLocation = p;
 			}
