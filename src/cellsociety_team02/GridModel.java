@@ -16,10 +16,6 @@ public class GridModel {
 	private int myNumStates;
 	private Map<String,String> myColorMap;
 	
-	public GridModel(){
-
-	}
-	
 	private XMLParser loadFileToParser() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));

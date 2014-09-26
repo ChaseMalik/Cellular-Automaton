@@ -16,21 +16,15 @@ public class SegregationCell extends Cell{
 	private static final int stateX = 1;
 	private static final int stateY = 2;
 	private static final String THRESHOLD = "threshold";
+	private static final double DEFAULT_THRESHOLD = 0.3;
 	private double threshold;
 	
-	public SegregationCell(double state, int x, int y,
-			Map<String, String> parameters) {
+	public SegregationCell(double state, int x, int y, Map<String, String> parameters) {
 		super(state, x, y, parameters);
-		if(parameters.containsKey(THRESHOLD))
-			threshold = Double.parseDouble(parameters.get(THRESHOLD));
-		else threshold = 0.3; //Default value
 	}
 
 	public SegregationCell(SegregationCell segregationCell) {
 		super(segregationCell);
-		if(myParameters.containsKey(THRESHOLD))
-			threshold = Double.parseDouble(myParameters.get(THRESHOLD));
-		else threshold = 0.3; //Default value
 	}
 
 	@Override
@@ -41,20 +35,28 @@ public class SegregationCell extends Cell{
 		double yNeighbors = 0;
 		
 		for(Patch p: getNeighbors(patches)){
-			switch((int) p.getCurrentCell().getCurrentState()){
-			case stateX: xNeighbors++; break;
-			case stateY: yNeighbors++; break;
-			}
+			int neighborState = (int) p.getCurrentCell().getCurrentState();
+			if(neighborState == stateX) xNeighbors++;
+			else if(neighborState == stateY) yNeighbors++;
 		}
 		
 		if(xNeighbors + yNeighbors == 0){move(patches); return;}
 		double xRatio = xNeighbors/(xNeighbors+yNeighbors);
 		double yRatio = yNeighbors/(xNeighbors+yNeighbors);
-		if(!(state==stateX && xRatio>threshold) && !(state==stateY && yRatio>threshold))
+		if(!(state==stateX && xRatio>=threshold) && !(state==stateY && yRatio>=threshold)){
 			move(patches);
+		}
 		else futureState = currentState;
 	}
-
+	/**
+	 * Moves the current cell to a random empty cell
+	 * Loops through the list of all patches and finds ones which do not have cells in the future
+	 * Then it randomly chooses one of these patches and moves there 
+	 * by setting its future cell equal to this and setting this locations current cell equal to
+	 * an empty cell
+	 * 
+	 * @param Patch[][] patches array of all patches on the grid
+	 */
 	private void move(Patch[][] patches) {
 		List<Point2D> possibleDest = new ArrayList<>();
 		for(int r=0;r<patches.length;r++){
@@ -75,17 +77,20 @@ public class SegregationCell extends Cell{
 
 	@Override
 	public Paint getColor() {
-		switch((int) futureState){
-		case stateX: return Color.RED;
-		case stateY: return Color.BLUE;
-		}
-		return Color.WHITE;
+		if(futureState == stateX) return Color.RED;
+		else if(futureState == stateY) return Color.BLUE;
+		else return Color.WHITE;
 	}
 
 	@Override
 	protected void setDeltas() {
 		xDelta = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
 		yDelta = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
+	}
+
+	@Override
+	protected void initialize() {
+		threshold = errorCheck(THRESHOLD,DEFAULT_THRESHOLD);
 	}
 
 }

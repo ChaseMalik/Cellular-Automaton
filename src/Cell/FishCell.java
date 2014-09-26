@@ -10,23 +10,19 @@ import javafx.scene.paint.Paint;
 
 public class FishCell extends PredPreyCell {
 
+	private static final int DEFAULT_FISHBREED = 3;
 	private boolean eaten;
 	private Patch newMove;
 	
 	public FishCell(double state, int x, int y, Map<String, String> parameters, int chronons) {
 		super(state, x, y, parameters);
 		myChronons = chronons;
-		myBreed = Integer.parseInt(parameters.get("fishBreed"));
-		eaten = false;
-		newMove = null;
+		
 	}
 	
 	public FishCell(FishCell c, int chronons){
 		super(c);
 		myChronons = chronons;
-		myBreed = Integer.parseInt(myParameters.get("fishBreed"));
-		eaten = false;
-		newMove = null;
 	}
 
 	@Override
@@ -63,7 +59,12 @@ public class FishCell extends PredPreyCell {
 	protected void breed(Patch[][] patches){
 		patches[currentX][currentY].setFutureCell(new FishCell(this, INITIAL_CHRONONS));
 	}
-	
+	@Override
+	protected void initialize() {
+		myBreed = (int) errorCheck("fishBreed",DEFAULT_FISHBREED);
+		eaten = false;
+		newMove = null;
+	}
 	
 	
 }

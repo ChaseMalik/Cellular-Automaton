@@ -10,14 +10,14 @@ import javafx.scene.paint.Paint;
 
 public class SharkCell extends PredPreyCell {
 
+	private static final int DEFAULT_STARVE = 4;
+	private static final int DEFAULT_SHARKBREED = 5;
 	private int starve;
 	private int myHunger;
 
 	public SharkCell(double state, int x, int y, Map<String, String> parameters) {
 		super(state, x, y, parameters);
 		myChronons = INITIAL_CHRONONS;
-		starve = Integer.parseInt(parameters.get("sharkStarve"));
-		myBreed = Integer.parseInt(parameters.get("sharkBreed"));
 		myHunger = INITIAL_HUNGER;
 	}
 
@@ -25,8 +25,6 @@ public class SharkCell extends PredPreyCell {
 		super(sharkCell);
 		myChronons = chronons;
 		myHunger = hunger;
-		starve = Integer.parseInt(myParameters.get("sharkStarve"));
-		myBreed = Integer.parseInt(myParameters.get("sharkBreed"));
 
 	}
 
@@ -74,6 +72,12 @@ public class SharkCell extends PredPreyCell {
 	@Override
 	protected void breed(Patch[][] patches){
 		patches[currentX][currentY].setFutureCell(new SharkCell(SHARK, currentX, currentY, myParameters));
+	}
+	
+	@Override
+	protected void initialize(){
+		starve = (int) errorCheck("sharkStarve", DEFAULT_STARVE);
+		myBreed = (int) errorCheck("sharkBreed", DEFAULT_SHARKBREED);
 	}
 
 

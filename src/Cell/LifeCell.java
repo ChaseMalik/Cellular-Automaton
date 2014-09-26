@@ -16,11 +16,9 @@ public class LifeCell extends Cell {
 		super(state, x, y, parameters);
 	}
 
-
 	public LifeCell(LifeCell lifeCell) {
 		super(lifeCell);
 	}
-
 
 	@Override
 	public void updateStateandMove(Patch[][] patches) {
@@ -39,7 +37,13 @@ public class LifeCell extends Cell {
 		patches[currentX][currentY].setFutureCell(new LifeCell(this));
 	}
 
-
+	/**
+	 * Loops through the list of neighboring patches
+	 * Returns the number of live neighbors
+	 * 
+	 * @param List<Patch> neighboring patches to the current cell
+	 * @return int returns the number of live neighbors
+	 */
 	private int aliveNeighbors(List<Patch> neighborsList) {
 		int result = 0;
 		for (Patch p: neighborsList){
@@ -61,6 +65,11 @@ public class LifeCell extends Cell {
 	protected void setDeltas() {
 		xDelta = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
 		yDelta = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
+	}
+
+	@Override
+	protected void initialize() {
+		//nothing
 	}
 
 }

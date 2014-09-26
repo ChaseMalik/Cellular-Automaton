@@ -7,7 +7,7 @@ import Cell.Cell;
 
 public class NullPatch extends Patch {
 
-	public NullPatch(Cell c, double state, double x, double y,Map<String,String> params) {
+	public NullPatch(Cell c, double state, int x, int y,Map<String,String> params) {
 		super(c, state, x, y,params);
 	}
 

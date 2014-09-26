@@ -1,7 +1,7 @@
 <CAModel>
-	<animation model = "Segregation" config = "Probability" numStates = "3" rows = "8" columns = "8">
+	<animation model = "Segregation" config = "Probability" numStates = "3" rows = "50" columns = "50">
 		<parameters>
-			<parameter name = "threshold" value = "0.50"></parameter>
+			<parameter name = "threshold" value = "0.8"></parameter>
 		</parameters>
 		<probabilities>
 			<cellProb name = "0" value = ".30"></cellProb>

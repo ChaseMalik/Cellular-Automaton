@@ -22,20 +22,73 @@ public class SugarCell extends Cell {
 
 	public SugarCell(double state, int x, int y, Map<String, String> parameters) {
 		super(state, x, y, parameters);
-		mySugar = (int) errorCheck("sugar", DEFAULT_SUGAR);
-		myVision = (int)errorCheck("vision", DEFAULT_VISION);
-		myMetabolism = (int)errorCheck("metabolism", DEFAULT_METABOLISM);
-		changeDeltas();
 	}
 
 	public SugarCell(SugarCell c, int sugar) {
-		super(c);	
-		mySugar = sugar;
-		myVision = (int)errorCheck("vision", DEFAULT_VISION);
-		myMetabolism = (int)errorCheck("metabolism", DEFAULT_METABOLISM);
+		super(c);
 	}
 
-	private void changeDeltas() {
+	@Override
+	public void updateStateandMove(Patch[][] patches) {
+		if(currentState == dead) return;
+		List<Patch> neighborPatches = getNeighbors(patches);
+		Patch newLocation = findHighestSugar(neighborPatches);
+		move(newLocation,patches);
+	}
+	/**
+	 * Finds the patch with the highest sugar that it can move to
+	 * Loops through the list of patches it can see and finds the one with the highest sugar value
+	 * that does not have a cell in the future
+	 * If multiple patches have the same high sugar, it choose the closest one
+	 * 
+	 * @param List<Patch> list of neighboring patches of the cell
+	 * @return Patch patch with the highest sugar that the cell can move to
+	 */
+	private Patch findHighestSugar(List<Patch> neighborPatches) {
+		Patch newLocation = new NullPatch(this,0,0,0,null);
+		double high = 0;
+		int dist = Integer.MAX_VALUE;
+		for(Patch p :neighborPatches){
+			int pX = p.getCurrentX();
+			int pY = p.getCurrentY();
+			if(p.getFutureCell().getCurrentState() == dead){
+				if(p.getCurrentState()>high){
+					high = p.getCurrentState();
+					newLocation = p;
+					dist = Math.abs(pX-currentX)+Math.abs(pY-currentY);
+				}
+				else if(p.getCurrentState() == high && Math.abs(pX-currentX)+Math.abs(pY-currentY)<dist){
+					high = p.getCurrentState();
+					newLocation = p;
+					dist = Math.abs(pX-currentX)+Math.abs(pY-currentY);
+				}
+			}
+		}
+		futureX = newLocation.getCurrentX();
+		futureY = newLocation.getCurrentY();
+		return newLocation;
+	}
+	/**
+	 * Moves the current cell to the patch it is given
+	 * The cell takes the sugar from the new patch and updates its own sugar
+	 * After subtracting its own metabolism, if the cell still has sugar it sets the new location's future cell
+	 * to this cell and sets the current patch's future cell to a dead cell
+	 * If it ran out of sugar then it instead sets the new location's future cell to a dead cell
+	 * 
+	 * @param patch newLocation destination for the current cell
+	 * @param Patch[][] patches array of all patches on the grid
+	 */
+	private void move(Patch newLocation, Patch[][] patches) {
+		mySugar += newLocation.getCurrentState();
+		newLocation.setFutureState(0);
+		mySugar -= myMetabolism;
+		if(mySugar > 0)	newLocation.setFutureCell(new SugarCell(this, mySugar));
+		else newLocation.setFutureCell(new SugarCell(dead,futureX,futureY,myParameters));
+		patches[currentX][currentY].setFutureCell(new SugarCell(dead,currentX,currentY,myParameters));
+	}
+	
+	@Override
+	protected void setDeltas() {
 		xDelta = new int[myVision*4];
 		yDelta = new int[myVision*4];
 		assignDeltas(0,-1,0);
@@ -50,61 +103,17 @@ public class SugarCell extends Cell {
 			yDelta[i+start] = y*(i+1);
 		}
 	}
-
-	@Override
-	public void updateStateandMove(Patch[][] patches) {
-		if(currentState == dead) return;
-		List<Patch> neighborPatches = getNeighbors(patches);
-		Patch newLocation = findHighestSugar(neighborPatches);
-		move(newLocation,patches);
-	}
-
-	private void move(Patch newLocation, Patch[][] patches) {
-		mySugar += newLocation.getCurrentState();
-		newLocation.setFutureState(0);
-		mySugar -= myMetabolism;
-		if(mySugar > 0){
-			newLocation.setFutureCell(new SugarCell(this, mySugar));
-			patches[currentX][currentY].setFutureCell(new SugarCell(dead,currentX,currentY,myParameters));
-		}
-		else newLocation.setFutureCell(new SugarCell(dead,futureX,futureY,myParameters));
-	}
-
-	private Patch findHighestSugar(List<Patch> neighborPatches) {
-		Patch newLocation = new NullPatch(this,0,0,0,null);
-		double high = 0;
-		int dist = Integer.MAX_VALUE;
-		for(Patch p :neighborPatches){
-			int pX = (int) p.getCurrentX();
-			int pY = (int) p.getCurrentY();
-			if(p.getCurrentCell().getCurrentState() == dead && p.getFutureCell().getCurrentState() == dead){
-				if(p.getCurrentState()>high){
-					high = p.getCurrentState();
-					newLocation = p;
-					dist = Math.abs(pX-currentX)+Math.abs(pY-currentY);
-				}
-				else if(p.getCurrentState() == high && Math.abs(pX-currentX)+Math.abs(pY-currentY)<dist){
-					high = p.getCurrentState();
-					newLocation = p;
-					dist = Math.abs(pX-currentX)+Math.abs(pY-currentY);
-				}
-			}
-		}
-		futureX = (int) newLocation.getCurrentX();
-		futureY = (int) newLocation.getCurrentY();
-		return newLocation;
-	}
-
-	@Override
-	protected void setDeltas() {
-		xDelta = new int[]{-1,0,0,1};
-		yDelta = new int[]{0,-1,1,0};
-	}
-
 	@Override
 	public Paint getColor() {
 		if(currentState == alive) return Color.RED;
 		else return null;
+	}
+
+	@Override
+	protected void initialize() {
+		mySugar = (int) errorCheck("sugar", DEFAULT_SUGAR);
+		myVision = (int)errorCheck("vision", DEFAULT_VISION);
+		myMetabolism = (int)errorCheck("metabolism", DEFAULT_METABOLISM);
 	}
 
 }

@@ -19,7 +19,6 @@ public class PredPreyCell extends Cell {
 
 	public PredPreyCell(double state, int x, int y, Map<String, String> parameters) {
 		super(state, x, y, parameters);
-		myChronons = INITIAL_CHRONONS;
 	}
 
 	public PredPreyCell(PredPreyCell c){
@@ -73,5 +72,11 @@ public class PredPreyCell extends Cell {
 	@Override
 	public Paint getColor() {
 		return Color.ROYALBLUE;
+	}
+
+	@Override
+	protected void initialize() {
+		myChronons = INITIAL_CHRONONS;
+		
 	}
 }
