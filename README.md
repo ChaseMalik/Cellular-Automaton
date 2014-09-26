@@ -10,7 +10,8 @@ Primary Roles:
 - Kevin: Fire simulation, GridModel, GridView, graph, Cell, Patch
 - Chase: XML Parser, Factory, Draw, Life simulation, Segregation simulation, Sugar simulation, Cell, Patch
 
-File to start project: Main.java 
+File to start project: Main.java
+
 Necessary resources and files (XML files) are included in project.
 
 XML files contain the configuration data for running the simulations.  The following attributes and parameters may be specified in our XML files for any simulation:
