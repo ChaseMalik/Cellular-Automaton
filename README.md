@@ -6,9 +6,9 @@ Estimated number of hours: 40
 
 Primary Roles:
 
-Greg: Predator/Prey simulation, GridModel, GridView, Cell, Patch
-Kevin: Fire simulation, GridModel, GridView, graph, Cell, Patch
-Chase: XML Parser, Factory, Draw, Life simulation, Segregation simulation, Sugar simulation, Cell, Patch
+- Greg: Predator/Prey simulation, GridModel, GridView, Cell, Patch
+- Kevin: Fire simulation, GridModel, GridView, graph, Cell, Patch
+- Chase: XML Parser, Factory, Draw, Life simulation, Segregation simulation, Sugar simulation, Cell, Patch
 
 File to start project: Main.java 
 Necessary resources and files (XML files) are included in project.
