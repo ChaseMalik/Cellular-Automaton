@@ -251,6 +251,10 @@ public class GridView {
 	 * Loops through all of the patches and creates a new shape for each one based on its cell
 	 * Creates a handler for each of these shapes, so that the user can interact with the simulation
 	 * 
+	 * We are still having issues with updating individual states based on user input
+	 * There is a preliminary implementation in place (commented out) but it runs into issues with scope
+	 * Code can still compile and run without handler commented out, but we did so to avoid any errors in the program
+	 * 
 	 */
 	private Node makeGrid() {
 		Draw draw = new Draw();
@@ -267,10 +271,10 @@ public class GridView {
 				newDisplay.setUserData(new Point2D.Double(i,j));
 				newDisplay.setFill(getLocationColor(p, c));
 				newDisplay.setOnMouseClicked(new EventHandler<MouseEvent>() {
-					public void handle(MouseEvent me) {
+					public void handle(MouseEvent me) {/*
 						Point2D point = (Point2D) newDisplay.getUserData();
 						myModel.changeState(point.getX(), point.getY());
-						newDisplay.setFill(getLocationColor(p, c));
+						newDisplay.setFill(getLocationColor(p, c));*/
 					}
 				});
 				myShapeList.add(newDisplay);
