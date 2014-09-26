@@ -12,7 +12,7 @@ public class SugarPatch extends Patch {
 	private int sugarInterval;
 	private int maxCapacity;
 	private int currentTime;
-	public SugarPatch(Cell c,double state, double x, double y, Map<String,String> params) {
+	public SugarPatch(Cell c,double state, int x, int y, Map<String,String> params) {
 		super(c, state, x, y, params);
 		sugarRate = check("sugarRate", 1);
 		sugarInterval = check("sugarInterval", 1);

@@ -3,14 +3,16 @@ package cellsociety_team02;
 import java.util.Map;
 import java.util.Random;
 
+import Cell.AntCell;
 import Cell.Cell;
 import Cell.FireCell;
 import Cell.LifeCell;
 import Cell.PredPreyCell;
 import Cell.SegregationCell;
 import Cell.SugarCell;
+import Patch.AntPatch;
 import Patch.FirePatch;
-import Patch.NullPatch;
+import Patch.GenericPatch;
 import Patch.Patch;
 import Patch.SugarPatch;
 
@@ -28,6 +30,8 @@ public class Factory {
 			return new LifeCell(state, r, c, params);
 		case "Sugar":
 			return new SugarCell(state,r,c,params);
+		case "Ant":
+			return new AntCell(state,r,c,params);
 		}
 		return null;
 	}
@@ -37,8 +41,9 @@ public class Factory {
 		switch(myType){
 		case "Fire": return new FirePatch(cell, state,r,c, params);
 		case "Sugar": return new SugarPatch(cell, state,r,c,params);
+		case "Ant": return new AntPatch(cell, state,r,c,params);
 		}
-		return new NullPatch(cell,0,r,c , params);
+		return new GenericPatch(cell,0,r,c , params);
 	}
 
 	public Cell makeRandomCell(String myType, int i, int j,Map<String, String> params, int numStates) {

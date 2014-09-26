@@ -50,7 +50,7 @@ public class SegregationCell extends Cell{
 		if(xNeighbors + yNeighbors == 0){move(patches); return;}
 		double xRatio = xNeighbors/(xNeighbors+yNeighbors);
 		double yRatio = yNeighbors/(xNeighbors+yNeighbors);
-		if(!(state==stateX && xRatio>threshold) && !(state==stateY && yRatio>threshold))
+		if(!(state==stateX && xRatio>=threshold) && !(state==stateY && yRatio>=threshold))
 			move(patches);
 		else futureState = currentState;
 	}

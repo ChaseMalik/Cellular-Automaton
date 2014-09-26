@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import Patch.NullPatch;
+import Patch.GenericPatch;
 import Patch.Patch;
 
 public class SugarCell extends Cell {
@@ -71,7 +71,7 @@ public class SugarCell extends Cell {
 	}
 
 	private Patch findHighestSugar(List<Patch> neighborPatches) {
-		Patch newLocation = new NullPatch(this,0,0,0,null);
+		Patch newLocation = new GenericPatch(this,0,0,0,null);
 		double high = 0;
 		int dist = Integer.MAX_VALUE;
 		for(Patch p :neighborPatches){

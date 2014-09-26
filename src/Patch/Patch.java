@@ -1,5 +1,7 @@
 package Patch;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javafx.scene.paint.Paint;
@@ -8,13 +10,13 @@ import Cell.Cell;
 public abstract class Patch {
 	protected double currentState;
 	protected double futureState;
-	protected double myX;
-	protected double myY;
+	protected int myX;
+	protected int myY;
 	protected Cell myCurrentCell;
 	protected Cell myFutureCell;
 	protected Map<String, String> myParameters;
 	
-	public Patch(Cell c, double state, double x, double y, Map<String, String> params) {
+	public Patch(Cell c, double state, int x, int y, Map<String, String> params) {
 		myCurrentCell = c;
 		myFutureCell = c;
 		currentState = state;
@@ -43,10 +45,10 @@ public abstract class Patch {
 		myFutureCell = c;
 	}
 	
-	public double getCurrentY() {
+	public int getCurrentY() {
 		return myY;
 	}
-	public double getCurrentX() {
+	public int getCurrentX() {
 		return myX;
 	}
 	

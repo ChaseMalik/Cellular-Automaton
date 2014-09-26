@@ -203,7 +203,8 @@ public class GridView {
 	}
 
 	private Paint getLocationColor(Patch p, Cell c) {
-		if(c.getColor() != null) return c.getColor();
+		if(c.getColor() != null) 
+			return c.getColor();
 		else return p.getColor();
 	}
 }
