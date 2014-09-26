@@ -174,7 +174,7 @@ public class GridView {
 		Group g = new Group();
 		myShapeList.clear();
 		Cell[][] cells = myModel.getCells();
-		Patch[][] patches = myModel.getPatches();
+		final Patch[][] patches = myModel.getPatches();
 		double height = cells.length;
 		double width = cells[0].length;
 		for(int i=0;i<patches.length;i++){
@@ -183,17 +183,21 @@ public class GridView {
 				Cell c = p.getCurrentCell();
 				Shape newDisplay = draw.drawShape(height,width,i,j,gridType);
 				newDisplay.setUserData(new Point2D.Double(i,j));
-				newDisplay.setFill(getLocationColor(p, c));
-				newDisplay.setOnMouseClicked(new EventHandler<MouseEvent>() {
-		            public void handle(MouseEvent me) {
-		            	Point2D point = (Point2D) newDisplay.getUserData();
-		            	myModel.changeState(point.getX(), point.getY());
-						newDisplay.setFill(getLocationColor(p, c));
-		            }
-		        });
+				newDisplay.setFill(getLocationColor(p, c));		
 				myShapeList.add(newDisplay);
 				g.getChildren().add(newDisplay);
 			}
+		}
+		for(final Shape shape: myShapeList){
+		shape.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent me) {
+            	Point2D point = (Point2D) shape.getUserData();
+            	myModel.changeState(point.getX(), point.getY());
+            	int x = (int) point.getX();
+            	int y = (int) point.getX();
+				shape.setFill(getLocationColor(patches[x][y], patches[x][y].getCurrentCell()));
+            }
+        });
 		}
 		return g;
 	}
