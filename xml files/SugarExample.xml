@@ -1,29 +1,9 @@
 <CAModel>
-	<animation model = "Sugar" config = "Given" numStates = "2" rows = "20" columns = "20" gridType = "Triangle">
+	<animation model = "Sugar" config = "Given" numStates = "2" rows = "20" columns = "20">
 		<cells>
-			<cell row = "1" column = "1" state = "1"></cell>
-			<cell row = "1" column = "2" state = "1"></cell>
-			<cell row = "2" column = "1" state = "1"></cell>
-			<cell row = "2" column = "2" state = "1"></cell>
-			<cell row = "2" column = "4" state = "1"></cell>
-			<cell row = "2" column = "5" state = "1"></cell>
 			<cell row = "2" column = "6" state = "1"></cell>
-			<cell row = "3" column = "3" state = "1"></cell>
-			<cell row = "3" column = "4" state = "1"></cell>
-			<cell row = "3" column = "5" state = "1"></cell>
-			<cell row = "5" column = "7" state = "1"></cell>
-			<cell row = "6" column = "8" state = "1"></cell>
 			<cell row = "7" column = "6" state = "1"></cell>
-			<cell row = "7" column = "7" state = "1"></cell>
-			<cell row = "7" column = "8" state = "1"></cell>
-			<cell row = "10" column = "14" state = "1"></cell>	
-			<cell row = "16" column = "4" state = "1"></cell>
-			<cell row = "17" column = "3" state = "1"></cell>
-			<cell row = "17" column = "5" state = "1"></cell>
-			<cell row = "18" column = "8" state = "1"></cell>
-			<cell row = "18" column = "10" state = "1"></cell>
-			<cell row = "19" column = "3" state = "1"></cell>
-			<cell row = "19" column = "15" state = "1"></cell>
+			<cell row = "10" column = "14" state = "1"></cell>
 		</cells>
 		<patches>
 			<patch row = "1" column = "8" state = "4"></patch>
@@ -33,7 +13,8 @@
 			<patch row = "9" column = "14" state = "0"></patch>
 			<patch row = "10" column = "13" state = "1"></patch>			
 			<patch row = "10" column = "15" state = "2"></patch>			
-			<patch row = "11" column = "14" state = "3"></patch>	
+			<patch row = "11" column = "14" state = "4"></patch>
+			<patch row = "12" column = "14" state = "4"></patch>	
 		</patches>
 	</animation>
 </CAModel>

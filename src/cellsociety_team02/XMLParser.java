@@ -23,6 +23,7 @@ import Patch.Patch;
  */
 public class XMLParser {
 	private static final int DEFAULT_PATCH_VALUE = 1;
+	private static final int DEFAULT_CELL_VALUE = 0;
 	private Document myDoc;
 	private String myType;
 	private String myConfig;
@@ -55,10 +56,9 @@ public class XMLParser {
 		}
 	}
 	/**
-	 * Gets the model type of the simulation
-	 * Initializes the arrays of cells and patches with default values
-	 * Default value of cell is 0
-	 * Default value of patch is 1.0
+	 * Gets the important parameters for the simulation
+	 * Initializes the arrays of cells and patches
+	 * Makes the parameter map
 	 *
 	 */
 	public void initialize(){
@@ -97,11 +97,12 @@ public class XMLParser {
 	public Map<String,String> makeParameterMap(){		
 		return makeMap("parameter");
 	}
-	
-	public Map<String, String> makeColorMap(){
-		return makeMap("color");
-	}
-	
+	/**
+	 * Makes a map from the xml file based on the string it is passed to their value
+	 *
+	 *@param String s of node name to search for in the xml
+	 *@return Map<String,String> with keys defined by the s name and value equal to its value
+	 */
 	private Map<String, String> makeMap(String s) {
 		Map<String, String> pMap = new HashMap<>();
 		NodeList parameterNodes = myDoc.getElementsByTagName(s);
@@ -114,18 +115,18 @@ public class XMLParser {
 		return pMap;
 	}
 	/**
-	 * Using the xml input, creates an array of states for the cells
+	 * Using the xml input, creates an array of cells
 	 *
-	 *@return 
+	 *@return Cell[][] array of cells
 	 */
 	public Cell[][] makeCells(){
 		constructList("cell");
 		return cellsList;
 	}
 	/**
-	 * Using the xml input, creates an array of states for the patches
+	 * Using the xml input, creates an array of patches
 	 *
-	 *@return 
+	 *@return Patch[][] array of patches
 	 */
 	public Patch[][] makePatches(){
 		constructList("patch");
@@ -133,6 +134,7 @@ public class XMLParser {
 	}
 	/**
 	 * Using the xml input, creates an array of states for either cells or patches
+	 * Based on the model's configuration
 	 * 
 	 * @param s String that defines whether to create array for cells or patches
 	 */
@@ -143,7 +145,50 @@ public class XMLParser {
 		case "Probability": doProbability(s); break;
 		}
 	}
+	/**
+	 * Using the xml input, creates an array of states for either cells or patches
+	 * Looks for all the nodes of the type s
+	 * Creates the appropriate cell or patch at the location given
+	 * Then sets all null entries equal to a cell or patch with its default value
+	 * 
+	 * @param s String that defines whether to create cells or patches
+	 */
+	private void doGiven(String s) {
+		NodeList nodes = myDoc.getElementsByTagName(s);
+		for(int i = 0; i<nodes.getLength(); i++){
+			Node node = nodes.item(i);
+			if(node instanceof Element){
+				int r = Integer.parseInt(getAttribute(node,"row"));	
+				int c = Integer.parseInt(getAttribute(node,"column"));	
+				double state = Double.parseDouble(getAttribute(node,"state"));
+				if(s.equals("cell")) cellsList[r][c] = factory.makeCell(myType, r, c, state, paramMap);
+				else patchesList[r][c] = factory.makePatch(cellsList[r][c], myType, r, c, state, paramMap);
+			}
+		}
 	
+		setNullState();
+	}
+	/**
+	 * Using the xml input, creates an array of states for either cells or patches
+	 * Loops through all possible locations and creates a random cell or patch at the location
+	 * 
+	 * @param s String that defines whether to create cells or patches
+	 */
+	private void doRandom(String s){
+		for(int i=0;i<cellsList.length;i++){
+			for(int j=0;j<cellsList[0].length;j++){
+				if(s.equals("cell")) cellsList[i][j] = factory.makeRandomCell(myType, i, j, paramMap,myNumStates);
+				else patchesList[i][j] = factory.makeRandomPatch(cellsList[i][j],myType, i, j, paramMap,myNumPatches);
+			}
+		}
+	}
+	/**
+	 * Using the xml input, creates an array of states for either cells or patches
+	 * Creates a map of cell probabilities and patch probabilities
+	 * Loops through all possible locations and creates a cell or patch at the location based on the map
+	 * 
+	 * @param s String that defines whether to create cells or patches
+	 */
 	private void doProbability(String s) {
 		Map<String, String> cellProb = makeMap("cellProb");
 		Map<String, String> patchProb;
@@ -159,65 +204,35 @@ public class XMLParser {
 			}
 		}
 	}
-	private void doGiven(String s) {
-		NodeList nodes = myDoc.getElementsByTagName(s);
-		for(int i = 0; i<nodes.getLength(); i++){
-			Node node = nodes.item(i);
-			if(node instanceof Element){
-				int r = Integer.parseInt(getAttribute(node,"row"));	
-				int c = Integer.parseInt(getAttribute(node,"column"));	
-				double state = Double.parseDouble(getAttribute(node,"state"));
-				if(s.equals("cell")) cellsList[r][c] = factory.makeCell(myType, r, c, state, paramMap);
-				else patchesList[r][c] = factory.makePatch(cellsList[r][c], myType, r, c, state, paramMap);
-			}
-		}
-
-		setNullState();
-	}
-
-	private void doRandom(String s){
-		for(int i=0;i<cellsList.length;i++){
-			for(int j=0;j<cellsList[0].length;j++){
-				if(s.equals("cell")) cellsList[i][j] = factory.makeRandomCell(myType, i, j, paramMap,myNumStates);
-				else patchesList[i][j] = factory.makeRandomPatch(cellsList[i][j],myType, i, j, paramMap,myNumPatches);
-			}
-		}
-	}
+	/**
+	 * Sets all null entries in cellsList and patchesList
+	 * equal to a cell or patch's default state, respectively
+	 * 
+	 */
 	private void setNullState() {
 		for(int i=0; i<cellsList.length;i++){
 			for(int j =0; j<cellsList[0].length;j++){
 				if(cellsList[i][j] == null){
-					cellsList[i][j] = factory.makeCell(myType, i, j, 0, paramMap);
+					cellsList[i][j] = factory.makeCell(myType, i, j, DEFAULT_CELL_VALUE, paramMap);
 				}
 				if(patchesList[i][j]== null)
 					patchesList[i][j] = factory.makePatch(cellsList[i][j],myType, i, j, DEFAULT_PATCH_VALUE, paramMap);
 			}
 		}
 	}
-	
 	/**
-	 * Prints the cellsArray to the console
-	 * Used for testing purposes
+	 * Return the type of grid
+	 * 
+	 * @return String of grid type
 	 */
-	public void printCellsArray(){
-		for(int i=0; i<cellsList.length; i++){
-			for(int j=0; j<cellsList[0].length;j++){
-				System.out.print(cellsList[i][j].getCurrentState() + " ");
-			}
-			System.out.print("\n");
-		}
-	}
-	public void printPatchArray(){
-		for(int i=0; i<patchesList.length; i++){
-			for(int j=0; j<patchesList[0].length;j++){
-				System.out.print(patchesList[i][j].getCurrentState() + " ");
-			}
-			System.out.print("\n");
-		}
-	}
 	public String getGridType() {
 		return myGridType;
 	}
+	/**
+	 * Return the maximum number of cell states
+	 * 
+	 * @return int myNumStates
+	 */
 	public int getNumStates(){
 		return myNumStates;
 	}

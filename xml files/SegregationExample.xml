@@ -1,7 +1,7 @@
 <CAModel>
 	<animation model = "Segregation" config = "Given" numStates = "3" rows = "8" columns = "8">
 		<parameters>
-			<parameter name = "threshold" value = "0.30"></parameter>
+			<parameter name = "threshold" value = ".3"></parameter>
 		</parameters>
 		<cells>
 			<cell row = "0" column = "2" state = "2"></cell>

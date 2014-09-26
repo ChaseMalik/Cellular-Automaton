@@ -2,8 +2,17 @@ package cellsociety_team02;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-
-public class MainTest extends Application {
+/**
+ * Main Class
+ * Used to Run Cellular Automata Simulations
+ * 
+ * Starts the Application
+ * 
+ * @author Chase Malik
+ * @author Greg Lyons
+ * @author Kevin Rhine
+ */
+public class Main extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);

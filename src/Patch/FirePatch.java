@@ -27,7 +27,7 @@ public class FirePatch extends Patch {
 	private static final double burnRate = 0.8;
 	private static final int burning = 1;
 	
-	public FirePatch(Cell c, double state, double x, double y, Map<String,String> params) {
+	public FirePatch(Cell c, double state, int x, int y, Map<String,String> params) {
 		super(c, state, x, y, params);
 	}
 

@@ -31,7 +31,8 @@ public class SugarPatch extends Patch {
 	public static final int DEFAULT_SUGAR_INTERVAL = 1;
 	public static final int DEFAULT_MAX_CAPACITY = 4;
 	
-	public SugarPatch(Cell c,double state, double x, double y, Map<String,String> params) {
+	public SugarPatch(Cell c,double state, int x, int y, Map<String,String> params) {
+
 		super(c, state, x, y, params);
 		sugarRate = errorCheck("sugarRate", DEFAULT_SUGAR_RATE);
 		sugarInterval = errorCheck("sugarInterval", DEFAULT_SUGAR_INTERVAL);
