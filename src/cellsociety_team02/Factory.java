@@ -36,7 +36,7 @@ public class Factory {
 			Map<String, String> params) {
 		switch(myType){
 		case "Fire": return new FirePatch(cell, state,r,c, params);
-		//case "Sugar": return new SugarPatch(cell, state,r,c,params);
+		case "Sugar": return new SugarPatch(cell, state,r,c,params);
 		}
 		return new NullPatch(cell,0,r,c , params);
 	}
@@ -56,13 +56,17 @@ public class Factory {
 		return null;
 	}
 
-	public Patch makeProbPatch(String myType, int i, int j,
-			Map<String, String> paramMap, int myNumStates,
+	public Patch makeProbPatch(Cell c, String myType, int i, int j, Map<String, String> paramMap, int myNumStates,
 			Map<String, String> patchProb) {
-		// TODO Auto-generated method stub
+		double value = rand.nextDouble();
+		double current = 0;
+		for(String s: patchProb.keySet()){
+			current += Double.parseDouble(patchProb.get(s));
+			if(value<current) return makePatch(c, myType,i,j,Integer.parseInt(s),paramMap);
+		}
 		return null;
 	}
-	public Patch makeRandomPatch(String myType, int i, int j, Map<String, String> params, int maxPatch){
-		return makePatch(myType,i,j,rand.nextInt(maxPatch),params);
+	public Patch makeRandomPatch(Cell c, String myType, int i, int j, Map<String, String> params, int maxPatch){
+		return makePatch(c, myType,i,j,rand.nextInt(maxPatch),params);
 	}
 }

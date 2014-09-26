@@ -39,6 +39,9 @@ public abstract class Cell {
 	public double getCurrentState(){
 		return currentState;
 	}
+	public void setCurrentState(double state){
+		currentState = state;
+	}
 
 	public double getFutureState(){
 		return futureState;

@@ -1,6 +1,5 @@
 package Cell;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +7,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import Patch.NullPatch;
 import Patch.Patch;
-import Patch.SugarPatch;
 
 public class SugarCell extends Cell {
 
@@ -30,6 +28,13 @@ public class SugarCell extends Cell {
 		changeDeltas();
 	}
 
+	public SugarCell(SugarCell c, int sugar) {
+		super(c);	
+		mySugar = sugar;
+		myVision = (int)errorCheck("vision", DEFAULT_VISION);
+		myMetabolism = (int)errorCheck("metabolism", DEFAULT_METABOLISM);
+	}
+
 	private void changeDeltas() {
 		xDelta = new int[myVision*4];
 		yDelta = new int[myVision*4];
@@ -47,61 +52,47 @@ public class SugarCell extends Cell {
 	}
 
 	@Override
-	public void updateStateandMove(Cell[][] cellList, Patch[][] patches) {
+	public void updateStateandMove(Patch[][] patches) {
 		if(currentState == dead) return;
-		List<Patch> neighborPatches = getNeighborPatches(patches);
-		Patch newLocation = findHighestSugar(neighborPatches, cellList);
-		move(newLocation,cellList);
+		List<Patch> neighborPatches = getNeighbors(patches);
+		Patch newLocation = findHighestSugar(neighborPatches);
+		move(newLocation,patches);
 	}
 
-	private void move(Patch newLocation, Cell[][] cellList) {
-		Cell c = cellList[(int) newLocation.getCurrentX()][(int) newLocation.getCurrentY()];
-		c.setFutureState(currentState);
+	private void move(Patch newLocation, Patch[][] patches) {
 		mySugar += newLocation.getCurrentState();
 		newLocation.setFutureState(0);
-		futureState = 0;
 		mySugar -= myMetabolism;
 		if(mySugar > 0){
-			c.setFutureState(currentState);
-			((SugarCell) c).swap(mySugar,myVision,myMetabolism);	
+			newLocation.setFutureCell(new SugarCell(this, mySugar));
+			patches[currentX][currentY].setFutureCell(new SugarCell(dead,currentX,currentY,myParameters));
 		}
-		else c.setFutureState(0);
+		else newLocation.setFutureCell(new SugarCell(dead,futureX,futureY,myParameters));
 	}
 
-	private void swap(int sugar, int vision, int metabolism) {
-		mySugar = sugar;
-		myVision = vision;
-		myMetabolism = metabolism;
-	}
-
-	private Patch findHighestSugar(List<Patch> neighborPatches, Cell[][] cellList) {
-		Patch newLocation = new NullPatch(0,0,0,null);
+	private Patch findHighestSugar(List<Patch> neighborPatches) {
+		Patch newLocation = new NullPatch(this,0,0,0,null);
 		double high = 0;
 		int dist = Integer.MAX_VALUE;
 		for(Patch p :neighborPatches){
 			int pX = (int) p.getCurrentX();
 			int pY = (int) p.getCurrentY();
-			Cell c = cellList[pX][pY];
-			if(p.getCurrentState()>high && c.getCurrentState() == dead && c.getFutureState() == dead){//&&
-					//Math.abs(pX-currentX)+Math.abs(pY-currentY)<dist){
-				//dist = Math.abs(pX-currentX)+Math.abs(pY-currentY);
-				high = p.getCurrentState();
-				newLocation = p;
+			if(p.getCurrentCell().getCurrentState() == dead && p.getFutureCell().getCurrentState() == dead){
+				if(p.getCurrentState()>high){
+					high = p.getCurrentState();
+					newLocation = p;
+					dist = Math.abs(pX-currentX)+Math.abs(pY-currentY);
+				}
+				else if(p.getCurrentState() == high && Math.abs(pX-currentX)+Math.abs(pY-currentY)<dist){
+					high = p.getCurrentState();
+					newLocation = p;
+					dist = Math.abs(pX-currentX)+Math.abs(pY-currentY);
+				}
 			}
 		}
+		futureX = (int) newLocation.getCurrentX();
+		futureY = (int) newLocation.getCurrentY();
 		return newLocation;
-	}
-
-	private List<Patch> getNeighborPatches(Patch[][] patches) {
-		List<Patch> neighborsList = new ArrayList<Patch>();
-		for(int k=0; k<xDelta.length;k++){
-			if(currentX+xDelta[k]>=0 && currentX+xDelta[k] <patches.length
-					&& currentY+yDelta[k] >= 0 && currentY+yDelta[k] <patches[0].length){
-				neighborsList.add(patches[currentX+xDelta[k]][currentY+yDelta[k]]);
-			}
-		}
-		return neighborsList;
-
 	}
 
 	@Override

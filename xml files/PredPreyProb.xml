@@ -1,0 +1,15 @@
+<CAModel>
+	<animation model = "PredPrey" config = "Probability" numStates = "3" rows = "50" columns = "50">
+		<parameters>
+			<parameter name = "fishBreed" value = "3"></parameter>
+			<parameter name = "sharkBreed" value = "5"></parameter>
+			<parameter name = "sharkStarve" value = "4"></parameter>
+		</parameters>
+		<probabilities>
+			<cellProb name = "0" value = ".80"></cellProb>
+			<cellProb name = "1" value = ".1"></cellProb>
+			<cellProb name = "2" value = ".10"></cellProb>
+		</probabilities>
+	</animation>
+</CAModel>
+

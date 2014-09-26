@@ -98,6 +98,10 @@ public class XMLParser {
 		return makeMap("parameter");
 	}
 	
+	public Map<String, String> makeColorMap(){
+		return makeMap("color");
+	}
+	
 	private Map<String, String> makeMap(String s) {
 		Map<String, String> pMap = new HashMap<>();
 		NodeList parameterNodes = myDoc.getElementsByTagName(s);
@@ -142,11 +146,16 @@ public class XMLParser {
 	
 	private void doProbability(String s) {
 		Map<String, String> cellProb = makeMap("cellProb");
-		Map<String, String> patchProb = makeMap("patchProb");
+		Map<String, String> patchProb;
+		if(myNumPatches > 1) {patchProb = makeMap("patchProb");}
+		else{
+			patchProb = new HashMap<String,String>();
+			patchProb.put("0", "1.0");
+		}
 		for(int i=0;i<cellsList.length;i++){
 			for(int j=0;j<cellsList[0].length;j++){
 				if(s.equals("cell")) cellsList[i][j] = factory.makeProbCell(myType, i, j, paramMap,myNumStates, cellProb);
-				else patchesList[i][j] = factory.makeProbPatch(myType, i, j, paramMap,myNumStates, patchProb);
+				else patchesList[i][j] = factory.makeProbPatch(cellsList[i][j], myType, i, j, paramMap,myNumPatches, patchProb);
 			}
 		}
 	}
@@ -170,7 +179,7 @@ public class XMLParser {
 		for(int i=0;i<cellsList.length;i++){
 			for(int j=0;j<cellsList[0].length;j++){
 				if(s.equals("cell")) cellsList[i][j] = factory.makeRandomCell(myType, i, j, paramMap,myNumStates);
-				else patchesList[i][j] = factory.makeRandomPatch(myType, i, j, paramMap,myNumPatches);
+				else patchesList[i][j] = factory.makeRandomPatch(cellsList[i][j],myType, i, j, paramMap,myNumPatches);
 			}
 		}
 	}
@@ -208,5 +217,8 @@ public class XMLParser {
 	}
 	public String getGridType() {
 		return myGridType;
+	}
+	public int getNumStates(){
+		return myNumStates;
 	}
 }

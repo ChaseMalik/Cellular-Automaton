@@ -1,6 +1,7 @@
 package cellsociety_team02;
 
 import java.awt.Dimension;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -18,8 +19,10 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
@@ -174,18 +177,29 @@ public class GridView {
 		Patch[][] patches = myModel.getPatches();
 		double height = cells.length;
 		double width = cells[0].length;
-		/*double cellHeight = 500.0/(cells.length);
-		double cellWidth = 500.0/cells[0].length;*/
 		for(int i=0;i<patches.length;i++){
 			for(int j=0; j<patches[0].length;j++){
-				Cell c = patches[i][j].getCurrentCell();
+				Patch p = patches[i][j];
+				Cell c = p.getCurrentCell();
 				Shape newDisplay = draw.drawShape(height,width,i,j,gridType);
-				if(c.getColor() != null) newDisplay.setFill(c.getColor());
-				else newDisplay.setFill(patches[i][j].getColor());
+				newDisplay.setUserData(new Point2D.Double(i,j));
+				newDisplay.setFill(getLocationColor(p, c));
+				newDisplay.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		            public void handle(MouseEvent me) {
+		            	Point2D point = (Point2D) newDisplay.getUserData();
+		            	myModel.changeState(point.getX(), point.getY());
+						newDisplay.setFill(getLocationColor(p, c));
+		            }
+		        });
 				myShapeList.add(newDisplay);
 				g.getChildren().add(newDisplay);
 			}
 		}
 		return g;
+	}
+
+	private Paint getLocationColor(Patch p, Cell c) {
+		if(c.getColor() != null) return c.getColor();
+		else return p.getColor();
 	}
 }

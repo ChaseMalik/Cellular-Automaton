@@ -3,6 +3,9 @@
 		<parameters>
 			<parameter name = "probCatch" value = ".6"></parameter>
 		</parameters>
+		<colors>
+			<color name = "1" value = "RED"></color>
+		</colors>
 		<cells>
 			<cell row = "13" column = "5" state = "1"></cell>
 		</cells>

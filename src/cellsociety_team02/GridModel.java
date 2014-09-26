@@ -1,9 +1,9 @@
 package cellsociety_team02;
 
 import java.io.File;
+import java.util.Map;
 
 import Cell.Cell;
-import Cell.PredPreyCell;
 import Patch.Patch;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -13,6 +13,8 @@ public class GridModel {
 	private Cell[][] myCells;
 	private Patch[][] myPatches;
 	private String myGridType;
+	private int myNumStates;
+	private Map<String,String> myColorMap;
 	
 	public GridModel(){
 
@@ -33,6 +35,8 @@ public class GridModel {
 		myCells = parser.makeCells();
 		myPatches = parser.makePatches();
 		myGridType = parser.getGridType();
+		myNumStates = parser.getNumStates();
+		myColorMap = parser.makeColorMap();
 	}
 	
 	
@@ -65,6 +69,19 @@ public class GridModel {
 
 	public String getGridType() {
 		return myGridType;
+	}
+	
+	public Map<String,String> getColorMap(){
+		return myColorMap;
+	}
+
+	public void changeState(double x, double y) {
+		Cell c = myPatches[(int)x][(int)y].getCurrentCell();
+		double state = c.getCurrentState();
+		double futureState = (state+1) % myNumStates;
+		c.setCurrentState(futureState);
+		c.setFutureState(futureState);
+		
 	}
 
 	

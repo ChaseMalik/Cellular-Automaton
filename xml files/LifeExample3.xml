@@ -1,4 +1,8 @@
 <CAModel>
-	<animation model = "Life" config = "Random" gridType = "Triangle" numStates = "2" rows = "20" columns = "20">
+	<animation model = "Life" config = "Probability" gridType = "Triangle" numStates = "2" rows = "20" columns = "20">
+		<probabilities>
+			<cellProb name = "0" value = ".70"></cellProb>
+			<cellProb name = "1" value = ".3"></cellProb>
+		</probabilities>
 	</animation>
 </CAModel>
