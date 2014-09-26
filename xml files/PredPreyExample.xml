@@ -1,9 +1,10 @@
 <CAModel>
 	<animation model = "PredPrey" config = "Given" numStates = "3" rows = "20" columns = "20">
 		<parameters>
-			<parameter name = "fishBreed" value = "11"></parameter>
+			<parameter name = "fishBreed" value = "3"></parameter>
 			<parameter name = "sharkBreed" value = "5"></parameter>
-			<parameter name = "sharkStarve" value = "8"></parameter>
+			<parameter name = "sharkStarve" value = "4"></parameter>
+			<parameter name = "boundary" value = "Toroidal"></parameter>
 		</parameters>
 		<cells>
 			<cell row = "0" column = "4" state = "1"></cell>
@@ -28,6 +29,19 @@
 			<cell row = "18" column = "10" state = "2"></cell>
 			<cell row = "19" column = "3" state = "1"></cell>
 			<cell row = "19" column = "15" state = "1"></cell>
+			<cell row = "12" column = "4" state = "2"></cell>
+			<cell row = "3" column = "13" state = "2"></cell>
+			<cell row = "5" column = "5" state = "2"></cell>
+			<cell row = "1" column = "1" state = "2"></cell>
+			<cell row = "3" column = "11" state = "1"></cell>
+			<cell row = "6" column = "12" state = "1"></cell>
+			<cell row = "9" column = "3" state = "1"></cell>
+			<cell row = "10" column = "7" state = "1"></cell>
+			<cell row = "14" column = "16" state = "1"></cell>
+			<cell row = "18" column = "2" state = "1"></cell>
+			<cell row = "19" column = "6" state = "1"></cell>
+			<cell row = "12" column = "16" state = "1"></cell>
+			<cell row = "14" column = "19" state = "1"></cell>
 		</cells>
 	</animation>
 </CAModel>

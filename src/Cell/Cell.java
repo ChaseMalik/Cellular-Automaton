@@ -19,6 +19,7 @@ public abstract class Cell {
 	protected int[] xDelta;
 	protected int[] yDelta;
 	protected Map<String,String> myParameters;
+	protected String boundaryType;
 
 	public Cell(double state, int x, int y, Map<String,String> parameters) {
 		currentState = state;
@@ -29,12 +30,12 @@ public abstract class Cell {
 		futureY = y;
 		myParameters = parameters;
 		setDeltas();
+		boundaryType = parameters.get("boundary");
 	}
 	public Cell(Cell c){
 		this(c.getFutureState(),c.getFutureX(), c.getFutureY(), c.getParameters());
 	}
-
-
+	
 	public double getCurrentState(){
 		return currentState;
 	}
@@ -89,11 +90,22 @@ public abstract class Cell {
 
 	protected List<Patch> getNeighbors(Patch[][] patches){
 		List<Patch> neighborsList = new ArrayList<Patch>();
-		for(int k=0; k<xDelta.length;k++){
-			if(currentX+xDelta[k]>=0 && currentX+xDelta[k] <patches.length
-					&& currentY+yDelta[k] >= 0 && currentY+yDelta[k] <patches[0].length){
-				neighborsList.add(patches[currentX+xDelta[k]][currentY+yDelta[k]]);
-			}
+		switch(boundaryType){
+		case "Finite":
+			for(int k=0; k<xDelta.length;k++){
+				if(currentX+xDelta[k]>=0 && currentX+xDelta[k] <patches.length
+						&& currentY+yDelta[k] >= 0 && currentY+yDelta[k] <patches[0].length){
+					neighborsList.add(patches[currentX+xDelta[k]][currentY+yDelta[k]]);
+				}
+			} break;
+		case "Toroidal" :
+			for(int k=0; k<xDelta.length;k++){
+				int neighborX = (currentX+xDelta[k])%patches.length;
+				int neighborY = (currentY+yDelta[k])%patches[0].length;
+				if (neighborX<0) neighborX += patches.length;  //corrects for negative result
+				if (neighborY<0) neighborY += patches[0].length;  //corrects for negative result
+				neighborsList.add(patches[neighborX][neighborY]);
+			}break;
 		}
 		return neighborsList;
 	}

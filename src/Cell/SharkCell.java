@@ -50,45 +50,30 @@ public class SharkCell extends PredPreyCell {
 				fishMoves.add(p);
 		}
 		if (fishMoves.size()>0){
-			int random = (int)(Math.random()*fishMoves.size());
-			Patch nextMove = fishMoves.get(random);
-			futureX = (int)nextMove.getCurrentX();
-			futureY = (int)nextMove.getCurrentY();
+			Patch nextMove = pickMove(fishMoves);
 			FishCell escapingFish = (FishCell)nextMove.getCurrentCell();
 			if (escapingFish.getNewMove()!= null) {
 				Patch water = escapingFish.getNewMove();
 				water.setFutureCell(new PredPreyCell(WATER,(int)water.getCurrentX(), (int)water.getCurrentY(), myParameters));
 			}
 			escapingFish.food();
-			if (myChronons >= myBreed){
-				patches[currentX][currentY].setFutureCell(new SharkCell(SHARK, currentX, currentY, myParameters));
-				myChronons = INITIAL_CHRONONS;
-			}
-			else {
-				patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
-				myChronons++;
-			}
+			checkBreed(patches);
 			nextMove.setFutureCell(new SharkCell(this, myChronons, INITIAL_HUNGER));
 		}
 		else if (waterMoves.size()>0) {
-			int random = (int)(Math.random()*waterMoves.size());
-			Patch nextMove = waterMoves.get(random);
-			futureX = (int)nextMove.getCurrentX();
-			futureY = (int)nextMove.getCurrentY();
-			if (myChronons >= myBreed){
-				patches[currentX][currentY].setFutureCell(new SharkCell(SHARK, currentX, currentY, myParameters));
-				myChronons = INITIAL_CHRONONS;
-			}
-			else {
-				patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
-				myChronons++;
-			}
+			Patch nextMove = pickMove(waterMoves);
+			checkBreed(patches);
 			nextMove.setFutureCell(new SharkCell(this, myChronons, myHunger+1));
 		}
 		else{
 			myChronons++;
 			myHunger++; 
 		}
+	}
+	
+	@Override
+	protected void breed(Patch[][] patches){
+		patches[currentX][currentY].setFutureCell(new SharkCell(SHARK, currentX, currentY, myParameters));
 	}
 
 

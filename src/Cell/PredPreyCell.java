@@ -14,7 +14,7 @@ public class PredPreyCell extends Cell {
 	public static final double SHARK = 2;
 	public static final int INITIAL_CHRONONS = 0;
 	public static final int INITIAL_HUNGER = 0;
-	
+
 	protected PredPreyCell futureCell;
 	protected int myChronons;
 	protected int myBreed;
@@ -23,13 +23,14 @@ public class PredPreyCell extends Cell {
 		super(state, x, y, parameters);
 		myChronons = INITIAL_CHRONONS;
 		futureCell = this;
+		System.out.println(boundaryType);
 	}
-	
+
 	public PredPreyCell(PredPreyCell c, int chronons){
 		super(c);
 		myChronons = chronons;
 	}
-	
+
 	public PredPreyCell(PredPreyCell c){
 		super(c);
 	}
@@ -38,6 +39,29 @@ public class PredPreyCell extends Cell {
 		//overridden by subclasses for sharks and fish, does nothing for water
 		if (currentState == WATER)
 			return;
+	}
+
+	protected Patch pickMove(List<Patch> moves) {
+		int random = (int)(Math.random()*moves.size());
+		Patch nextMove = moves.get(random);
+		futureX = (int)nextMove.getCurrentX();
+		futureY = (int)nextMove.getCurrentY();
+		return nextMove;
+	}
+
+	protected void checkBreed(Patch[][] patches) {
+		if (myChronons >= myBreed){
+			breed(patches);
+			myChronons = INITIAL_CHRONONS;
+		}
+		else{
+			patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
+			myChronons++;
+		}
+	}
+
+	protected void breed(Patch[][] patches){
+		//overridden by subclasses
 	}
 
 	public Cell makeCell() {
@@ -54,7 +78,7 @@ public class PredPreyCell extends Cell {
 		xDelta = new int[]{-1,0,0,1};
 		yDelta = new int[]{0,-1,1,0};
 	}
-	
+
 	@Override
 	public Paint getColor() {
 		if (currentState == SHARK)
@@ -63,7 +87,6 @@ public class PredPreyCell extends Cell {
 			return Color.LIMEGREEN;		
 		else
 			return Color.ROYALBLUE;
-		
 	}
 
 	public int getChronons() {

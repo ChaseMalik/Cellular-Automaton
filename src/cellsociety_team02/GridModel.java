@@ -21,7 +21,7 @@ public class GridModel {
 	private XMLParser loadFileToParser() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")+"\\xml files")); // Needs to be tested on Macs +"\\xml files"
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir"))); // Needs to be tested on Macs +"\\xml files"
 		File file = fileChooser.showOpenDialog(new Stage());
 		XMLParser parser = new XMLParser(file);
 		return parser;

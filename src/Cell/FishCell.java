@@ -50,23 +50,17 @@ public class FishCell extends PredPreyCell {
 				moves.add(p);
 		}
 		if (moves.size()>0 && !eaten) {
-			int random = (int)(Math.random()*moves.size());
-			Patch nextMove = moves.get(random);
-			newMove = nextMove;
-			futureX = (int)nextMove.getCurrentX();
-			futureY = (int)nextMove.getCurrentY();
-			if (myChronons >= myBreed){
-				patches[currentX][currentY].setFutureCell(new FishCell(this, INITIAL_CHRONONS));
-				myChronons = INITIAL_CHRONONS;
-			}
-			else{
-				patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
-				myChronons++;
-			}
+			Patch nextMove = pickMove(moves);
+			checkBreed(patches);
 			nextMove.setFutureCell(new FishCell(this, myChronons));
 		}
 		else 
 			myChronons++;
+	}
+	
+	@Override
+	protected void breed(Patch[][] patches){
+		patches[currentX][currentY].setFutureCell(new FishCell(this, INITIAL_CHRONONS));
 	}
 	
 	
