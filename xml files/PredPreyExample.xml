@@ -2,7 +2,7 @@
 	<animation model = "PredPrey" config = "Given" numStates = "3" rows = "20" columns = "20">
 		<parameters>
 			<parameter name = "fishBreed" value = "11"></parameter>
-			<parameter name = "sharkBreed" value = "4"></parameter>
+			<parameter name = "sharkBreed" value = "5"></parameter>
 			<parameter name = "sharkStarve" value = "8"></parameter>
 		</parameters>
 		<cells>

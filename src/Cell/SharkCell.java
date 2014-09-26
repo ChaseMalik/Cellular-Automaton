@@ -9,65 +9,90 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public class SharkCell extends PredPreyCell {
-	
+
 	private int starve;
 	private int myHunger;
 
 	public SharkCell(double state, int x, int y, Map<String, String> parameters, int chronons, int hunger) {
 		super(state, x, y, parameters);
 		myChronons = chronons;
-		starve = Integer.parseInt(myParameters.get("sharkStarve"));
-		myBreed = Integer.parseInt(myParameters.get("sharkBreed"));
+		starve = Integer.parseInt(parameters.get("sharkStarve"));
+		myBreed = Integer.parseInt(parameters.get("sharkBreed"));
 		myHunger = hunger;
 	}
-	
+
+	public SharkCell(SharkCell sharkCell, int chronons, int hunger) {
+		super(sharkCell);
+		myChronons = chronons;
+		myHunger = hunger;
+		starve = Integer.parseInt(myParameters.get("sharkStarve"));
+		myBreed = Integer.parseInt(myParameters.get("sharkBreed"));
+
+	}
+
 	@Override
 	public Paint getColor(){
 		return Color.RED;
 	}
-	
-	public void updateStateandMove(Cell[][] cells, Patch[][] patches) {
+
+	public void updateStateandMove(Patch[][] patches) {
 		if (myHunger >= starve) {
-			this.setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
+			patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
 			return;
 		}
-		List<Cell> neighbors = getNeighbors(cells);
-		List<Cell> fishMoves = new ArrayList<Cell>();
-		List<Cell> waterMoves = new ArrayList<Cell>();
-		for (Cell c: neighbors) {
-			if (c.getCurrentState() == WATER && ((PredPreyCell)c).getFutureCell().getCurrentState() == WATER)
-				waterMoves.add(c);
-			if (c.getCurrentState() == FISH)
-				fishMoves.add(c);
+		List<Patch> neighbors = getNeighbors(patches);
+		List<Patch> fishMoves = new ArrayList<Patch>();
+		List<Patch> waterMoves = new ArrayList<Patch>();
+		for (Patch p: neighbors) {
+			if (p.getCurrentCell().getCurrentState() == WATER && p.getFutureCell().getCurrentState() == WATER)
+				waterMoves.add(p);
+			if (p.getCurrentCell().getCurrentState() == FISH && p.getFutureCell().getCurrentState() != SHARK)
+				fishMoves.add(p);
 		}
 		if (fishMoves.size()>0){
 			int random = (int)(Math.random()*fishMoves.size());
-			PredPreyCell nextMove = (PredPreyCell)fishMoves.get(random);
-			((FishCell)nextMove).getNewMove().setFutureCell(
-					new PredPreyCell(WATER, ((FishCell)nextMove).getNewMove().getCurrentX(),
-											((FishCell)nextMove).getNewMove().getCurrentY(), myParameters));
-			((FishCell)nextMove).setFutureCell(
-					new SharkCell(SHARK, nextMove.getCurrentX(), nextMove.getCurrentY(), myParameters, myChronons+1, INITIAL_HUNGER));
-			((FishCell)nextMove).food();
-			if (myChronons == myBreed)
-				this.setFutureCell(new SharkCell(SHARK, currentX, currentY, myParameters, INITIAL_CHRONONS, INITIAL_HUNGER));
-			else 
-				this.setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
+			Patch nextMove = fishMoves.get(random);
+			futureX = (int)nextMove.getCurrentX();
+			futureY = (int)nextMove.getCurrentY();
+			FishCell escapingFish = (FishCell)nextMove.getCurrentCell();
+			if (escapingFish.getNewMove()!= null) {
+				Patch water = escapingFish.getNewMove();
+				water.setFutureCell(new PredPreyCell(WATER,(int)water.getCurrentX(), (int)water.getCurrentY(), myParameters));
+			}
+			escapingFish.food();
+			if (myChronons == myBreed){
+				patches[currentX][currentY].setFutureCell(new SharkCell(this, INITIAL_CHRONONS, INITIAL_HUNGER));
+				myChronons = INITIAL_CHRONONS;
+			}
+			else {
+				patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
+				myChronons++;
+			}
+			nextMove.setFutureCell(new SharkCell(this, myChronons, myHunger+1));
 		}
 		else if (waterMoves.size()>0) {
+			boolean test = (currentX == 17) && (currentY == 3);
 			int random = (int)(Math.random()*waterMoves.size());
-			Cell nextMove = waterMoves.get(random);
-			((PredPreyCell)nextMove).setFutureCell(new SharkCell(SHARK, nextMove.getCurrentX(), nextMove.getCurrentY(), myParameters, myChronons+1, myHunger+1));
-			if (myChronons == myBreed)
-				this.setFutureCell(new SharkCell(SHARK, currentX, currentY, myParameters, INITIAL_CHRONONS, INITIAL_HUNGER));
-		
-			else
-				this.setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
+			Patch nextMove = waterMoves.get(random);
+			futureX = (int)nextMove.getCurrentX();
+			futureY = (int)nextMove.getCurrentY();
+			if(test) System.out.println(futureX + " " + futureY);
+			if (myChronons == myBreed){
+				patches[currentX][currentY].setFutureCell(new SharkCell(this, INITIAL_CHRONONS, INITIAL_HUNGER));
+				myChronons = INITIAL_CHRONONS;
+			}
+			else {
+				patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
+				myChronons++;
+			}
+			nextMove.setFutureCell(new SharkCell(this, myChronons, myHunger+1));
+			
 		}
-		else
+		else{
 			myChronons++;
 			myHunger++;
+		}
 	}
-	
-	
+
+
 }

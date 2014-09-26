@@ -21,7 +21,7 @@ public class GridModel {
 	private XMLParser loadFileToParser() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir"))); // Needs to be tested on Macs +"\\xml files"
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")+"\\xml files")); // Needs to be tested on Macs +"\\xml files"
 		File file = fileChooser.showOpenDialog(new Stage());
 		XMLParser parser = new XMLParser(file);
 		return parser;
@@ -37,21 +37,20 @@ public class GridModel {
 	
 	
 	public void update(){
-		for(int i=0;i<myCells.length;i++){
-			for(int j=0; j<myCells[0].length;j++){
-				myCells[i][j].updateStateandMove(myCells,myPatches);
-				myPatches[i][j].updateState(myCells[i][j]);
+		for(int i=0;i<myPatches.length;i++){
+			for(int j=0; j<myPatches[0].length;j++){
+				myPatches[i][j].updateState(myPatches);
 			}
 		}
 		
-		for(int i=0;i<myCells.length;i++){
-			for(int j=0; j<myCells[0].length;j++){
-				if(myCells[i][j] instanceof PredPreyCell)
+		for(int i=0;i<myPatches.length;i++){
+			for(int j=0; j<myPatches[0].length;j++){
+				/*if(myCells[i][j] instanceof PredPreyCell)
 					myCells[i][j]=((PredPreyCell) myCells[i][j]).getFutureCell();
 				else{ 
-					myCells[i][j].currentToFuture();
+					myCells[i][j].currentToFuture();*/
 					myPatches[i][j].currentToFuture();
-				}
+				//}
 			}
 		}
 	}

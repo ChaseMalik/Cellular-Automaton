@@ -7,18 +7,18 @@ import Cell.Cell;
 
 public class NullPatch extends Patch {
 
-	public NullPatch(double state, double x, double y,Map<String,String> params) {
-		super(state, x, y,params);
+	public NullPatch(Cell c, double state, double x, double y,Map<String,String> params) {
+		super(c, state, x, y,params);
 	}
 
 	@Override
-	public void updateState(Cell cell) {
-
+	public void updateState(Patch[][] patches) {
+		myCurrentCell.updateStateandMove(patches);
 	}
 
 	@Override
 	public Paint getColor() {
-		return null;
+		return myCurrentCell.getColor();
 	}
 
 }

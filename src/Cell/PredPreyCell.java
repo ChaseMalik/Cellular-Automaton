@@ -24,13 +24,23 @@ public class PredPreyCell extends Cell {
 		myChronons = INITIAL_CHRONONS;
 		futureCell = this;
 	}
+	
+	public PredPreyCell(PredPreyCell c){
+		super(c);
+		currentState = WATER;
+		futureState = WATER;
+	}
+	
+	public PredPreyCell(PredPreyCell c, int chronons){
+		super(c);
+		myChronons = chronons;
+	}
 
-	@Override
-	public void updateStateandMove(Cell[][] cells, Patch[][] patches) {
+	public void updateStateandMove(Patch[][] patches) {
+		//overridden by subclasses for sharks and fish, does nothing for water
 		if (currentState == WATER)
 			return;
 	}
-
 
 	public Cell makeCell() {
 		switch((int)currentState) {
@@ -45,21 +55,6 @@ public class PredPreyCell extends Cell {
 	protected void setDeltas() {
 		xDelta = new int[]{-1,0,0,1};
 		yDelta = new int[]{0,-1,1,0};
-	}
-
-	protected void setNewStates(double newState, int newChronons, int newBreed) {
-		futureState = newState;
-		myChronons = newChronons;
-		myBreed = newBreed;
-		
-	}
-	
-	public void setFutureCell(PredPreyCell c) {
-		futureCell = c;
-	}
-	
-	public PredPreyCell getFutureCell() {
-		return futureCell;
 	}
 	
 	@Override

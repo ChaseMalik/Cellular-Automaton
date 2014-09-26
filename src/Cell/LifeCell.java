@@ -16,10 +16,16 @@ public class LifeCell extends Cell {
 		super(state, x, y, parameters);
 	}
 
+
+	public LifeCell(LifeCell lifeCell) {
+		super(lifeCell);
+	}
+
+
 	@Override
-	public void updateStateandMove(Cell[][] cellList, Patch[][] patches) {
+	public void updateStateandMove(Patch[][] patches) {
 		double state = currentState;
-		int aliveNeighbors = aliveNeighbors(getNeighbors(cellList));
+		int aliveNeighbors = aliveNeighbors(getNeighbors(patches));
 		if(state == dead && aliveNeighbors == 3)
 			futureState = alive;
 		else if(state == dead)
@@ -30,13 +36,14 @@ public class LifeCell extends Cell {
 			futureState = alive;
 		else
 			futureState = dead;
+		patches[currentX][currentY].setFutureCell(new LifeCell(this));
 	}
 
 
-	private int aliveNeighbors(List<Cell> neighborsList) {
+	private int aliveNeighbors(List<Patch> neighborsList) {
 		int result = 0;
-		for (Cell c: neighborsList){
-			if (c.getCurrentState() == alive)
+		for (Patch p: neighborsList){
+			if (p.getCurrentCell().getCurrentState() == alive)
 				result++;
 		}
 		return result;

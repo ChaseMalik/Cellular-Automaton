@@ -159,7 +159,7 @@ public class XMLParser {
 				int c = Integer.parseInt(getAttribute(node,"column"));	
 				double state = Double.parseDouble(getAttribute(node,"state"));
 				if(s.equals("cell")) cellsList[r][c] = factory.makeCell(myType, r, c, state, paramMap);
-				else patchesList[r][c] = factory.makePatch(myType, r, c, state, paramMap);
+				else patchesList[r][c] = factory.makePatch(cellsList[r][c], myType, r, c, state, paramMap);
 			}
 		}
 
@@ -181,7 +181,7 @@ public class XMLParser {
 					cellsList[i][j] = factory.makeCell(myType, i, j, 0, paramMap);
 				}
 				if(patchesList[i][j]== null)
-					patchesList[i][j] = factory.makePatch(myType, i, j, DEFAULT_PATCH_VALUE, paramMap);
+					patchesList[i][j] = factory.makePatch(cellsList[i][j],myType, i, j, DEFAULT_PATCH_VALUE, paramMap);
 			}
 		}
 	}

@@ -18,26 +18,34 @@ public class FireCell extends Cell {
 		probCatch = Double.parseDouble(parameters.get("probCatch"));
 	}
 
+	public FireCell(FireCell fireCell) {
+		super(fireCell);
+		probCatch = Double.parseDouble(myParameters.get("probCatch"));
+	}
+
 	@Override
-	public void updateStateandMove(Cell[][] cellList, Patch[][] patches) {
+	public void updateStateandMove(Patch[][] patches) {
 		double wood = patches[currentX][currentY].getCurrentState();
-		getNeighbors(cellList);
 		if (currentState==burning && wood>0)
 			futureState = burning;
 		else if(currentState==burning)
 			futureState=notBurning;
-		else if(currentState==notBurning && burningNeighbor(getNeighbors(cellList)) && wood>0){
+		else if(currentState==notBurning && burningNeighbor(getNeighbors(patches)) && wood>0){
 			double num = Math.random();
-			if (num<=probCatch)
+			if (num<=probCatch){
 				futureState=burning;
+			}
 		}
 		else futureState = notBurning;
+		patches[currentX][currentY].setFutureCell(new FireCell(this));
 	}
 	
-	private boolean burningNeighbor(List<Cell> neighbors){
-		for(Cell c:neighbors)
-			if(c.currentState==burning)
+	private boolean burningNeighbor(List<Patch> neighbors){
+
+		for(Patch p:neighbors){
+			if(p.getCurrentCell().getCurrentState()==burning)
 				return true;
+		}
 		return false;
 	}
 

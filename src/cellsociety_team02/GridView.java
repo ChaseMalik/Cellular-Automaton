@@ -176,9 +176,9 @@ public class GridView {
 		double width = cells[0].length;
 		/*double cellHeight = 500.0/(cells.length);
 		double cellWidth = 500.0/cells[0].length;*/
-		for(int i=0;i<cells.length;i++){
-			for(int j=0; j<cells[0].length;j++){
-				Cell c = cells[i][j];
+		for(int i=0;i<patches.length;i++){
+			for(int j=0; j<patches[0].length;j++){
+				Cell c = patches[i][j].getCurrentCell();
 				Shape newDisplay = draw.drawShape(height,width,i,j,gridType);
 				if(c.getColor() != null) newDisplay.setFill(c.getColor());
 				else newDisplay.setFill(patches[i][j].getColor());

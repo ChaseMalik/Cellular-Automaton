@@ -11,14 +11,21 @@ import javafx.scene.paint.Paint;
 public class FishCell extends PredPreyCell {
 
 	private boolean eaten;
-	private PredPreyCell newMove;
+	private Patch newMove;
 	
 	public FishCell(double state, int x, int y, Map<String, String> parameters, int chronons) {
 		super(state, x, y, parameters);
 		myChronons = chronons;
 		myBreed = Integer.parseInt(parameters.get("fishBreed"));
 		eaten = false;
-		newMove = this;
+		newMove = null;
+	}
+	
+	public FishCell(FishCell c, int chronons){
+		super(c, chronons);
+		myBreed = Integer.parseInt(myParameters.get("fishBreed"));
+		eaten = false;
+		newMove = null;
 	}
 
 	@Override
@@ -30,27 +37,33 @@ public class FishCell extends PredPreyCell {
 		eaten = true;
 	}
 	
-	public PredPreyCell getNewMove(){
+	public Patch getNewMove(){
 		return newMove;
 	}
 	
 	@Override
-	public void updateStateandMove(Cell[][] cells, Patch[][] patches) {
-		List<Cell> neighbors = getNeighbors(cells);
-		List<Cell> moves = new ArrayList<Cell>();
-		for (Cell c: neighbors) {
-			if (c.getCurrentState() == WATER && ((PredPreyCell)c).getFutureCell().getCurrentState() == WATER)
-				moves.add(c);
+	public void updateStateandMove(Patch[][] patches) {
+		List<Patch> neighbors = getNeighbors(patches);
+		List<Patch> moves = new ArrayList<Patch>();
+		for (Patch p: neighbors) {
+			if (p.getCurrentCell().getCurrentState() == WATER && p.getFutureCell().getCurrentState() == WATER)
+				moves.add(p);
 		}
 		if (moves.size()>0 && !eaten) {
 			int random = (int)(Math.random()*moves.size());
-			Cell nextMove = moves.get(random);
-			newMove = (PredPreyCell)nextMove;
-			((PredPreyCell)nextMove).setFutureCell(new FishCell(FISH, nextMove.getCurrentX(), nextMove.getCurrentY(), myParameters, myChronons+1));
-			if (myChronons >= myBreed)
-				this.setFutureCell(new FishCell(FISH, currentX, currentY, myParameters, INITIAL_CHRONONS));
-			else
-				this.setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
+			Patch nextMove = moves.get(random);
+			newMove = nextMove;
+			futureX = (int)nextMove.getCurrentX();
+			futureY = (int)nextMove.getCurrentY();
+			if (myChronons >= myBreed){
+				patches[currentX][currentY].setFutureCell(new FishCell(this, INITIAL_CHRONONS));
+				myChronons = INITIAL_CHRONONS;
+			}
+			else{
+				patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
+				myChronons++;
+			}
+			nextMove.setFutureCell(new FishCell(this, myChronons));
 		}
 		else 
 			myChronons++;

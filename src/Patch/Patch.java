@@ -10,9 +10,13 @@ public abstract class Patch {
 	protected double futureState;
 	protected double myX;
 	protected double myY;
+	protected Cell myCurrentCell;
+	protected Cell myFutureCell;
 	protected Map<String, String> myParameters;
 	
-	public Patch(double state, double x, double y, Map<String, String> params) {
+	public Patch(Cell c, double state, double x, double y, Map<String, String> params) {
+		myCurrentCell = c;
+		myFutureCell = c;
 		currentState = state;
 		futureState = state;
 		myX = x;
@@ -28,6 +32,17 @@ public abstract class Patch {
 		return futureState;
 	}
 	
+	public Cell getCurrentCell(){
+		return myCurrentCell;
+	}
+	
+	public Cell getFutureCell(){
+		return myFutureCell;
+	}
+	public void setFutureCell(Cell c){
+		myFutureCell = c;
+	}
+	
 	public double getCurrentY() {
 		return myY;
 	}
@@ -39,11 +54,12 @@ public abstract class Patch {
 		this.futureState = futureState;
 	}
 	
-	public abstract void updateState(Cell cell);
+	public abstract void updateState(Patch[][] patches);
 
 	public abstract Paint getColor();
 	
 	public void currentToFuture(){
 		currentState = futureState;
+		myCurrentCell = myFutureCell;
 	}
 }

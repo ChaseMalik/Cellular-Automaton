@@ -1,7 +1,7 @@
 <CAModel>
 	<animation model = "Fire" config = "Given" numStates = "2" rows = "16" columns = "16" gridType = "Triangle">
 		<parameters>
-			<parameter name = "probCatch" value = "0.60"></parameter>
+			<parameter name = "probCatch" value = ".6"></parameter>
 		</parameters>
 		<cells>
 			<cell row = "13" column = "5" state = "1"></cell>

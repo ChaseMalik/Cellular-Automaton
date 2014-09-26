@@ -9,17 +9,20 @@ import Cell.Cell;
 public class FirePatch extends Patch {
 
 
-	private static final double minWood = 1;
+	private static final double minWood = 0.9;
+
+	private static final double burnRate = 0.8;
 	private static final int burning = 1;
-	public FirePatch(double state, double x, double y, Map<String,String> params) {
-		super(state, x, y, params);
+	public FirePatch(Cell c, double state, double x, double y, Map<String,String> params) {
+		super(c, state, x, y, params);
 	}
 
 	@Override
-	public void updateState(Cell cell) {
-		if(cell.getCurrentState() == burning && currentState > minWood)
-			futureState  = currentState * 0.8;
-		else if(cell.getCurrentState() == burning){
+	public void updateState(Patch[][] patches) {
+		myCurrentCell.updateStateandMove(patches);
+		if(myCurrentCell.getCurrentState() == burning && currentState > minWood)
+			futureState  = currentState * burnRate;
+		else if(myCurrentCell.getCurrentState() == burning){
 			futureState = 0;
 		}
 		else futureState = currentState;

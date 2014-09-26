@@ -32,13 +32,13 @@ public class Factory {
 		return null;
 	}
 
-	public Patch makePatch(String myType, int r, int c, double state,
+	public Patch makePatch(Cell cell, String myType, int r, int c, double state,
 			Map<String, String> params) {
 		switch(myType){
-		case "Fire": return new FirePatch(state,r,c, params);
-		case "Sugar": return new SugarPatch(state,r,c,params);
+		case "Fire": return new FirePatch(cell, state,r,c, params);
+		//case "Sugar": return new SugarPatch(cell, state,r,c,params);
 		}
-		return new NullPatch(0,r,c , params);
+		return new NullPatch(cell,0,r,c , params);
 	}
 
 	public Cell makeRandomCell(String myType, int i, int j,Map<String, String> params, int numStates) {

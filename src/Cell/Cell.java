@@ -9,7 +9,7 @@ import javafx.scene.paint.Paint;
 
 
 public abstract class Cell {
-	
+
 	protected double currentState;
 	protected double futureState;
 	protected int currentX;
@@ -19,7 +19,7 @@ public abstract class Cell {
 	protected int[] xDelta;
 	protected int[] yDelta;
 	protected Map<String,String> myParameters;
-	
+
 	public Cell(double state, int x, int y, Map<String,String> parameters) {
 		currentState = state;
 		futureState = state;
@@ -30,19 +30,23 @@ public abstract class Cell {
 		myParameters = parameters;
 		setDeltas();
 	}
-	
+	public Cell(Cell c){
+		this(c.getFutureState(),c.getFutureX(), c.getFutureY(), c.getParameters());
+	}
+
+
 	public double getCurrentState(){
 		return currentState;
 	}
-	
+
 	public double getFutureState(){
 		return futureState;
 	}
-	
+
 	public int getCurrentX() {
 		return currentX;
 	}
-	
+
 	public int getCurrentY() {
 		return currentY;
 	}
@@ -59,6 +63,10 @@ public abstract class Cell {
 		return futureY;
 	}
 
+	public Map<String, String> getParameters() {
+		return myParameters;
+	}
+
 	public void setFutureY(int futureY) {
 		this.futureY = futureY;
 	}
@@ -68,23 +76,23 @@ public abstract class Cell {
 		if(myParameters.containsKey(string)) return Double.parseDouble(myParameters.get(string));
 		else return result;
 	}
-	
-	public abstract void updateStateandMove(Cell[][] cellList, Patch[][] patches);
-	
+
+	public abstract void updateStateandMove(Patch[][] patches);
+
 	protected abstract void setDeltas();
-	
+
 	public void currentToFuture(){
 		currentX = futureX;
 		currentY = futureY;
 		currentState = futureState;
 	}
-	
-	protected List<Cell> getNeighbors(Cell[][] cellList){
-		List<Cell> neighborsList = new ArrayList<Cell>();
+
+	protected List<Patch> getNeighbors(Patch[][] patches){
+		List<Patch> neighborsList = new ArrayList<Patch>();
 		for(int k=0; k<xDelta.length;k++){
-			if(currentX+xDelta[k]>=0 && currentX+xDelta[k] <cellList.length
-					&& currentY+yDelta[k] >= 0 && currentY+yDelta[k] <cellList[0].length){
-				neighborsList.add(cellList[currentX+xDelta[k]][currentY+yDelta[k]]);
+			if(currentX+xDelta[k]>=0 && currentX+xDelta[k] <patches.length
+					&& currentY+yDelta[k] >= 0 && currentY+yDelta[k] <patches[0].length){
+				neighborsList.add(patches[currentX+xDelta[k]][currentY+yDelta[k]]);
 			}
 		}
 		return neighborsList;
@@ -95,7 +103,7 @@ public abstract class Cell {
 	public void setFutureState(double futureState) {
 		this.futureState = futureState;
 	}
-	
-	
-	
+
+
+
 }
