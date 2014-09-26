@@ -25,15 +25,13 @@ public class PredPreyCell extends Cell {
 		futureCell = this;
 	}
 	
-	public PredPreyCell(PredPreyCell c){
-		super(c);
-		currentState = WATER;
-		futureState = WATER;
-	}
-	
 	public PredPreyCell(PredPreyCell c, int chronons){
 		super(c);
 		myChronons = chronons;
+	}
+	
+	public PredPreyCell(PredPreyCell c){
+		super(c);
 	}
 
 	public void updateStateandMove(Patch[][] patches) {
@@ -46,7 +44,7 @@ public class PredPreyCell extends Cell {
 		switch((int)currentState) {
 		case (int)WATER: return new PredPreyCell(currentState, currentX, currentY, myParameters);
 		case (int)FISH: return new FishCell(currentState, currentX, currentY, myParameters, INITIAL_CHRONONS); 
-		case (int)SHARK: return new SharkCell(currentState, currentX, currentY, myParameters, INITIAL_CHRONONS, INITIAL_HUNGER);
+		case (int)SHARK: return new SharkCell(currentState, currentX, currentY, myParameters);
 		default: return null;
 		}
 	}
@@ -68,4 +66,7 @@ public class PredPreyCell extends Cell {
 		
 	}
 
+	public int getChronons() {
+		return myChronons;
+	}
 }

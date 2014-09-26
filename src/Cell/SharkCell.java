@@ -13,12 +13,12 @@ public class SharkCell extends PredPreyCell {
 	private int starve;
 	private int myHunger;
 
-	public SharkCell(double state, int x, int y, Map<String, String> parameters, int chronons, int hunger) {
+	public SharkCell(double state, int x, int y, Map<String, String> parameters) {
 		super(state, x, y, parameters);
-		myChronons = chronons;
+		myChronons = INITIAL_CHRONONS;
 		starve = Integer.parseInt(parameters.get("sharkStarve"));
 		myBreed = Integer.parseInt(parameters.get("sharkBreed"));
-		myHunger = hunger;
+		myHunger = INITIAL_HUNGER;
 	}
 
 	public SharkCell(SharkCell sharkCell, int chronons, int hunger) {
@@ -60,25 +60,23 @@ public class SharkCell extends PredPreyCell {
 				water.setFutureCell(new PredPreyCell(WATER,(int)water.getCurrentX(), (int)water.getCurrentY(), myParameters));
 			}
 			escapingFish.food();
-			if (myChronons == myBreed){
-				patches[currentX][currentY].setFutureCell(new SharkCell(this, INITIAL_CHRONONS, INITIAL_HUNGER));
+			if (myChronons >= myBreed){
+				patches[currentX][currentY].setFutureCell(new SharkCell(SHARK, currentX, currentY, myParameters));
 				myChronons = INITIAL_CHRONONS;
 			}
 			else {
 				patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
 				myChronons++;
 			}
-			nextMove.setFutureCell(new SharkCell(this, myChronons, myHunger+1));
+			nextMove.setFutureCell(new SharkCell(this, myChronons, INITIAL_HUNGER));
 		}
 		else if (waterMoves.size()>0) {
-			boolean test = (currentX == 17) && (currentY == 3);
 			int random = (int)(Math.random()*waterMoves.size());
 			Patch nextMove = waterMoves.get(random);
 			futureX = (int)nextMove.getCurrentX();
 			futureY = (int)nextMove.getCurrentY();
-			if(test) System.out.println(futureX + " " + futureY);
-			if (myChronons == myBreed){
-				patches[currentX][currentY].setFutureCell(new SharkCell(this, INITIAL_CHRONONS, INITIAL_HUNGER));
+			if (myChronons >= myBreed){
+				patches[currentX][currentY].setFutureCell(new SharkCell(SHARK, currentX, currentY, myParameters));
 				myChronons = INITIAL_CHRONONS;
 			}
 			else {
@@ -86,11 +84,10 @@ public class SharkCell extends PredPreyCell {
 				myChronons++;
 			}
 			nextMove.setFutureCell(new SharkCell(this, myChronons, myHunger+1));
-			
 		}
 		else{
 			myChronons++;
-			myHunger++;
+			myHunger++; 
 		}
 	}
 
