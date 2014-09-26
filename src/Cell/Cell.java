@@ -30,7 +30,9 @@ public abstract class Cell {
 		futureY = y;
 		myParameters = parameters;
 		setDeltas();
-		boundaryType = parameters.get("boundary");
+		if(myParameters.containsKey("boundary"))
+			boundaryType = (myParameters.get("boundary"));
+		else boundaryType = "Finite";
 	}
 	public Cell(Cell c){
 		this(c.getFutureState(),c.getFutureX(), c.getFutureY(), c.getParameters());
