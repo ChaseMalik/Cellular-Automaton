@@ -14,21 +14,12 @@ public class PredPreyCell extends Cell {
 	public static final double SHARK = 2;
 	public static final int INITIAL_CHRONONS = 0;
 	public static final int INITIAL_HUNGER = 0;
-
-	protected PredPreyCell futureCell;
 	protected int myChronons;
 	protected int myBreed;
 
 	public PredPreyCell(double state, int x, int y, Map<String, String> parameters) {
 		super(state, x, y, parameters);
 		myChronons = INITIAL_CHRONONS;
-		futureCell = this;
-		System.out.println(boundaryType);
-	}
-
-	public PredPreyCell(PredPreyCell c, int chronons){
-		super(c);
-		myChronons = chronons;
 	}
 
 	public PredPreyCell(PredPreyCell c){
@@ -81,15 +72,6 @@ public class PredPreyCell extends Cell {
 
 	@Override
 	public Paint getColor() {
-		if (currentState == SHARK)
-			return Color.RED;
-		if (currentState == FISH)
-			return Color.LIMEGREEN;		
-		else
-			return Color.ROYALBLUE;
-	}
-
-	public int getChronons() {
-		return myChronons;
+		return Color.ROYALBLUE;
 	}
 }

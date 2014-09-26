@@ -22,7 +22,8 @@ public class FishCell extends PredPreyCell {
 	}
 	
 	public FishCell(FishCell c, int chronons){
-		super(c, chronons);
+		super(c);
+		myChronons = chronons;
 		myBreed = Integer.parseInt(myParameters.get("fishBreed"));
 		eaten = false;
 		newMove = null;
