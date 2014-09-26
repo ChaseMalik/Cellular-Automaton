@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import Cell.Cell;
@@ -12,11 +13,16 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
@@ -30,6 +36,10 @@ public class GridView {
 
 	private Scene myScene;
 	public static final Dimension DEFAULT_SIZE = new Dimension(600, 700);
+	public static final int GRAPH_WIDTH = 600;
+	public static final int GRAPH_HEIGHT = 150;
+	public static final int AXIS_WIDTH = 50;
+	public static final int GRAPH_INTERVAL=2;
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
 
 	private ResourceBundle myResources;
@@ -40,6 +50,10 @@ public class GridView {
 	private BorderPane root;
 	private boolean isRunning;
 	private String gridType;
+	private int numFrames=0;
+	private NumberAxis xAxis = new NumberAxis();
+    private NumberAxis yAxis = new NumberAxis();
+    private LineChart<Number,Number> popChart;
 	
 	public GridView (GridModel model, String language) {
 		myModel = model;
@@ -48,6 +62,8 @@ public class GridView {
 		myInterval = 1.0;
 		myShapeList = new ArrayList<Shape>();
 		isRunning = false;
+		xAxis.setAutoRanging(false);
+		xAxis.setUpperBound(AXIS_WIDTH);
 		initialize();
 		load();
 	}
@@ -109,6 +125,7 @@ public class GridView {
 		myModel.load();
 		gridType = myModel.getGridType();
 		root.setCenter(makeGrid());
+		root.setTop(makeGraph());
 	}
 
 	private Button makeButton (String property, EventHandler<ActionEvent> handler) {
@@ -119,14 +136,23 @@ public class GridView {
 	}
 
 	private Node makeGraph() {
-		// TODO Auto-generated method stub
-		return null;
+		Map<Integer,XYChart.Series> series = myModel.addData(numFrames);
+		List<XYChart.Series> temp = new ArrayList<XYChart.Series>(series.values());
+		ObservableList<XYChart.Series> seriesList = FXCollections.observableList(temp);
+		if(numFrames>AXIS_WIDTH){
+			xAxis.setLowerBound(numFrames-AXIS_WIDTH);
+			xAxis.setUpperBound(numFrames);
+		}
+		xAxis.setTickLabelsVisible(false);
+		yAxis.setTickLabelsVisible(false);
+		popChart = new LineChart(xAxis,yAxis, seriesList);
+		popChart.setPrefSize(GRAPH_WIDTH, GRAPH_HEIGHT);
+		return popChart;
 	}
 
 
 	public void initialize() {
 		root = new BorderPane();
-		root.setTop(makeGraph());
 		root.setBottom(makeButtons());
 		myScene = new Scene(root, DEFAULT_SIZE.width, DEFAULT_SIZE.height);
 	}
@@ -165,6 +191,9 @@ public class GridView {
 	public void step(){
 		myModel.update();
 		root.setCenter(makeGrid());
+		numFrames++;
+		if(numFrames%GRAPH_INTERVAL==0)
+		root.setTop(makeGraph());
 	}
 
 	private Node makeGrid() {

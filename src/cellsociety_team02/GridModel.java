@@ -1,10 +1,12 @@
 package cellsociety_team02;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 import Cell.Cell;
 import Patch.Patch;
+import javafx.scene.chart.XYChart;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -15,6 +17,7 @@ public class GridModel {
 	private String myGridType;
 	private int myNumStates;
 	private Map<String,String> myColorMap;
+	private Map<Integer, XYChart.Series> seriesMap;
 	
 	private XMLParser loadFileToParser() {
 		FileChooser fileChooser = new FileChooser();
@@ -32,6 +35,8 @@ public class GridModel {
 		myPatches = parser.makePatches();
 		myGridType = parser.getGridType();
 		myNumStates = parser.getNumStates();
+		seriesMap = new HashMap<Integer, XYChart.Series>();
+		initSeries();
 		myColorMap = parser.makeColorMap();
 	}
 	
@@ -77,9 +82,32 @@ public class GridModel {
 		double futureState = (state+1) % myNumStates;
 		c.setCurrentState(futureState);
 		c.setFutureState(futureState);
-		
+	}
+	
+	private void initSeries(){
+		for(int i=0;i<myNumStates;i++){
+			seriesMap.put(i, new XYChart.Series());
+		}
+	}
+	
+	public Map<Integer,XYChart.Series> addData(int newX){
+		for(int i=0;i<seriesMap.size();i++){
+			seriesMap.get(i).getData().add(new XYChart.Data(newX, numState(i)));
+		}
+		return seriesMap;
 	}
 
+	private int numState(int state){
+		int total = 0;
+		for (int i = 0; i<myPatches.length; i++){
+			for(int j=0; j<myPatches[0].length; j++){
+				double current = myPatches[i][j].getCurrentCell().getCurrentState();
+				if(current==state)
+					total++;
+			}
+		}
+		return total;
+	}
 	
 	
 	
