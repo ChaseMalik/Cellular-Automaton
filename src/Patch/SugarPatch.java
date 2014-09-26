@@ -6,25 +6,56 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import Cell.Cell;
 
+/**
+ * 
+ * @author Greg Lyons
+ * @author Chase Malik
+ * @author Kevin Rhine
+ * 
+ * SugarPatch implements the abstract Patch class
+ * 
+ * SugarPatch updates its own state (grows back its sugar) in addition to updating its Cell
+ * 
+ * The color of the Patch is based on the amount of sugar available
+ *
+ */
+
 public class SugarPatch extends Patch {
 	
 	private int sugarRate;
 	private int sugarInterval;
 	private int maxCapacity;
 	private int currentTime;
+	
+	public static final int DEFAULT_SUGAR_RATE = 1;
+	public static final int DEFAULT_SUGAR_INTERVAL = 1;
+	public static final int DEFAULT_MAX_CAPACITY = 4;
+	
 	public SugarPatch(Cell c,double state, double x, double y, Map<String,String> params) {
 		super(c, state, x, y, params);
-		sugarRate = check("sugarRate", 1);
-		sugarInterval = check("sugarInterval", 1);
-		maxCapacity = check("maxCapacity", 4);
+		sugarRate = errorCheck("sugarRate", DEFAULT_SUGAR_RATE);
+		sugarInterval = errorCheck("sugarInterval", DEFAULT_SUGAR_INTERVAL);
+		maxCapacity = errorCheck("maxCapacity", DEFAULT_MAX_CAPACITY);
 		currentTime = 0;
 	}
 
-	private int check(String string, int result) {
+	/**
+	 *  Checks to see if parameter map contains a given value
+	 *  If not, returns a default constant
+	 * 
+	 * @param string
+	 * @param result
+	 * @return int
+	 */
+	private int errorCheck(String string, int result) {
 		if(myParameters.containsKey(string)) return Integer.parseInt(myParameters.get(string));
 		else return result;
 	}
 
+	/**
+	 * Updates both the Patch's state and its Cell's state
+	 * 
+	 */
 	@Override
 	public void updateState(Patch[][] patches) {
 		myCurrentCell.updateStateandMove(patches);
@@ -36,6 +67,10 @@ public class SugarPatch extends Patch {
 		}
 	}
 
+	/**
+	 * Sets the color based on the amount of sugar available
+	 * Darker = more sugar available
+	 */
 	@Override
 	public Paint getColor() {
 		if(currentState>=4) return Color.DARKORANGE;

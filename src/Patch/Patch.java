@@ -5,6 +5,27 @@ import java.util.Map;
 import javafx.scene.paint.Paint;
 import Cell.Cell;
 
+/**
+ * 
+ * 
+ * @author Greg Lyons
+ * @author Chase Malik
+ * @author Kevin Rhine
+ * 
+ * The Patch class is the basis for the grid
+ * Each Patch has its own state, and it holds a Cell that also has its own state
+ * 
+ * Patches update by checking the grid based on the current state and changing a future state
+ * Each Patch updates its given Cell - Cells can manipulate the Patch's futureCell
+ *
+ *GridModel loops over the array of Patches and calls each one's updateState method
+ *Each of the Patches updates its Cell from within the updateState method
+ *
+ *In this sense, the Patches serve as locations for the Cells to inhabit
+ *The two objects are able to interact with each other depending on the nature of the simulation
+ *
+ */
+
 public abstract class Patch {
 	protected double currentState;
 	protected double futureState;

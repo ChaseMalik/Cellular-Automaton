@@ -6,6 +6,20 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import Cell.Cell;
 
+/**
+ * 
+ * 
+ * @author Greg Lyons
+ * @author Chase Malik
+ * @author Kevin Rhine
+ *
+ *FirePatch implements the abstract Patch class
+ *
+ *It is able to store and update its own state in addition to it's Cell's state
+ *It can change color based on the amount of wood it has available
+ *
+ */
+
 public class FirePatch extends Patch {
 
 
@@ -17,6 +31,11 @@ public class FirePatch extends Patch {
 		super(c, state, x, y, params);
 	}
 
+	/**
+	 * FirePatch updates both its Cell and its own state (the amount of wood available)
+	 * 
+	 * @param patches
+	 */
 	@Override
 	public void updateState(Patch[][] patches) {
 		myCurrentCell.updateStateandMove(patches);
@@ -28,6 +47,9 @@ public class FirePatch extends Patch {
 		else futureState = currentState;
 	}
 
+	/**
+	 * Color is based on the amount of wood available
+	 */
 	@Override
 	public Paint getColor() {
 		double wood = currentState;

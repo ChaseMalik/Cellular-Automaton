@@ -8,6 +8,16 @@ import Patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+/**
+ * 
+ * @author Greg Lyons
+ * @author Kevin Rhine
+ * @author Chase Malik
+ * 
+ * Subclass of PredPreyCell, implemented to use shark behavior in the simulation
+ *
+ */
+
 public class SharkCell extends PredPreyCell {
 
 	private int starve;
@@ -35,6 +45,14 @@ public class SharkCell extends PredPreyCell {
 		return Color.RED;
 	}
 
+	/**
+	 * Updating is similar to fish
+	 * Sharks prioritize eating fish over an empty water location
+	 * Sharks can overwrite the move of a fish trying to escape in the same round
+	 * Sharks also have a hunger factor that increases if they don't eat, and they eventually starve
+	 * 
+	 * @param patches
+	 */
 	public void updateStateandMove(Patch[][] patches) {
 		if (myHunger >= starve) {
 			patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
