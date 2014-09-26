@@ -10,7 +10,7 @@ import Cell.PredPreyCell;
 import Cell.SegregationCell;
 import Cell.SugarCell;
 import Patch.FirePatch;
-import Patch.NullPatch;
+import Patch.GenericPatch;
 import Patch.Patch;
 import Patch.SugarPatch;
 
@@ -56,7 +56,7 @@ public class Factory {
 		case "Fire": return new FirePatch(cell, state,r,c, params);
 		case "Sugar": return new SugarPatch(cell, state,r,c,params);
 		}
-		return new NullPatch(cell,0,r,c , params);
+		return new GenericPatch(cell,0,r,c , params);
 	}
 	/**
 	 * Creates a random Cell based on the max number of states the cell can have
