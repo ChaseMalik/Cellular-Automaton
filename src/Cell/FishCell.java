@@ -1,3 +1,6 @@
+// This entire file is part of my masterpiece.
+// GREG LYONS
+
 package Cell;
 
 import java.util.ArrayList;
@@ -9,25 +12,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 /**
- * 
  * @author Greg Lyons
  * @author Kevin Rhine
  * @author Chase Malik
  * 
- * Subclass of PredPreyCell, implemented to use fish behavior in the simulation
- *
+ * Subclass of PredPreyCell, implements fish behavior
  */
 
 public class FishCell extends PredPreyCell {
 
-	private boolean eaten;  
-	private Patch newMove;  //keeps track of where the fish is trying to escape (from a shark)
+	private boolean eaten;  //whether or not the fish has been eaten by a shark on this turn
+	private Patch newMove;  //where the fish is trying to escape (from a shark)
 	private static final int DEFAULT_FISHBREED = 3;
 
-	public FishCell(double state, int x, int y, Map<String, String> parameters, int chronons) {
+	public FishCell(double state, int x, int y, Map<String, String> parameters) {
 		super(state, x, y, parameters);
-		myChronons = chronons;
-		
+		myChronons = INITIAL_CHRONONS;
 	}
 	
 	public FishCell(FishCell c, int chronons){
@@ -41,32 +41,26 @@ public class FishCell extends PredPreyCell {
 	}
 	
 	/**
-	 * Called by a SharkCell
-	 * Marks that the fish has been eaten when a shark moves to its position
-	 * The fish will not be able to update
-	 * 
-	 * @param void
+	 * Called by a SharkCell if the shark eats the fish
+	 * Fish will be unable to move if it comes after the shark in the iteration for this turn
+	 * If the fish moves before the shark, the SharkCell will erase its move anyway
 	 */
 	public void food(){
 		eaten = true;
 	}
 	
-	
 	/**
 	 * Called by a SharkCell
 	 * Returns the Patch that the FishCell is trying to escape to (away from a shark eating it)
-	 * 
-	 * @param void
 	 * @return Patch newMove
 	 */
 	public Patch getNewMove(){
 		return newMove;
 	}
 	
-	
 	/**
-	 * Implements the logic of a FishCell's movement
-	 * 
+	 * Moves the FishCell by creating a clone at the new location
+	 * Only moves if the location is currently water and has not been occupied yet for the next round
 	 * @param patches - the full array of Patches in the grid
 	 */
 	@Override
@@ -74,6 +68,7 @@ public class FishCell extends PredPreyCell {
 		List<Patch> neighbors = getNeighbors(patches);
 		List<Patch> moves = new ArrayList<Patch>();
 		for (Patch p: neighbors) {
+			if (p == null || p.getCurrentCell() == null) continue;
 			if (p.getCurrentCell().getCurrentState() == WATER && p.getFutureCell().getCurrentState() == WATER)
 				moves.add(p);
 		}
@@ -87,18 +82,20 @@ public class FishCell extends PredPreyCell {
 	}
 	
 	/**
-	 * Override from superclass
-	 * 
 	 * Breeds a new fish at the current location when called
 	 * Called from within the superclass's checkBreed method
 	 * 
 	 * @param patches - an array of Patches
-	 * 
 	 */
 	@Override
 	protected void breed(Patch[][] patches){
 		patches[currentX][currentY].setFutureCell(new FishCell(this, INITIAL_CHRONONS));
 	}
+	
+	/**
+	 * Called within the superclass (Cell) constructor, but overridden by each subclass
+	 * Sets up parameters and checks for errors (if errors, sets to default constants)
+	 */
 	@Override
 	protected void initialize() {
 		myBreed = (int) errorCheck("fishBreed",DEFAULT_FISHBREED);
@@ -106,5 +103,11 @@ public class FishCell extends PredPreyCell {
 		newMove = null;
 	}
 	
-	
+	/**
+	 * THIS METHOD EXISTS SOLELY FOR J-UNIT TESTING AND IS NOT PART OF THE PROGRAM
+	 * @return eaten - whether or not the fish has been eaten
+	 */
+	public boolean isEaten(){
+		return eaten;
+	}
 }

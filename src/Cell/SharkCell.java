@@ -15,7 +15,6 @@ import javafx.scene.paint.Paint;
  * @author Chase Malik
  * 
  * Subclass of PredPreyCell, implemented to use shark behavior in the simulation
- *
  */
 
 public class SharkCell extends PredPreyCell {
@@ -35,7 +34,6 @@ public class SharkCell extends PredPreyCell {
 		super(sharkCell);
 		myChronons = chronons;
 		myHunger = hunger;
-
 	}
 
 	@Override
@@ -60,11 +58,13 @@ public class SharkCell extends PredPreyCell {
 		List<Patch> fishMoves = new ArrayList<Patch>();
 		List<Patch> waterMoves = new ArrayList<Patch>();
 		for (Patch p: neighbors) {
+			if (p == null || p.getCurrentCell() == null) continue;
 			if (p.getCurrentCell().getCurrentState() == WATER && p.getFutureCell().getCurrentState() == WATER)
 				waterMoves.add(p);
 			if (p.getCurrentCell().getCurrentState() == FISH && p.getFutureCell().getCurrentState() != SHARK)
 				fishMoves.add(p);
 		}
+		
 		if (fishMoves.size()>0){
 			Patch nextMove = pickMove(fishMoves);
 			FishCell escapingFish = (FishCell)nextMove.getCurrentCell();
@@ -87,11 +87,22 @@ public class SharkCell extends PredPreyCell {
 		}
 	}
 	
+	/**
+	 * Breeds a new fish at the current location when called
+	 * Called from within the superclass's checkBreed method
+	 * 
+	 * @param patches - an array of Patches
+	 */
 	@Override
 	protected void breed(Patch[][] patches){
 		patches[currentX][currentY].setFutureCell(new SharkCell(SHARK, currentX, currentY, myParameters));
 	}
 	
+
+	/**
+	 * Called within the superclass (Cell) constructor, but overridden by each subclass
+	 * Sets up parameters and checks for errors (if errors, sets to default constants)
+	 */
 	@Override
 	protected void initialize(){
 		starve = (int) errorCheck("sharkStarve", DEFAULT_STARVE);

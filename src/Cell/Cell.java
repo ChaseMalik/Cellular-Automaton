@@ -174,6 +174,7 @@ public abstract class Cell {
 				if (neighborY<0) neighborY += patches[0].length;  //corrects for negative result
 				neighborsList.add(patches[neighborX][neighborY]);
 			}break;
+		default: break;
 		}
 		return neighborsList;
 	}
