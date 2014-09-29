@@ -1,12 +1,12 @@
-package Cell;
+package cell;
 
 import java.util.List;
 import java.util.Map;
 
+import patch.GenericPatch;
+import patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import Patch.GenericPatch;
-import Patch.Patch;
 
 public class SugarCell extends Cell {
 
@@ -30,7 +30,7 @@ public class SugarCell extends Cell {
 
 	@Override
 	public void updateStateandMove(Patch[][] patches) {
-		if(currentState == dead) return;
+		if(myCurrentState == dead) return;
 		List<Patch> neighborPatches = getNeighbors(patches);
 		Patch newLocation = findHighestSugar(neighborPatches);
 		move(newLocation,patches);
@@ -55,17 +55,17 @@ public class SugarCell extends Cell {
 				if(p.getCurrentState()>high){
 					high = p.getCurrentState();
 					newLocation = p;
-					dist = Math.abs(pX-currentX)+Math.abs(pY-currentY);
+					dist = Math.abs(pX-myCurrentX)+Math.abs(pY-myCurrentY);
 				}
-				else if(p.getCurrentState() == high && Math.abs(pX-currentX)+Math.abs(pY-currentY)<dist){
+				else if(p.getCurrentState() == high && Math.abs(pX-myCurrentX)+Math.abs(pY-myCurrentY)<dist){
 					high = p.getCurrentState();
 					newLocation = p;
-					dist = Math.abs(pX-currentX)+Math.abs(pY-currentY);
+					dist = Math.abs(pX-myCurrentX)+Math.abs(pY-myCurrentY);
 				}
 			}
 		}
-		futureX = newLocation.getCurrentX();
-		futureY = newLocation.getCurrentY();
+		myFutureX = newLocation.getCurrentX();
+		myFutureY = newLocation.getCurrentY();
 		return newLocation;
 	}
 	/**
@@ -83,14 +83,14 @@ public class SugarCell extends Cell {
 		newLocation.setFutureState(0);
 		mySugar -= myMetabolism;
 		if(mySugar > 0)	newLocation.setFutureCell(new SugarCell(this, mySugar));
-		else newLocation.setFutureCell(new SugarCell(dead,futureX,futureY,myParameters));
-		patches[currentX][currentY].setFutureCell(new SugarCell(dead,currentX,currentY,myParameters));
+		else newLocation.setFutureCell(new SugarCell(dead,myFutureX,myFutureY,myParameters));
+		patches[myCurrentX][myCurrentY].setFutureCell(new SugarCell(dead,myCurrentX,myCurrentY,myParameters));
 	}
 	
 	@Override
 	protected void setDeltas() {
-		xDelta = new int[myVision*4];
-		yDelta = new int[myVision*4];
+		myXDelta = new int[myVision*4];
+		myYDelta = new int[myVision*4];
 		assignDeltas(0,-1,0);
 		assignDeltas(myVision,0,-1);
 		assignDeltas(2*myVision,0,1);
@@ -99,13 +99,13 @@ public class SugarCell extends Cell {
 
 	private void assignDeltas(int start,int x, int y) {
 		for(int i=0; i<myVision;i++){
-			xDelta[i+start] = x*(i+1);
-			yDelta[i+start] = y*(i+1);
+			myXDelta[i+start] = x*(i+1);
+			myYDelta[i+start] = y*(i+1);
 		}
 	}
 	@Override
 	public Paint getColor() {
-		if(currentState == alive) return Color.RED;
+		if(myCurrentState == alive) return Color.RED;
 		else return null;
 	}
 

@@ -11,8 +11,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import Cell.Cell;
-import Patch.Patch;
+import patch.Patch;
+import cell.Cell;
 /**
  * Retrieves information from XML files designed for CA simulations
  * Stores the information in relevant data structures

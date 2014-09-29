@@ -1,10 +1,10 @@
-package Cell;
+package cell;
 
 
 import java.util.List;
 import java.util.Map;
 
-import Patch.Patch;
+import patch.Patch;
 import javafx.scene.paint.Color;
 
 public class LifeCell extends Cell {
@@ -22,19 +22,19 @@ public class LifeCell extends Cell {
 
 	@Override
 	public void updateStateandMove(Patch[][] patches) {
-		double state = currentState;
+		double state = myCurrentState;
 		int aliveNeighbors = aliveNeighbors(getNeighbors(patches));
 		if(state == dead && aliveNeighbors == 3)
-			futureState = alive;
+			myFutureState = alive;
 		else if(state == dead)
 			return;
 		if(aliveNeighbors <2)
-			futureState = dead;
+			myFutureState = dead;
 		else if(aliveNeighbors <= 3)
-			futureState = alive;
+			myFutureState = alive;
 		else
-			futureState = dead;
-		patches[currentX][currentY].setFutureCell(new LifeCell(this));
+			myFutureState = dead;
+		patches[myCurrentX][myCurrentY].setFutureCell(new LifeCell(this));
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class LifeCell extends Cell {
 
 	@Override
 	public Color getColor() {
-		if (futureState == dead)
+		if (myFutureState == dead)
 			return Color.WHITE;
 		else
 			return Color.BLACK;
@@ -63,8 +63,8 @@ public class LifeCell extends Cell {
 
 	@Override
 	protected void setDeltas() {
-		xDelta = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
-		yDelta = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
+		myXDelta = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
+		myYDelta = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 	}
 
 	@Override

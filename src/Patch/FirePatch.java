@@ -1,10 +1,10 @@
-package Patch;
+package patch;
 
 import java.util.Map;
 
+import cell.Cell;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import Cell.Cell;
 
 /**
  * 

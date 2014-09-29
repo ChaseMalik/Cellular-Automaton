@@ -1,11 +1,11 @@
-package Cell;
+package cell;
 
 import java.util.List;
 import java.util.Map;
 
+import patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import Patch.Patch;
 
 /**
  * 
@@ -46,7 +46,7 @@ public class PredPreyCell extends Cell {
 	 * 
 	 */
 	public void updateStateandMove(Patch[][] patches) {
-		if (currentState == WATER)
+		if (myCurrentState == WATER)
 			return;
 	}
 
@@ -58,8 +58,8 @@ public class PredPreyCell extends Cell {
 	protected Patch pickMove(List<Patch> moves) {
 		int random = (int)(Math.random()*moves.size());
 		Patch nextMove = moves.get(random);
-		futureX = (int)nextMove.getCurrentX();
-		futureY = (int)nextMove.getCurrentY();
+		myFutureX = (int)nextMove.getCurrentX();
+		myFutureY = (int)nextMove.getCurrentY();
 		return nextMove;
 	}
 
@@ -75,7 +75,7 @@ public class PredPreyCell extends Cell {
 			myChronons = INITIAL_CHRONONS;
 		}
 		else{
-			patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
+			patches[myCurrentX][myCurrentY].setFutureCell(new PredPreyCell(WATER, myCurrentX, myCurrentY, myParameters));
 			myChronons++;
 		}
 	}
@@ -95,18 +95,18 @@ public class PredPreyCell extends Cell {
 	 *
 	 */
 	public Cell makeCell() {
-		switch((int)currentState) {
-		case (int)WATER: return new PredPreyCell(currentState, currentX, currentY, myParameters);
-		case (int)FISH: return new FishCell(currentState, currentX, currentY, myParameters, INITIAL_CHRONONS); 
-		case (int)SHARK: return new SharkCell(currentState, currentX, currentY, myParameters);
+		switch((int)myCurrentState) {
+		case (int)WATER: return new PredPreyCell(myCurrentState, myCurrentX, myCurrentY, myParameters);
+		case (int)FISH: return new FishCell(myCurrentState, myCurrentX, myCurrentY, myParameters, INITIAL_CHRONONS); 
+		case (int)SHARK: return new SharkCell(myCurrentState, myCurrentX, myCurrentY, myParameters);
 		default: return null;
 		}
 	}
 
 	@Override
 	protected void setDeltas() {
-		xDelta = new int[]{-1,0,0,1};
-		yDelta = new int[]{0,-1,1,0};
+		myXDelta = new int[]{-1,0,0,1};
+		myYDelta = new int[]{0,-1,1,0};
 	}
 
 	@Override

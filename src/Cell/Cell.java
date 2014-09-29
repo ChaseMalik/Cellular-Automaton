@@ -1,10 +1,12 @@
-package Cell;
+package cell;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import Patch.Patch;
+import edges.EdgeType;
+import edges.FiniteEdge;
+import edges.ToroidalEdge;
+import patch.Patch;
 import javafx.scene.paint.Paint;
 
 /**
@@ -18,16 +20,17 @@ import javafx.scene.paint.Paint;
  */
 public abstract class Cell {
 
-	protected double currentState;
-	protected double futureState;
-	protected int currentX;
-	protected int currentY;
-	protected int futureX;
-	protected int futureY;
-	protected int[] xDelta;
-	protected int[] yDelta;
+	private static final String BOUNDARY = "boundary";
+	private static final String DEFAULT_GRID_BOUNDARY = "Finite";
+	protected double myCurrentState;
+	protected double myFutureState;
+	protected int myCurrentX;
+	protected int myCurrentY;
+	protected int myFutureX;
+	protected int myFutureY;
+	protected int[] myXDelta;
+	protected int[] myYDelta;
 	protected Map<String,String> myParameters;
-	protected String boundaryType;
 	/**
 	 * Cell constructor
 	 * 
@@ -37,18 +40,15 @@ public abstract class Cell {
 	 * @param parameters Takes the given value and sets the cell's parameter map
 	 */
 	public Cell(double state, int x, int y, Map<String,String> parameters) {
-		currentState = state;
-		futureState = state;
-		currentX = x;
-		currentY = y;
-		futureX = x;
-		futureY = y;
+		myCurrentState = state;
+		myFutureState = state;
+		myCurrentX = x;
+		myCurrentY = y;
+		myFutureX = x;
+		myFutureY = y;
 		myParameters = parameters;
 		initialize();
 		setDeltas();
-		if(myParameters.containsKey("boundary"))
-			boundaryType = (myParameters.get("boundary"));
-		else boundaryType = "Finite";
 	}
 	/**
 	 * Cell constructor
@@ -64,7 +64,7 @@ public abstract class Cell {
 	 * @return double currentState
 	 */
 	public double getCurrentState(){
-		return currentState;
+		return myCurrentState;
 	}
 	/**
 	 * Set currentState of cell
@@ -73,7 +73,7 @@ public abstract class Cell {
 	 * @param double sets the cell's current state
 	 */
 	public void setCurrentState(double state){
-		currentState = state;
+		myCurrentState = state;
 	}
 	/**
 	 * Return futureState of cell
@@ -81,7 +81,7 @@ public abstract class Cell {
 	 * @return double futureState
 	 */
 	public double getFutureState(){
-		return futureState;
+		return myFutureState;
 	}
 	/**
 	 * Set futureState of cell
@@ -89,7 +89,7 @@ public abstract class Cell {
 	 * @param double sets the cell's future state
 	 */
 	public void setFutureState(double state) {
-		futureState = state;
+		myFutureState = state;
 	}
 	/**
 	 * Return future x position of cell
@@ -97,7 +97,7 @@ public abstract class Cell {
 	 * @return double futureX
 	 */
 	public int getFutureX() {
-		return futureX;
+		return myFutureX;
 	}
 	/**
 	 * Return future y position of cell
@@ -105,7 +105,7 @@ public abstract class Cell {
 	 * @return double futureY
 	 */
 	public int getFutureY() {
-		return futureY;
+		return myFutureY;
 	}
 	/**
 	 * Return parameters associated with the cell
@@ -122,9 +122,9 @@ public abstract class Cell {
 	 * @param double default value of the parameter if it isn't in the map
 	 * @return double value to be used for the parameter in question
 	 */
-	protected double errorCheck(String string, double result) {
+	protected double errorCheck(String string, double defaultValue) {
 		if(myParameters.containsKey(string)) return Double.parseDouble(myParameters.get(string));
-		else return result;
+		else return defaultValue;
 	}
 	/**
 	 * Abstract method that updates the state of the cell and moves it to a new location based on the 
@@ -157,25 +157,16 @@ public abstract class Cell {
 	 * @return List<Patch> list of neighboring patches
 	 */
 	protected List<Patch> getNeighbors(Patch[][] patches){
-		List<Patch> neighborsList = new ArrayList<Patch>();
-		switch(boundaryType){
+		EdgeType edge = null;	
+		if(!myParameters.containsKey(BOUNDARY)) myParameters.put(BOUNDARY,DEFAULT_GRID_BOUNDARY);
+		
+		switch(myParameters.get(BOUNDARY)){
 		case "Finite":
-			for(int k=0; k<xDelta.length;k++){
-				if(currentX+xDelta[k]>=0 && currentX+xDelta[k] <patches.length
-						&& currentY+yDelta[k] >= 0 && currentY+yDelta[k] <patches[0].length){
-					neighborsList.add(patches[currentX+xDelta[k]][currentY+yDelta[k]]);
-				}
-			} break;
+			edge = new EdgeType(new FiniteEdge()); break;
 		case "Toroidal" :
-			for(int k=0; k<xDelta.length;k++){
-				int neighborX = (currentX+xDelta[k])%patches.length;
-				int neighborY = (currentY+yDelta[k])%patches[0].length;
-				if (neighborX<0) neighborX += patches.length;  //corrects for negative result
-				if (neighborY<0) neighborY += patches[0].length;  //corrects for negative result
-				neighborsList.add(patches[neighborX][neighborY]);
-			}break;
+			edge = new EdgeType(new ToroidalEdge()); break;
 		}
-		return neighborsList;
+		return edge.executeStrategy(patches, myCurrentX, myCurrentY, myXDelta, myYDelta);
 	}
 	/**
 	 * Abstract method that sets the color of the cell based on the possible states

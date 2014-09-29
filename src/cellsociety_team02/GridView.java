@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import Cell.Cell;
-import Patch.Patch;
+import patch.Patch;
+import cell.Cell;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;

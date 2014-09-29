@@ -1,10 +1,10 @@
-package Cell;
+package cell;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import Patch.Patch;
+import patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -53,7 +53,7 @@ public class SharkCell extends PredPreyCell {
 	 */
 	public void updateStateandMove(Patch[][] patches) {
 		if (myHunger >= starve) {
-			patches[currentX][currentY].setFutureCell(new PredPreyCell(WATER, currentX, currentY, myParameters));
+			patches[myCurrentX][myCurrentY].setFutureCell(new PredPreyCell(WATER, myCurrentX, myCurrentY, myParameters));
 			return;
 		}
 		List<Patch> neighbors = getNeighbors(patches);
@@ -89,7 +89,7 @@ public class SharkCell extends PredPreyCell {
 	
 	@Override
 	protected void breed(Patch[][] patches){
-		patches[currentX][currentY].setFutureCell(new SharkCell(SHARK, currentX, currentY, myParameters));
+		patches[myCurrentX][myCurrentY].setFutureCell(new SharkCell(SHARK, myCurrentX, myCurrentY, myParameters));
 	}
 	
 	@Override

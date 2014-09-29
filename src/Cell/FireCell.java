@@ -1,9 +1,9 @@
-package Cell;
+package cell;
 
 import java.util.List;
 import java.util.Map;
 
-import Patch.Patch;
+import patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -28,19 +28,19 @@ public class FireCell extends Cell {
 	 */
 	@Override
 	public void updateStateandMove(Patch[][] patches) {
-		double wood = patches[currentX][currentY].getCurrentState();
-		if (currentState==burning && wood>0)
-			futureState = burning;
-		else if(currentState==burning)
-			futureState=notBurning;
-		else if(currentState==notBurning && burningNeighbor(getNeighbors(patches)) && wood>0){
+		double wood = patches[myCurrentX][myCurrentY].getCurrentState();
+		if (myCurrentState==burning && wood>0)
+			myFutureState = burning;
+		else if(myCurrentState==burning)
+			myFutureState=notBurning;
+		else if(myCurrentState==notBurning && burningNeighbor(getNeighbors(patches)) && wood>0){
 			double num = Math.random();
 			if (num<=probCatch){
-				futureState=burning;
+				myFutureState=burning;
 			}
 		}
-		else futureState = notBurning;
-		patches[currentX][currentY].setFutureCell(new FireCell(this));
+		else myFutureState = notBurning;
+		patches[myCurrentX][myCurrentY].setFutureCell(new FireCell(this));
 	}
 	/**
 	 * Loops through the list of neighboring patches
@@ -59,15 +59,15 @@ public class FireCell extends Cell {
 
 	@Override
 	public Paint getColor() {
-		if(currentState == burning) return Color.RED;
+		if(myCurrentState == burning) return Color.RED;
 		else return null;
 	}
 
 
 	@Override
 	protected void setDeltas() {
-		xDelta = new int[]{-1,0,0,1};
-		yDelta = new int[]{0,-1,1,0};
+		myXDelta = new int[]{-1,0,0,1};
+		myYDelta = new int[]{0,-1,1,0};
 		
 	}
 

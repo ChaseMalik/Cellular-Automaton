@@ -1,10 +1,10 @@
-package Cell;
+package cell;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import Patch.Patch;
+import patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -97,7 +97,7 @@ public class FishCell extends PredPreyCell {
 	 */
 	@Override
 	protected void breed(Patch[][] patches){
-		patches[currentX][currentY].setFutureCell(new FishCell(this, INITIAL_CHRONONS));
+		patches[myCurrentX][myCurrentY].setFutureCell(new FishCell(this, INITIAL_CHRONONS));
 	}
 	@Override
 	protected void initialize() {
