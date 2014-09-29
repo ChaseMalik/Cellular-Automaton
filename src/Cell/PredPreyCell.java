@@ -1,11 +1,11 @@
-package Cell;
+package cell;
 
 import java.util.List;
 import java.util.Map;
 
+import patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import Patch.Patch;
 
 /**
  * 

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import Cell.Cell;
-import Patch.Patch;
+import cell.Cell;
+import patch.Patch;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
@@ -32,6 +32,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
+//This entire file is part of my masterpiece
+//Kevin Rhine
+
 public class GridView {
 
 	private Scene myScene;
@@ -53,9 +56,9 @@ public class GridView {
 	private BorderPane root;
 	private boolean isRunning;
 	private String gridType;
-	private int numFrames=0;
-	private NumberAxis xAxis = new NumberAxis();
-	private NumberAxis yAxis = new NumberAxis();
+	private int numFrames;
+	private NumberAxis xAxis;
+	private NumberAxis yAxis;
 	private LineChart<Number,Number> popChart;
 	/**
 	 * Sets up the initial viewer
@@ -72,8 +75,14 @@ public class GridView {
 		myInterval = INITIAL_INTERVAL;
 		myShapeList = new ArrayList<Shape>();
 		isRunning = false;
+		//MASTERPIECE: rearranged chart initialization to be better organized/robust
+		numFrames=0;
+		xAxis = new NumberAxis();
+		yAxis = new NumberAxis();
 		xAxis.setAutoRanging(false);
 		xAxis.setUpperBound(AXIS_WIDTH);
+		xAxis.setTickLabelsVisible(false);
+		yAxis.setTickLabelsVisible(false);
 		initialize();
 		load();
 	}
@@ -163,16 +172,17 @@ public class GridView {
 	 * Makes the graph
 	 * @return Node containing the graph
 	 */
+	//In old design, combined Data from "dataMap" into a new series, then added these series to an observable list of series which I used to create chart
 	private Node makeGraph() {
+		//previously had addData in one line, and getDataMap in another. Wanted to get rid of get method so combined into one
 		Map<Integer,XYChart.Series> series = myModel.addData(numFrames);
-		List<XYChart.Series> temp = new ArrayList<XYChart.Series>(series.values());
-		ObservableList<XYChart.Series> seriesList = FXCollections.observableList(temp);
+		//List<XYChart.Series> temp = new ArrayList<XYChart.Series>(series.values());
+		//Combined into one list line
+		ObservableList<XYChart.Series> seriesList = FXCollections.observableList(new ArrayList<XYChart.Series>(series.values()));
 		if(numFrames>AXIS_WIDTH){
 			xAxis.setLowerBound(numFrames-AXIS_WIDTH);
 			xAxis.setUpperBound(numFrames);
 		}
-		xAxis.setTickLabelsVisible(false);
-		yAxis.setTickLabelsVisible(false);
 		popChart = new LineChart(xAxis,yAxis, seriesList);
 		popChart.setPrefSize(GRAPH_WIDTH, GRAPH_HEIGHT);
 		return popChart;

@@ -3,16 +3,16 @@ package cellsociety_team02;
 import java.util.Map;
 import java.util.Random;
 
-import Cell.Cell;
-import Cell.FireCell;
-import Cell.LifeCell;
-import Cell.PredPreyCell;
-import Cell.SegregationCell;
-import Cell.SugarCell;
-import Patch.FirePatch;
-import Patch.GenericPatch;
-import Patch.Patch;
-import Patch.SugarPatch;
+import cell.Cell;
+import cell.FireCell;
+import cell.LifeCell;
+import cell.PredPreyCell;
+import cell.SegregationCell;
+import cell.SugarCell;
+import patch.FirePatch;
+import patch.GenericPatch;
+import patch.Patch;
+import patch.SugarPatch;
 
 public class Factory {
 	Random rand = new Random();

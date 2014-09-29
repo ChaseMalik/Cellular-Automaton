@@ -1,4 +1,4 @@
-package Cell;
+package cell;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import Patch.Patch;
+import patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 

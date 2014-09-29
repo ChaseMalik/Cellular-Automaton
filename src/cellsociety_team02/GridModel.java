@@ -4,11 +4,14 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import Cell.Cell;
-import Patch.Patch;
+import cell.Cell;
+import patch.Patch;
 import javafx.scene.chart.XYChart;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+//This entire file is part of my masterpiece
+//Kevin Rhine
 
 /**
  * Model for the grid
@@ -113,9 +116,12 @@ public class GridModel {
 		c.setCurrentState(futureState);
 		c.setFutureState(futureState);
 	}
+	
+	//MASTERPIECE: This is the graph code that I completely refactored 
 	/**
 	 * Creates the appropriate number of series for the graph
 	 */
+	//seriesMap used to be "dataMap" and stored XYChart.Data instead of .Series
 	private void initSeries(){
 		for(int i=0;i<myNumStates;i++){
 			seriesMap.put(i, new XYChart.Series());
@@ -127,6 +133,9 @@ public class GridModel {
 	 * @param int newX data point to be added (number of frames)
 	 * @return Map updated map
 	 */
+	//used to have separate "addData" and "getDataMap" methods
+	//when I switched to "seriesMap", I combined these two into one
+	
 	public Map<Integer,XYChart.Series> addData(int newX){
 		for(int i=0;i<seriesMap.size();i++){
 			seriesMap.get(i).getData().add(new XYChart.Data(newX, numState(i)));
@@ -139,6 +148,7 @@ public class GridModel {
 	 * @param int state - the state of interest
 	 * @return int count of the state on the board currently
 	 */
+	//this method was the same in both implementations
 	private int numState(int state){
 		int total = 0;
 		for (int i = 0; i<myPatches.length; i++){

@@ -1,12 +1,12 @@
-package Cell;
+package cell;
 
 import java.util.List;
 import java.util.Map;
 
+import patch.GenericPatch;
+import patch.Patch;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import Patch.GenericPatch;
-import Patch.Patch;
 
 public class SugarCell extends Cell {
 

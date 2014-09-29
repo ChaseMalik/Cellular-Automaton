@@ -1,10 +1,10 @@
-package Cell;
+package cell;
 
 
 import java.util.List;
 import java.util.Map;
 
-import Patch.Patch;
+import patch.Patch;
 import javafx.scene.paint.Color;
 
 public class LifeCell extends Cell {
