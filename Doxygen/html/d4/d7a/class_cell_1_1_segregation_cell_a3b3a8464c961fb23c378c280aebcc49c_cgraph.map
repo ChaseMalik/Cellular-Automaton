@@ -1,0 +1,5 @@
+<map id="Cell.SegregationCell.move" name="Cell.SegregationCell.move">
+<area shape="rect" id="node2" href="$d5/d5c/class_cell_1_1_cell.html#a04d500ffc9f19932a4ff0738f2f1dbc6" title="Cell.Cell.getCurrentState" alt="" coords="283,5,463,32"/>
+<area shape="rect" id="node3" href="$d4/d7a/class_cell_1_1_segregation_cell.html#a5818c9604a4daceb7e1eac94b0c11ba1" title="Cell.SegregationCell.SegregationCell" alt="" coords="246,56,501,83"/>
+<area shape="rect" id="node4" href="$d0/d0a/class_patch_1_1_patch.html#a798cf940ecaa1d512b2df9c717e4d834" title="Patch.Patch.setFutureCell" alt="" coords="282,107,465,133"/>
+</map>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Ant Test" basedir="." default="main">
+	<target name="main">
+		<property name="jreDir" location="/usr/lib/jvm/java-7-openjdk-amd64/jre"/>
+		<!-- The source directory for the code to run the analysis on -->
+        <property name="repoDir" location="/tmp/git/duke-compsci308-fall2014/cellsociety_team02"/>
+
+		<codepro.audit auditRuleSetFile="AuditPreferences.pref">
+            <fileSet dir="${repoDir}/repository/">
+				<exclude name="**/*Test*.jar"/>
+            </fileSet>
+			<classpath>
+				<pathelement location="${jreDir}/lib/rt.jar"/>
+			</classpath>
+            <report file="${repoDir}/docs/CodePro/AuditViolations.html" generateResourcePages="true" groupBy="severity" showRecommendations="true" format="html" />
+            <!-- <report file="${repoDir}/docs/CodePro/AuditViolations.xml" format="xml" /> -->
+		</codepro.audit>
+
+		<codepro.metrics >
+			<fileSet dir="${repoDir}/repository/">
+				<exclude name="**/*Test*.jar"/>
+			</fileSet>
+			<classpath>
+				<pathelement location="${jreDir}/lib/rt.jar"/>
+			</classpath>
+            <report file="${repoDir}/docs/CodePro/CodeMetrics.html" format="html" includeSubScopes="true" includeTypeLevelMetrics="true" includeDetails="true" includeViolationSummary="true" />
+            <!-- <report file="${repoDir}/docs/CodePro/CodeMetrics.xml" format="xml" /> -->
+        </codepro.metrics>
+
+    </target>
+</project>

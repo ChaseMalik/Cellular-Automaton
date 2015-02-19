@@ -1,0 +1,7 @@
+<map id="Cell.FireCell.updateStateandMove" name="Cell.FireCell.updateStateandMove">
+<area shape="rect" id="node2" href="$d5/de8/class_cell_1_1_fire_cell.html#ac3d96d433f1468098b06e807f30fa966" title="Cell.FireCell.burningNeighbor" alt="" coords="291,5,495,32"/>
+<area shape="rect" id="node3" href="$d5/de8/class_cell_1_1_fire_cell.html#ad39bb52b671624b259f02699a7075cd9" title="Cell.FireCell.FireCell" alt="" coords="322,56,465,83"/>
+<area shape="rect" id="node4" href="$d0/d0a/class_patch_1_1_patch.html#a95c5f0d4bc2f3dd4e3f3fb12b93c6cd3" title="Patch.Patch.getCurrentState" alt="" coords="291,107,495,133"/>
+<area shape="rect" id="node5" href="$d5/d5c/class_cell_1_1_cell.html#aceb5e4da80edd40d3c330807846aa8e6" title="Cell.Cell.getNeighbors" alt="" coords="312,157,475,184"/>
+<area shape="rect" id="node6" href="$d0/d0a/class_patch_1_1_patch.html#a798cf940ecaa1d512b2df9c717e4d834" title="Patch.Patch.setFutureCell" alt="" coords="302,208,485,235"/>
+</map>

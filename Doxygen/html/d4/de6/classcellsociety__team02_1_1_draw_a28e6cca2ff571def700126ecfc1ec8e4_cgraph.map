@@ -1,0 +1,6 @@
+<map id="cellsociety_team02.Draw.drawShape" name="cellsociety_team02.Draw.drawShape">
+<area shape="rect" id="node2" href="$d4/de6/classcellsociety__team02_1_1_draw.html#a194b51f8c48e33b98a53b48b0d1c105e" title="cellsociety_team02.Draw.make\lHexagon" alt="" coords="270,5,490,46"/>
+<area shape="rect" id="node3" href="$d4/de6/classcellsociety__team02_1_1_draw.html#a9fba740a0433f5893be019ecf23d486c" title="cellsociety_team02.Draw.make\lRectangle" alt="" coords="270,70,490,111"/>
+<area shape="rect" id="node4" href="$d4/de6/classcellsociety__team02_1_1_draw.html#a49fefdfc30cc8ed10caf60df63faac59" title="cellsociety_team02.Draw.make\lTriangle" alt="" coords="270,135,490,177"/>
+<area shape="rect" id="node5" href="$d4/de6/classcellsociety__team02_1_1_draw.html#abc4794b50b65fcbf55017ad2dd2fa11d" title="cellsociety_team02.Draw.make\lTriangleRow" alt="" coords="539,135,759,177"/>
+</map>
